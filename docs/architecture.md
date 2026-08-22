@@ -48,8 +48,8 @@
 
 ## 6. 模型适配状态
 
-- 实测模型：**DeepSeek V4 Flash**（Flash 分支 persona/引导按实测调优）。
-- **DeepSeek V4 Pro 未测试**：`router-core.mjs` 保留 Pro 分支（原项目移植），效果未验证，欢迎反馈。
+- 实测环境：**Codex（桌面端/CLI）+ DeepSeek V4 Flash**（自定义 provider）；Flash 分支 persona/引导按该组合实测调优。
+- **DeepSeek V4 Pro 及其他模型/宿主未测试**：`router-core.mjs` 保留 Pro 分支（原项目移植），效果未验证，欢迎反馈。
 
 ## 7. 边界与已知代价
 

@@ -8,7 +8,7 @@
 
 **dsh-routing-suite 的 Codex 移植版**：任务感知思维模式路由（spec / react / weak），通过 Hooks + MCP 工具让 Codex 按任务类型采用匹配的思维模式，并在首轮对工具面做硬锚定。
 
-> ⚠️ **模型适配声明**：本套件仅在 **DeepSeek V4 Flash** 上实测调优；**DeepSeek V4 Pro 未经测试，效果未验证**。`router-core.mjs` 中保留了 Pro 分支（来自原项目），但请按“未实测”对待。
+> ⚠️ **模型适配声明**：本套件仅在 **Codex（桌面端/CLI）搭配 DeepSeek V4 Flash** 这一组合上实测调优；**DeepSeek V4 Pro 及其他模型/宿主均未测试，效果未验证**。`router-core.mjs` 中的 Pro 分支来自原项目移植，请按“未实测”对待。
 
 ## 为什么需要
 
@@ -82,5 +82,5 @@ codex-deepseek-routing-suite/
 ## 版本兼容
 
 - Codex 桌面端 / CLI（实测 0.149+）；Node >= 22；Windows PowerShell。
-- 模型：DeepSeek V4 Flash（实测）；V4 Pro 未测试。
+- 模型：Codex + DeepSeek V4 Flash（实测组合）；V4 Pro 及其他模型/宿主未测试。
 - 许可证：MIT（原套装归属见 NOTICE）。
