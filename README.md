@@ -77,6 +77,7 @@ codex-deepseek-routing-suite/
 
 ```sh
 node install.mjs        # 跨平台（推荐）；Windows PowerShell 亦可：.\install.ps1
+./install.sh            # macOS/Linux（Node 安装器的 POSIX 入口）
 ```
 
 安装后：重启 Codex（桌面端或 CLI）→ 信任两个新钩子（CLI `codex /hooks` 或桌面端信任提示）→ 新会话调用 `dev_router_status` 验证。
@@ -96,6 +97,7 @@ node install.mjs        # 跨平台（推荐）；Windows PowerShell 亦可：.\
 
 ```sh
 node uninstall.mjs      # 跨平台（推荐）；Windows PowerShell 亦可：.\uninstall.ps1
+./uninstall.sh          # macOS/Linux（Node 卸载器的 POSIX 入口）
 ```
 
 ## 致谢

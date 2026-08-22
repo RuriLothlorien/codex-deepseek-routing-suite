@@ -21,6 +21,8 @@
     "uninstall.ps1",
     "install.mjs",
     "uninstall.mjs",
+    "install.sh",
+    "uninstall.sh",
     "README.md",
     "README.en.md",
     "CHANGELOG.md",

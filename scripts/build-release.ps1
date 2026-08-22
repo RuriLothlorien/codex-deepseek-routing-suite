@@ -21,7 +21,8 @@ New-Item -ItemType Directory -Force -Path $pkgDir | Out-Null
 $include = @(
   'hooks', 'mcp', 'skills', 'agents', 'instructions', 'test', 'docs',
   'README.md', 'README.en.md', 'LICENSE', 'NOTICE', 'CHANGELOG.md',
-  'install.ps1', 'uninstall.ps1', 'install.mjs', 'uninstall.mjs'
+  'install.ps1', 'uninstall.ps1', 'install.mjs', 'uninstall.mjs',
+  'install.sh', 'uninstall.sh'
 )
 foreach ($item in $include) {
   $src = Join-Path $repoRoot $item

@@ -62,6 +62,6 @@
 
 ## 8. 平台与 Agent 形态兼容
 
-- 平台：Windows / macOS / Linux；安装器为跨平台 `node install.mjs`（支持 `--home` 与 `--dry-run`），Windows 另保留 PowerShell 版 `install.ps1`；卸载对应 `node uninstall.mjs` / `uninstall.ps1`。
+- 平台：Windows / macOS / Linux；安装器为跨平台 `node install.mjs`（支持 `--home` 与 `--dry-run`），并提供 `install.sh`（macOS/Linux POSIX 入口）与 Windows PowerShell 版 `install.ps1`；卸载对应 `node uninstall.mjs` / `uninstall.sh` / `uninstall.ps1`。
 - Agent 形态：Codex 桌面端与 CLI 共用 `~/.codex/config.toml`、skills 与 MCP 配置，两者均可运行本套件钩子与工具；桌面端已实测，CLI 走同一机制（安装后需重启并在 `codex /hooks` 或桌面端信任两个新钩子）。
 - `dev_mode_subagent` 依赖本机 codex CLI：安装时自动探测（Windows：AppData bin 最新目录；macOS/Linux：PATH），失败时工具返回明确错误。

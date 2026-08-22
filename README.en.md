@@ -49,6 +49,7 @@ Full install (hooks + MCP + skill + agents; Windows / macOS / Linux):
 
 ```sh
 node install.mjs        # cross-platform (recommended); on Windows PowerShell: .\install.ps1
+./install.sh            # macOS/Linux (POSIX entrypoint for the Node installer)
 ```
 
 Then restart Codex (desktop or CLI), trust the two new hooks (`codex /hooks` or the desktop trust prompt), and verify with `dev_router_status` in a new session.
@@ -65,6 +66,7 @@ Skill-only usage: copy or symlink `skills/dsh-router` into `~/.codex/skills/` (o
 - Platforms: Windows / macOS / Linux.
 - Agent forms: Codex desktop and CLI both work (they share the same hooks/MCP/skill configuration); desktop is tested, CLI uses the same mechanism.
 - Uninstall: `node uninstall.mjs` (cross-platform) or `.\uninstall.ps1` on Windows.
+- POSIX entrypoints: `./install.sh` / `./uninstall.sh` on macOS/Linux.
 
 ## Acknowledgments
 
