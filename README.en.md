@@ -103,6 +103,7 @@ node uninstall.mjs      # cross-platform (recommended); on Windows PowerShell: .
 
 ## Compatibility
 
+- Upstream source: ported from the **dsh-router-standard** preset (preset package v0.2.0) in [dsh-routing-suite](https://github.com/yjh051108/dsh-routing-suite) (upstream component tag v0.3.0); `router-core.mjs` is that preset's core, plus the Chinese classification keyword extension.
 - Codex desktop / CLI (tested on 0.149+); Node >= 22; entrypoints: `node install.mjs` (cross-platform), `./install.sh` (macOS/Linux), `.\install.ps1` (Windows).
 - Platforms: Windows / macOS / Linux.
 - Agent forms: Codex desktop and CLI both work (they share the same hooks/MCP/skill configuration); desktop is tested, CLI uses the same mechanism.

@@ -2,7 +2,7 @@
 
 ## 1. 背景
 
-本套件移植自 DeepSeek Harness 生态的 [dsh-routing-suite](https://github.com/yjh051108/dsh-routing-suite)（MIT）。原项目在 DSH 侧用 `system-prompt/assemble` Waterfall 实现首轮 persona 注入与工具面裁剪；本套件用 Codex 对等扩展面实现相同语义：
+本套件移植自 DeepSeek Harness 生态的 [dsh-routing-suite](https://github.com/yjh051108/dsh-routing-suite)（MIT，上游组件 tag v0.3.0；其中 dsh-router-standard preset 包版本 v0.2.0，`router-core.mjs` 即该预设核心）。原项目在 DSH 侧用 `system-prompt/assemble` Waterfall 实现首轮 persona 注入与工具面裁剪；本套件用 Codex 对等扩展面实现相同语义：
 
 | DSH 原机制 | Codex 对等面 |
 |---|---|

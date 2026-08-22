@@ -108,6 +108,7 @@ node uninstall.mjs      # 跨平台（推荐）；Windows PowerShell 亦可：.\
 
 ## 版本兼容
 
+- 上游来源：基于 [dsh-routing-suite](https://github.com/yjh051108/dsh-routing-suite)（上游组件 tag v0.3.0）中的 **dsh-router-standard** 预设（preset 包版本 v0.2.0）移植；`router-core.mjs` 即该预设核心，另含中文分类关键词扩展（方案 A）。
 - Codex 桌面端 / CLI（实测 0.149+）；Node >= 22；安装入口：`node install.mjs`（跨平台）、`./install.sh`（macOS/Linux）、`.\install.ps1`（Windows）。
 - 平台：Windows / macOS / Linux；Agent 形态：Codex 桌面端与 CLI 均兼容（共用同一套 hooks/MCP/技能配置）。
 - 模型：专门面向 Codex + DeepSeek 设计；实测组合为 V4 Flash；V4 Pro 未测试。
