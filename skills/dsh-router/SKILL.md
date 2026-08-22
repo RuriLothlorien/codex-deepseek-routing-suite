@@ -18,11 +18,11 @@ description: 思维模式路由套件（dsh-routing-suite 的 Codex 移植版）
 
 ## 2. 工具用法
 
-- `dev_router_status`：查看当前会话 mode/band/persona/core/promoted/override/anchoring/model。
+- `dev_router_status`：查看当前会话 mode/band/persona/core/promoted/override/anchoring/supported/nativeAgents/model。
 - `dev_router_mode <spec|weak|mixed|react|0-100|0.0-1.0|auto>`：写 override，下一轮请求生效；`auto` 清除 override 回到任务分类。
 - `dev_mode_subagent <spec|react|weak> <task> [reasoning=low|medium|high|xhigh|max]`：用不同模式派生一次性 `codex exec` 子进程（全新上下文、独立 persona、hooks 与 memories 禁用、剥离桌面端线程环境变量），当前会话轨迹与锚定状态不受影响。适合“换个模式验证结论/做交叉检查”。
 - 原生多智能体后端（可选，不强制配置）：若当前会话具备 `spawn_agent` 工具（`features.multi_agent` 是否开启由你决定，本套件不修改它），可直接 `spawn_agent(agent_type = "router_spec" | "router_react" | "router_weak", message = "<task>")` 做模式隔离子代理（自定义 agents 位于 `~/.codex/agents/`，由 install 安装）；否则回退 MCP `dev_mode_subagent`（exec 后端，始终可用）。
-- `dev_router_test`：运行单元 + 钩子场景测试，返回 PASS/FAIL 汇总。
+- `dev_router_test`：运行单元、钩子场景、agents 与模型门控测试，返回 PASS/FAIL 汇总。
 
 ## 3. 首轮锚定
 
@@ -45,5 +45,5 @@ description: 思维模式路由套件（dsh-routing-suite 的 Codex 移植版）
 ## 6. 参考
 
 - `references/personas.md`：persona 原文与实测依据（P23/P24/P30）。
-- `docs/architecture.md`：机制映射、接口契约与模型适配说明。
+- [docs/architecture.md](https://github.com/RuriLothlorien/codex-deepseek-routing-suite/blob/main/docs/architecture.md)：机制映射、接口契约与模型适配说明。
 - 原项目：https://github.com/yjh051108/dsh-routing-suite（MIT）。
