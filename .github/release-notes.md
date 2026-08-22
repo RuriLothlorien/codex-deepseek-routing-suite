@@ -1,6 +1,8 @@
 ## 简介
 
-**codex-deepseek-routing-suite** 是 dsh-routing-suite 的 Codex 移植版：任务感知思维模式路由（spec / react / weak），通过 Hooks + MCP 工具实现首轮 persona 注入、工具面硬锚定与双后端模式隔离子代理。
+**codex-deepseek-routing-suite** 是 [dsh-routing-suite](https://github.com/yjh051108/dsh-routing-suite) 的 Codex 移植版：任务感知思维模式路由（spec / react / weak），通过 Hooks + MCP 工具实现首轮 persona 注入、工具面硬锚定与双后端模式隔离子代理。
+
+- 致谢：原作者 [yjh051108](https://github.com/yjh051108) 及 **风神插件**
 
 - 主会话唯一形态：`model_instructions_file` 替换内置 identity（RL 句 + 路由规则）
 - 首轮硬锚定：首个核心工具调用前仅 `Bash`/`exec_command` + `apply_patch`
@@ -25,7 +27,9 @@
 
 ## Overview (English)
 
-**codex-deepseek-routing-suite** is a Codex port of dsh-routing-suite: task-aware reasoning-mode routing (spec / react / weak) with first-turn persona injection, tool anchoring, and dual-backend mode isolation via Hooks + MCP tools.
+**codex-deepseek-routing-suite** is a Codex port of [dsh-routing-suite](https://github.com/yjh051108/dsh-routing-suite): task-aware reasoning-mode routing (spec / react / weak) with first-turn persona injection, tool anchoring, and dual-backend mode isolation via Hooks + MCP tools.
+
+- Thanks to the original author [yjh051108](https://github.com/yjh051108) and the **风神插件 (Fengshen plugin)**
 
 - `model_instructions_file` persona replacement is the only release form
 - First-turn hard anchoring: only `Bash`/`exec_command` and `apply_patch` until the first core tool call

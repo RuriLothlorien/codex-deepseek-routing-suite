@@ -6,7 +6,7 @@
 
 > [English](README.en.md) | 中文
 
-**dsh-routing-suite 的 Codex 移植版**：任务感知思维模式路由（spec / react / weak），通过 Hooks + MCP 工具让 Codex 按任务类型采用匹配的思维模式，并在首轮对工具面做硬锚定。
+**[dsh-routing-suite](https://github.com/yjh051108/dsh-routing-suite) 的 Codex 移植版**：任务感知思维模式路由（spec / react / weak），通过 Hooks + MCP 工具让 Codex 按任务类型采用匹配的思维模式，并在首轮对工具面做硬锚定。
 
 > ⚠️ **模型适配声明**：本套件专门面向 **Codex + DeepSeek** 设计，仅在 **Codex（桌面端/CLI）搭配 DeepSeek V4 Flash** 组合上实测调优；**DeepSeek V4 Pro 未测试，效果未验证**。`router-core.mjs` 中的 Pro 分支来自原项目移植，请按“未实测”对待。
 
@@ -78,6 +78,10 @@ codex-deepseek-routing-suite/
 ```powershell
 .\uninstall.ps1
 ```
+
+## 致谢
+
+感谢原作者 [yjh051108](https://github.com/yjh051108) 及 **风神插件**；本套件基于 [dsh-routing-suite](https://github.com/yjh051108/dsh-routing-suite)（MIT）移植，原项目归属详见 NOTICE。
 
 ## 版本兼容
 

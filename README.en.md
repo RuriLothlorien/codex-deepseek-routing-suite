@@ -6,7 +6,7 @@
 
 > English | [中文](README.md)
 
-A Codex port of **dsh-routing-suite**: task-aware reasoning-mode routing (spec / react / weak) via Hooks + MCP tools, with first-turn tool anchoring.
+A Codex port of **[dsh-routing-suite](https://github.com/yjh051108/dsh-routing-suite)**: task-aware reasoning-mode routing (spec / react / weak) via Hooks + MCP tools, with first-turn tool anchoring.
 
 > ⚠️ **Model status**: designed specifically for **Codex + DeepSeek**; tested and tuned on **Codex (desktop/CLI) with DeepSeek V4 Flash**. **DeepSeek V4 Pro is NOT tested**; the Pro branch in `router-core.mjs` is inherited from the original project and should be treated as unverified.
 
@@ -35,6 +35,10 @@ Skill-only usage: copy or symlink `skills/dsh-router` into `~/.codex/skills/` (o
 
 - `docs/architecture.md` — mechanism mapping, contracts, and model status.
 - `CHANGELOG.md` — version history.
+
+## Acknowledgments
+
+Thanks to the original author [yjh051108](https://github.com/yjh051108) and the **风神插件 (Fengshen plugin)**. This suite is a port of [dsh-routing-suite](https://github.com/yjh051108/dsh-routing-suite) (MIT); original attribution is in NOTICE.
 
 ## License
 
