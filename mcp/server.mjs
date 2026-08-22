@@ -1,5 +1,5 @@
 /**
- * dsh-router MCP server (stdio, zero dependencies).
+ * codex-deepseek-routing-suite MCP server (stdio, zero dependencies).
  *
  * Tools:
  *   dev_router_status(session_id?)     - current mode/band/persona/core/state
@@ -24,7 +24,7 @@ import {
 const TOOLS = [
   {
     name: 'dev_router_status',
-    description: 'Show the dsh-router routing state for a session: mode, band, persona, first-turn core tools, promotion, override, anchoring and routerMode.',
+    description: 'Show the codex-deepseek-routing-suite routing state for a session: mode, band, persona, first-turn core tools, promotion, override, anchoring and routerMode.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -46,7 +46,7 @@ const TOOLS = [
   },
   {
     name: 'dev_router_test',
-    description: 'Run the dsh-router unit tests and hook scenario tests; returns a PASS/FAIL summary.',
+    description: 'Run the codex-deepseek-routing-suite unit tests and hook scenario tests; returns a PASS/FAIL summary.',
     inputSchema: { type: 'object', properties: {} },
   },
   {
@@ -88,7 +88,7 @@ async function handle(msg) {
       send(msg.id, {
         protocolVersion: '2025-03-26',
         capabilities: { tools: {} },
-        serverInfo: { name: 'dsh-router', version: '0.1.0' },
+        serverInfo: { name: 'codex-deepseek-routing-suite', version: '0.1.3' },
       })
       break
     case 'notifications/initialized':

@@ -12,7 +12,7 @@
 import { spawnSync } from 'node:child_process'
 import {
   copyFileSync, existsSync, lstatSync, mkdirSync, readFileSync, readdirSync,
-  rmSync, statSync, writeFileSync,
+  renameSync, rmSync, statSync, writeFileSync,
 } from 'node:fs'
 import { homedir } from 'node:os'
 import { delimiter, dirname, join, resolve, sep } from 'node:path'
@@ -31,8 +31,12 @@ function parseArgs(argv) {
 
 const args = parseArgs(process.argv.slice(2))
 const codexHome = resolve(args.home || join(homedir(), '.codex'))
-const dst = join(codexHome, 'routing-suite')
-const skillDst = join(codexHome, 'skills', 'dsh-router')
+const CODE_NAME = 'codex-deepseek-routing-suite'
+const OLD_CODE_NAME = 'dsh-router'
+const dst = join(codexHome, CODE_NAME)
+const skillDst = join(codexHome, 'skills', CODE_NAME)
+const oldDst = join(codexHome, 'routing-suite')
+const oldSkillDst = join(codexHome, 'skills', OLD_CODE_NAME)
 const agentsDst = join(codexHome, 'agents')
 const configPath = join(codexHome, 'config.toml')
 const stamp = new Date().toISOString().replace(/[-:.TZ]/g, '').slice(0, 14)
@@ -98,9 +102,9 @@ function escapeRegExp(s) {
   return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 }
 
-function setMarkerBlock(text, marker, block, { insertTop = false } = {}) {
-  const begin = `# >>> dsh-router ${marker}: begin >>>`
-  const end = `# >>> dsh-router ${marker}: end <<<`
+function setMarkerBlock(text, label, marker, block, { insertTop = false } = {}) {
+  const begin = `# >>> ${label} ${marker}: begin >>>`
+  const end = `# >>> ${label} ${marker}: end <<<`
   const trimmed = block.trimEnd()
   if (text.includes(begin)) {
     // Consume the trailing whitespace left after the old end marker so
@@ -120,12 +124,19 @@ function setMarkerBlock(text, marker, block, { insertTop = false } = {}) {
   return `${text.trimEnd()}\n\n${trimmed}\n`
 }
 
+function removeMarkerBlock(text, label, marker) {
+  const begin = `# >>> ${label} ${marker}: begin >>>`
+  const end = `# >>> ${label} ${marker}: end <<<`
+  const re = new RegExp(`${escapeRegExp(begin)}[\\s\\S]*?${escapeRegExp(end)}\\s*`)
+  return text.replace(re, '')
+}
+
 function mergeConfigToml(configPath, runtimeDir) {
   let text = ''
   if (existsSync(configPath)) text = readFileSync(configPath, 'utf8')
   const fs = runtimeDir.replace(/\\/g, '/')
 
-  const hooksBlock = `# >>> dsh-router hooks: begin >>>
+  const hooksBlock = `# >>> ${CODE_NAME} hooks: begin >>>
 [[hooks.UserPromptSubmit]]
 [[hooks.UserPromptSubmit.hooks]]
 type = "command"
@@ -141,27 +152,31 @@ type = "command"
 command = "node ${fs}/hooks/router-pre-tool.mjs"
 command_windows = "node ${fs}/hooks/router-pre-tool.mjs"
 timeout = 10
-# >>> dsh-router hooks: end <<<`
+# >>> ${CODE_NAME} hooks: end <<<`
 
-  const mcpBlock = `# >>> dsh-router mcp: begin >>>
-[mcp_servers.dsh-router]
+  const mcpBlock = `# >>> ${CODE_NAME} mcp: begin >>>
+[mcp_servers.${CODE_NAME}]
 type = "stdio"
 command = "node"
 args = ["${fs}/mcp/server.mjs"]
 startup_timeout_sec = 30
 tool_timeout_sec = 120
-# >>> dsh-router mcp: end <<<`
+# >>> ${CODE_NAME} mcp: end <<<`
 
-  const instructionsBlock = `# >>> dsh-router instructions: begin >>>
+  const instructionsBlock = `# >>> ${CODE_NAME} instructions: begin >>>
 model_instructions_file = "${fs}/instructions/base.md"
-# >>> dsh-router instructions: end <<<`
+# >>> ${CODE_NAME} instructions: end <<<`
 
-  text = setMarkerBlock(text, 'hooks', hooksBlock)
-  text = setMarkerBlock(text, 'mcp', mcpBlock)
-  text = setMarkerBlock(text, 'instructions', instructionsBlock, { insertTop: true })
+  // Remove legacy dsh-router marker blocks from older installs.
+  for (const marker of ['hooks', 'mcp', 'instructions']) {
+    text = removeMarkerBlock(text, OLD_CODE_NAME, marker)
+  }
+  text = setMarkerBlock(text, CODE_NAME, 'hooks', hooksBlock)
+  text = setMarkerBlock(text, CODE_NAME, 'mcp', mcpBlock)
+  text = setMarkerBlock(text, CODE_NAME, 'instructions', instructionsBlock, { insertTop: true })
   // Safety net: collapse any 3+ newline runs (legacy accumulated blank lines)
   // and keep a single trailing newline.
-  return `${text.replace(/\n{3,}/g, '\n\n').trimEnd()}\n`
+  return `${text.replace(/\n{3,}/g, '\n\n').replace(/^\n+/, '').trimEnd()}\n`
 }
 
 step(1, `Backing up ${configPath}`)
@@ -169,6 +184,21 @@ if (existsSync(configPath) && !args.dryRun) {
   const backup = `${configPath}.bak-${stamp}`
   copyFileSync(configPath, backup)
   console.log(`  backup: ${backup}`)
+}
+
+step(1.5, `Migrating legacy layout (dsh-router -> ${CODE_NAME})`)
+if (!args.dryRun) {
+  if (existsSync(oldDst) && !existsSync(dst)) {
+    renameSync(oldDst, dst)
+    console.log(`  moved ${oldDst} -> ${dst}`)
+  } else if (existsSync(oldDst)) {
+    removeInside(oldDst, codexHome)
+    console.log(`  removed stale ${oldDst}`)
+  }
+  if (existsSync(oldSkillDst)) {
+    removeInside(oldSkillDst, codexHome)
+    console.log(`  removed stale ${oldSkillDst}`)
+  }
 }
 
 step(2, `Copying runtime to ${dst}`)
@@ -190,8 +220,8 @@ step(3, `Installing skill to ${skillDst}`)
 if (!args.dryRun) {
   removeInside(skillDst, codexHome)
   mkdirSync(skillDst, { recursive: true })
-  copyFileSync(join(root, 'skills', 'dsh-router', 'SKILL.md'), join(skillDst, 'SKILL.md'))
-  copyTree(join(root, 'skills', 'dsh-router', 'references'), join(skillDst, 'references'))
+  copyFileSync(join(root, 'skills', CODE_NAME, 'SKILL.md'), join(skillDst, 'SKILL.md'))
+  copyTree(join(root, 'skills', CODE_NAME, 'references'), join(skillDst, 'references'))
 }
 
 step(4, 'Installing native agents (optional backend; multi_agent stays off)')

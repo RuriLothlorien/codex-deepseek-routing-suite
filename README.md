@@ -52,13 +52,13 @@
 
 - `UserPromptSubmit` 钩子：记录首条用户消息并分类，按轮返回 persona + 引导（`additionalContext`）。
 - `PreToolUse` 钩子：首轮仅放行核心工具，首个核心调用后置 `promoted=true` 并全量放开。
-- 会话状态落盘于 `~/.codex/routing-suite/state/`，resume/续接不丢。
+- 会话状态落盘于 `~/.codex/codex-deepseek-routing-suite/state/`，resume/续接不丢。
 - MCP 服务器读写同一状态，支持查看/切换模式、运行自检、派生隔离子进程。
 
 ### 安全性分析
 
 - **全本地运行**：钩子与 MCP 服务器均为本机零依赖 Node 脚本；日常路由（分类、注入、锚定、状态读写）不产生任何网络请求或遥测。
-- **数据边界**：状态仅写入 `~/.codex/routing-suite/state/`（会话 id、首条消息文本、模式/复杂度/提升状态）；不读取、不保存密钥或令牌。
+- **数据边界**：状态仅写入 `~/.codex/codex-deepseek-routing-suite/state/`（会话 id、首条消息文本、模式/复杂度/提升状态）；不读取、不保存密钥或令牌。
 - **权限最小化**：`UserPromptSubmit` 只返回注入文本；`PreToolUse` 只返回放行/拒绝决策，不代替你执行任何命令；`model_instructions_file` 仅指向一个只读 Markdown 文件。
 - **可审计、可回滚**：所有行为可在会话记录中复核；`config.json` 与状态文件可人工检查；`uninstall.mjs` / `uninstall.sh` / `uninstall.ps1` 会移除 config.toml 标记块、运行时、技能与 agents，完整还原。
 - **信任链**：两个钩子需你在 `codex /hooks` 或桌面端显式信任后才生效；安装脚本与钩子源码全部开源，安装前可审阅。
@@ -71,7 +71,7 @@
 codex-deepseek-routing-suite/
 ├─ hooks/                  # UserPromptSubmit + PreToolUse 钩子
 ├─ mcp/server.mjs          # 零依赖 MCP 服务器（dev_router_*）
-├─ skills/dsh-router/      # 技能手册与 persona 参考
+├─ skills/codex-deepseek-routing-suite/      # 技能手册与 persona 参考
 ├─ agents/                 # 可选原生 agents（router_*）
 ├─ instructions/base.md    # 主会话 persona 替换基础指令
 ├─ test/                   # 仓库 39 例（会话内自检 38 例）

@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- 全套件命名对齐：技能、运行时目录、config.toml 标记、MCP 服务器名与 persona 身份统一为 `codex-deepseek-routing-suite`（旧 `dsh-router` 布局由安装器自动迁移：旧运行时目录改名保留状态、旧技能目录移除、旧标记块清理）；上游 `dsh-routing-suite` / `dsh-router-standard` 署名与 `dev_router_*` 工具名保持不变。
+
 ## 0.1.3 (2026-08-23)
 
 - 修复安装器重复运行在 `~/.codex/config.toml` 中累积空白行的问题（`install.mjs` / `install.ps1` 替换标记块时消费残留换行，并对 3+ 连续换行做归一化）；`uninstall.mjs` / `uninstall.ps1` 同步清理移除标记后的残留空行。

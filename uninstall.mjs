@@ -22,8 +22,12 @@ function parseArgs(argv) {
 const args = parseArgs(process.argv.slice(2))
 const codexHome = resolve(args.home || join(homedir(), '.codex'))
 const configPath = join(codexHome, 'config.toml')
-const dst = join(codexHome, 'routing-suite')
-const skillDst = join(codexHome, 'skills', 'dsh-router')
+const CODE_NAME = 'codex-deepseek-routing-suite'
+const OLD_CODE_NAME = 'dsh-router'
+const dst = join(codexHome, CODE_NAME)
+const skillDst = join(codexHome, 'skills', CODE_NAME)
+const oldDst = join(codexHome, 'routing-suite')
+const oldSkillDst = join(codexHome, 'skills', OLD_CODE_NAME)
 const agentsDst = join(codexHome, 'agents')
 const stamp = new Date().toISOString().replace(/[-:.TZ]/g, '').slice(0, 14)
 
@@ -44,11 +48,13 @@ if (existsSync(configPath)) {
     copyFileSync(configPath, backup)
     console.log(`  backup: ${backup}`)
     let text = readFileSync(configPath, 'utf8')
-    for (const marker of ['hooks', 'mcp', 'instructions']) {
-      const begin = `# >>> dsh-router ${marker}: begin >>>`
-      const end = `# >>> dsh-router ${marker}: end <<<`
-      const pattern = `${begin.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}[\\s\\S]*?${end.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`
-      text = text.replace(new RegExp(pattern), '')
+    for (const label of [CODE_NAME, OLD_CODE_NAME]) {
+      for (const marker of ['hooks', 'mcp', 'instructions']) {
+        const begin = `# >>> ${label} ${marker}: begin >>>`
+        const end = `# >>> ${label} ${marker}: end <<<`
+        const pattern = `${begin.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}[\\s\\S]*?${end.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*`
+        text = text.replace(new RegExp(pattern), '')
+      }
     }
     // Remove leftover blank lines left behind by removed marker blocks.
     text = text.replace(/\n{3,}/g, '\n\n').replace(/^\n+/, '')
@@ -68,6 +74,8 @@ console.log('[3/4] Removing runtime and skill')
 if (!args.dryRun) {
   removeInside(dst, codexHome)
   removeInside(skillDst, codexHome)
+  removeInside(oldDst, codexHome)
+  removeInside(oldSkillDst, codexHome)
 }
 
 console.log('[4/4] Done. Restart Codex. Config backup kept for recovery.')

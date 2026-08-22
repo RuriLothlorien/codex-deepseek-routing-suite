@@ -1,4 +1,4 @@
-# dsh-router install script for Codex (user-level direct install).
+# codex-deepseek-routing-suite install script for Codex (user-level direct install).
 # Usage: .\install.ps1
 $ErrorActionPreference = 'Stop'
 
@@ -19,9 +19,9 @@ function Get-CodexCli {
 }
 
 function Set-MarkerBlock {
-  param([string]$Text, [string]$Marker, [string]$Block, [switch]$InsertTop)
-  $begin = "# >>> dsh-router ${Marker}: begin >>>"
-  $end = "# >>> dsh-router ${Marker}: end <<<"
+  param([string]$Text, [string]$Label, [string]$Marker, [string]$Block, [switch]$InsertTop)
+  $begin = "# >>> ${Label} ${Marker}: begin >>>"
+  $end = "# >>> ${Label} ${Marker}: end <<<"
   $trimmed = $Block.TrimEnd()
   if ($Text.Contains($begin)) {
     # Consume the trailing whitespace left after the old end marker so
@@ -48,15 +48,24 @@ function Set-MarkerBlock {
   return $Text
 }
 
+function Remove-MarkerBlock {
+  param([string]$Text, [string]$Label, [string]$Marker)
+  $begin = "# >>> ${Label} ${Marker}: begin >>>"
+  $end = "# >>> ${Label} ${Marker}: end <<<"
+  $pattern = [regex]::Escape($begin) + '.*?' + [regex]::Escape($end) + '\s*'
+  return [regex]::Replace($Text, $pattern, '', [Text.RegularExpressions.RegexOptions]::Singleline)
+}
+
 function Merge-ConfigToml {
   param([string]$ConfigPath, [string]$RuntimeDir)
   $toml = ''
   if (Test-Path -LiteralPath $ConfigPath) { $toml = Get-Content -Raw -LiteralPath $ConfigPath }
   if ($null -eq $toml) { $toml = '' }
   $fs = $RuntimeDir.Replace('\', '/')
+  $label = 'codex-deepseek-routing-suite'
 
   $hooksBlock = @"
-# >>> dsh-router hooks: begin >>>
+# >>> ${label} hooks: begin >>>
 [[hooks.UserPromptSubmit]]
 [[hooks.UserPromptSubmit.hooks]]
 type = "command"
@@ -72,33 +81,38 @@ type = "command"
 command = "node $fs/hooks/router-pre-tool.mjs"
 command_windows = "node $fs/hooks/router-pre-tool.mjs"
 timeout = 10
-# >>> dsh-router hooks: end <<<
+# >>> ${label} hooks: end <<<
 "@
 
   $mcpBlock = @"
-# >>> dsh-router mcp: begin >>>
-[mcp_servers.dsh-router]
+# >>> ${label} mcp: begin >>>
+[mcp_servers.${label}]
 type = "stdio"
 command = "node"
 args = ["$fs/mcp/server.mjs"]
 startup_timeout_sec = 30
 tool_timeout_sec = 120
-# >>> dsh-router mcp: end <<<
+# >>> ${label} mcp: end <<<
 "@
 
   $instructionsBlock = @"
-# >>> dsh-router instructions: begin >>>
+# >>> ${label} instructions: begin >>>
 model_instructions_file = "$fs/instructions/base.md"
-# >>> dsh-router instructions: end <<<
+# >>> ${label} instructions: end <<<
 "@
 
-  $toml = Set-MarkerBlock -Text $toml -Marker 'hooks' -Block $hooksBlock
-  $toml = Set-MarkerBlock -Text $toml -Marker 'mcp' -Block $mcpBlock
+  # Remove legacy dsh-router marker blocks from older installs.
+  foreach ($marker in @('hooks', 'mcp', 'instructions')) {
+    $toml = Remove-MarkerBlock -Text $toml -Label 'dsh-router' -Marker $marker
+  }
+  $toml = Set-MarkerBlock -Text $toml -Label $label -Marker 'hooks' -Block $hooksBlock
+  $toml = Set-MarkerBlock -Text $toml -Label $label -Marker 'mcp' -Block $mcpBlock
   # Persona replacement via model_instructions_file is the only form
   # (closest to the original dsh-router-standard semantics).
-  $toml = Set-MarkerBlock -Text $toml -Marker 'instructions' -Block $instructionsBlock -InsertTop
+  $toml = Set-MarkerBlock -Text $toml -Label $label -Marker 'instructions' -Block $instructionsBlock -InsertTop
   # Safety net: collapse any 3+ newline runs and keep a single trailing newline.
   $toml = $toml -replace '\n{3,}', "`n`n"
+  $toml = $toml -replace '^\n+', ''
   $toml = $toml.TrimEnd() + "`n"
   Set-Content -LiteralPath $ConfigPath -Value $toml -Encoding UTF8
 }
@@ -107,8 +121,10 @@ $root = Split-Path -Parent $MyInvocation.MyCommand.Path
 $homeDir = $env:USERPROFILE
 if (-not $homeDir) { throw 'USERPROFILE is not set' }
 $codexHome = Join-Path $homeDir '.codex'
-$dst = Join-Path $codexHome 'routing-suite'
-$skillDst = Join-Path $codexHome 'skills\dsh-router'
+$dst = Join-Path $codexHome 'codex-deepseek-routing-suite'
+$skillDst = Join-Path $codexHome 'skills\codex-deepseek-routing-suite'
+$oldDst = Join-Path $codexHome 'routing-suite'
+$oldSkillDst = Join-Path $codexHome 'skills\dsh-router'
 $configPath = Join-Path $codexHome 'config.toml'
 $stamp = Get-Date -Format 'yyyyMMdd-HHmmss'
 
@@ -117,6 +133,19 @@ if (Test-Path -LiteralPath $configPath) {
   $backup = "$configPath.bak-$stamp"
   Copy-Item -LiteralPath $configPath -Destination $backup -Force
   Write-Host "  backup: $backup"
+}
+
+Write-Host '[1.5/7] Migrating legacy layout (dsh-router -> codex-deepseek-routing-suite)'
+if ((Test-Path -LiteralPath $oldDst) -and -not (Test-Path -LiteralPath $dst)) {
+  Move-Item -LiteralPath $oldDst -Destination $dst
+  Write-Host "  moved $oldDst -> $dst"
+} elseif (Test-Path -LiteralPath $oldDst) {
+  Remove-Item -LiteralPath $oldDst -Recurse -Force
+  Write-Host "  removed stale $oldDst"
+}
+if (Test-Path -LiteralPath $oldSkillDst) {
+  Remove-Item -LiteralPath $oldSkillDst -Recurse -Force
+  Write-Host "  removed stale $oldSkillDst"
 }
 
 Write-Host "[2/6] Copying runtime to $dst"
@@ -153,9 +182,9 @@ if (Test-Path -LiteralPath $skillDst) {
   }
 }
 New-Item -ItemType Directory -Force -Path $skillDst | Out-Null
-Copy-Item -LiteralPath (Join-Path $root 'skills\dsh-router\SKILL.md') -Destination (Join-Path $skillDst 'SKILL.md') -Force
+Copy-Item -LiteralPath (Join-Path $root 'skills\codex-deepseek-routing-suite\SKILL.md') -Destination (Join-Path $skillDst 'SKILL.md') -Force
 New-Item -ItemType Directory -Force -Path (Join-Path $skillDst 'references') | Out-Null
-Copy-Item -Path (Join-Path $root 'skills\dsh-router\references\*') -Destination (Join-Path $skillDst 'references') -Recurse -Force
+Copy-Item -Path (Join-Path $root 'skills\codex-deepseek-routing-suite\references\*') -Destination (Join-Path $skillDst 'references') -Recurse -Force
 
 Write-Host '[4/7] Installing native agents (optional backend; multi_agent stays off)'
 $agentsDst = Join-Path $codexHome 'agents'
