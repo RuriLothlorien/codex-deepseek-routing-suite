@@ -6,7 +6,7 @@
 - 首轮硬锚定：首个核心工具调用前仅 `Bash`/`exec_command` + `apply_patch`
 - 双后端：默认一次性 `codex exec` 子进程；可选原生 `router_*` agents（不强制开启多智能体配置）
 - 零运行时依赖；安装/卸载脚本幂等且可逆；Codex 直装，不依赖 CC Switch
-- 模型适配：**仅 Codex + DeepSeek V4 Flash 组合实测；DeepSeek V4 Pro 及其他模型/宿主未测试，效果未验证**
+- 模型适配：**本套件专门面向 Codex + DeepSeek 设计；仅 Codex + DeepSeek V4 Flash 组合实测；DeepSeek V4 Pro 未测试，效果未验证**
 
 ## 安装
 
@@ -31,7 +31,7 @@
 - First-turn hard anchoring: only `Bash`/`exec_command` and `apply_patch` until the first core tool call
 - Dual backend: one-shot `codex exec` subprocess by default; optional native `router_*` agents (no forced multi-agent config)
 - Zero runtime dependencies; idempotent install/uninstall; direct Codex install, no CC Switch dependency
-- Model status: **tested on Codex + DeepSeek V4 Flash only; DeepSeek V4 Pro and other models/hosts NOT tested**
+- Model status: **designed for Codex + DeepSeek; tested on Codex + DeepSeek V4 Flash only; DeepSeek V4 Pro NOT tested**
 
 ### Install
 

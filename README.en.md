@@ -8,7 +8,7 @@
 
 A Codex port of **dsh-routing-suite**: task-aware reasoning-mode routing (spec / react / weak) via Hooks + MCP tools, with first-turn tool anchoring.
 
-> ⚠️ **Model status**: tested and tuned on **Codex (desktop/CLI) with DeepSeek V4 Flash** only. **DeepSeek V4 Pro and other models/hosts are NOT tested**; the Pro branch in `router-core.mjs` is inherited from the original project and should be treated as unverified.
+> ⚠️ **Model status**: designed specifically for **Codex + DeepSeek**; tested and tuned on **Codex (desktop/CLI) with DeepSeek V4 Flash**. **DeepSeek V4 Pro is NOT tested**; the Pro branch in `router-core.mjs` is inherited from the original project and should be treated as unverified.
 
 ## Highlights
 
