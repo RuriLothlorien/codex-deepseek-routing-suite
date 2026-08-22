@@ -128,3 +128,21 @@ export function matchesCore(normalized, coreSet) {
   }
   return false
 }
+
+/** Explicit Pro-family markers. Unknown/empty ids are NOT treated as Pro. */
+const PRO_MODEL_RE = /pro|reasoner|r1\b|v4-pro/i
+
+/** True only for an explicit Pro-family model id (and not a Flash one). */
+export function isProModel(modelId) {
+  const m = String(modelId || '')
+  return PRO_MODEL_RE.test(m) && !/flash/i.test(m)
+}
+
+/**
+ * Canonical model id for persona routing: only an explicit Pro id stays Pro;
+ * anything unknown/empty falls back to the tested DeepSeek V4 Flash model.
+ */
+export function routerModelFor(modelId) {
+  const m = String(modelId || '').trim()
+  return isProModel(m) ? m : 'deepseek-v4-flash'
+}

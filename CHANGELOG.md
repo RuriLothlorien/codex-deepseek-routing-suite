@@ -7,6 +7,7 @@
 - `dev_mode_subagent`：CLI 探测补充 PATH 回退（macOS/Linux）。
 - 测试：新增安装器用例（临时 codex home 安装/卸载）；仓库 `npm test` 32 例，会话内 `dev_router_test` 31 例（不含安装器用例）。
 - 补充 macOS/Linux 的 `install.sh` / `uninstall.sh`（Node 安装/卸载器的 POSIX 入口）。
+- 修复：模型识别默认按 Flash——模型缺失或未识别时不再误用未测试的 Pro 分支（`routerModelFor` 保护 + 测试）。
 
 ## 0.1.0 (2026-08-21)
 

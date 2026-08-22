@@ -57,6 +57,7 @@
 - **深度自适应引导**：按 `isComplexTask`（长文本或 架构/设计/重构 等关键词，含中文）选择 deep-guide / fast-guide（P30：深度 +12% 且收敛更快）。
 - **中文任务分类适配**：`SPEC_RE` 增加 `规划|计划|方案|阅读|移植`，降低 DeepSeek 中文规划/移植任务被“实现”误判为 react 的概率。
 - **模式隔离子进程**：`dev_mode_subagent` 用 `model_instructions_file` 做完整 persona 替换，剥离桌面端线程环境变量、禁用 hooks/memories；`reasoning` 参数映射 `model_reasoning_effort`。
+- **模型识别默认 Flash**：按模型 slug 自动区分 Flash/Pro；模型缺失或未识别（如 `deepseek-chat`、空值）时默认按已实测的 Flash 分支处理，避免误用未测试的 Pro 分支。
 - 上述测量依据来自原项目（P11/P23/P24/P30 等，DSH 环境）；本移植在 Codex + V4 Flash 组合上实测。
 
 ## 仓库结构

@@ -51,6 +51,7 @@ Designed for Codex + DeepSeek and tested on **DeepSeek V4 Flash**:
 - Depth-adaptive guidance via `isComplexTask` (long text or architecture keywords, including Chinese): deep guide for complex tasks, fast guide for simple ones (P30).
 - Chinese task classification adaptation: `SPEC_RE` adds 规划/计划/方案/阅读/移植 to keep Chinese planning/porting tasks from being misrouted to react.
 - Mode-isolated subprocesses use `model_instructions_file` replacement, strip desktop thread env vars, and disable hooks/memories; `reasoning` maps to `model_reasoning_effort`.
+- Model detection defaults to Flash: the model slug distinguishes Flash/Pro; missing or unrecognized ids (e.g., `deepseek-chat`, empty) default to the tested Flash branch instead of the untested Pro branch.
 - Measurements cited (P11/P23/P24/P30) come from the original project's DSH environment; this port is tested on Codex + V4 Flash.
 
 ## Repository structure

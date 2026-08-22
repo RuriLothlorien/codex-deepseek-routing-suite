@@ -8,7 +8,7 @@
  */
 import { bandOf, classifyTask, isComplexTask, personaFor } from '../router-core.mjs'
 import {
-  readConfig, readSessionInput, readState, touchLatest, writeState,
+  readConfig, readSessionInput, readState, routerModelFor, touchLatest, writeState,
 } from './router-common.mjs'
 
 const RL_PERSONA = 'You are a helpful software engineer assistant.'
@@ -46,7 +46,7 @@ if (!text) {
 }
 
 const cfg = readConfig()
-const persona = cfg.routerMode === 'standard' ? RL_PERSONA : personaFor(mode, model)
+const persona = cfg.routerMode === 'standard' ? RL_PERSONA : personaFor(mode, routerModelFor(model))
 let context = OVERRIDE_PREFIX + persona
 if (band === 'weak') {
   context += state.complexity ? GUIDE_DEEP : GUIDE_WEAK

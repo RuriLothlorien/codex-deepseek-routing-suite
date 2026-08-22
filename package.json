@@ -30,6 +30,6 @@
     "NOTICE"
   ],
   "scripts": {
-    "test": "node --test test/router.test.mjs test/hook.test.mjs test/agents.test.mjs test/installer.test.mjs"
+    "test": "node --test test/router.test.mjs test/router-model.test.mjs test/hook.test.mjs test/agents.test.mjs test/installer.test.mjs"
   }
 }

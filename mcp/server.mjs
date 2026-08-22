@@ -18,7 +18,7 @@ import {
 } from '../router-core.mjs'
 import {
   LATEST_DIR, PERSONA_DIR, ROUTER_HOME, TMP_DIR, ensureDirs, readConfig, readState,
-  resolveLatestSessionId, statePath, writeState,
+  resolveLatestSessionId, routerModelFor, statePath, writeState,
 } from '../hooks/router-common.mjs'
 
 const TOOLS = [
@@ -171,7 +171,7 @@ async function callTool(name, args) {
     const mode = state.override ?? state.mode
     const persona = cfg.routerMode === 'standard'
       ? 'You are a helpful software engineer assistant.'
-      : personaFor(mode ?? 'weak', state.model || 'deepseek-v4-flash')
+      : personaFor(mode ?? 'weak', routerModelFor(state.model))
     return textResult([
       `session=${sessionId}`,
       `router-mode=${cfg.routerMode} (standard=RL sentence / spec=classified persona)`,
@@ -213,7 +213,7 @@ async function callTool(name, args) {
 function runTests() {
   const res = spawnSync(
     process.execPath,
-    ['--test', 'test/router.test.mjs', 'test/hook.test.mjs', 'test/agents.test.mjs'],
+    ['--test', 'test/router.test.mjs', 'test/router-model.test.mjs', 'test/hook.test.mjs', 'test/agents.test.mjs'],
     { cwd: ROUTER_HOME, env: { ...process.env, ROUTER_HOME }, encoding: 'utf8', timeout: 90_000 },
   )
   const tail = String(res.stdout || '').split('\n').filter((l) => /^(ℹ|✔|✖)/.test(l)).slice(-12).join('\n')
@@ -274,7 +274,7 @@ async function runModeSubagent(args, cfg) {
   const stamp = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
   const personaFile = join(PERSONA_DIR, `${String(args.mode).toLowerCase()}-${stamp}.md`)
   const outFile = join(TMP_DIR, `subagent-${stamp}.txt`)
-  const persona = personaFor(parsed, 'deepseek-v4-flash')
+  const persona = personaFor(parsed, routerModelFor(readState(sessionId).model))
   writeFileSync(personaFile, persona, 'utf8')
 
   const sessionId = resolveSession(undefined)

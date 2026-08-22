@@ -111,6 +111,16 @@ test('user-prompt: spec mode weak persona includes flash anchors', () => {
   assert.ok(ctx.includes('classify this task'))
 })
 
+test('user-prompt: unknown/empty model defaults to Flash persona (guard)', () => {
+  const { output } = runHook(
+    'router-user-prompt.mjs',
+    { ...BASE_INPUT, model: '', prompt: '今天天气怎么样' },
+    { seedConfig: { routerMode: 'spec' } },
+  )
+  const ctx = output.hookSpecificOutput?.additionalContext || ''
+  assert.ok(ctx.includes('review what you have already done'), `flash anchors expected, got: ${ctx}`)
+})
+
 test('user-prompt: complex weak task locks the deep guide', () => {
   const longPrompt = '请先通读这份材料，然后给出你的看法。'.repeat(8)
   const { output, state } = runHook('router-user-prompt.mjs', {
