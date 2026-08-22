@@ -12,6 +12,10 @@
 
 > ⚠️ **模型适配声明**：本套件专门面向 **Codex + DeepSeek** 设计，仅在 **Codex（桌面端/CLI）搭配 DeepSeek V4 Flash** 组合上实测调优；**DeepSeek V4 Pro 未测试，效果未验证**。`router-core.mjs` 中的 Pro 分支来自原项目移植，请按“未实测”对待。
 
+## 致谢
+
+感谢 [yjh051108](https://github.com/yjh051108) 的 **风神插件**；本套件基于 [dsh-routing-suite](https://github.com/yjh051108/dsh-routing-suite)（MIT）移植，原项目归属详见 NOTICE。
+
 ## 为什么需要（当 Codex/ChatGPT 作为 DeepSeek 的 Agent 时）
 
 原项目在 DeepSeek 系列上的实测（P1-P30）表明，当你用 Codex/ChatGPT 作为 DeepSeek 的 Agent 时，这套适配不是可选项：
@@ -101,10 +105,6 @@ node install.mjs        # 跨平台（推荐）；Windows PowerShell 亦可：.\
 node uninstall.mjs      # 跨平台（推荐）；Windows PowerShell 亦可：.\uninstall.ps1
 ./uninstall.sh          # macOS/Linux（Node 卸载器的 POSIX 入口）
 ```
-
-## 致谢
-
-感谢 [yjh051108](https://github.com/yjh051108) 的 **风神插件**；本套件基于 [dsh-routing-suite](https://github.com/yjh051108/dsh-routing-suite)（MIT）移植，原项目归属详见 NOTICE。
 
 ## 版本兼容
 

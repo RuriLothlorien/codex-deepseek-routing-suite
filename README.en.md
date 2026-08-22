@@ -12,6 +12,10 @@ If this suite helps you, please give it a ⭐.
 
 > ⚠️ **Model status**: designed specifically for **Codex + DeepSeek**; tested and tuned on **Codex (desktop/CLI) with DeepSeek V4 Flash**. **DeepSeek V4 Pro is NOT tested**; the Pro branch in `router-core.mjs` is inherited from the original project and should be treated as unverified.
 
+## Acknowledgments
+
+Thanks to the original author [yjh051108](https://github.com/yjh051108) and the **风神插件 (Fengshen plugin)**. This suite is a port of [dsh-routing-suite](https://github.com/yjh051108/dsh-routing-suite) (MIT); original attribution is in NOTICE.
+
 ## Why (when Codex/ChatGPT is the agent for DeepSeek)
 
 Measured on DeepSeek (P1-P30 in the original project), when Codex/ChatGPT acts as DeepSeek's agent, these adaptations are not optional:
@@ -110,6 +114,6 @@ node uninstall.mjs      # cross-platform (recommended); on Windows PowerShell: .
 - Model: designed for Codex + DeepSeek; tested on V4 Flash; V4 Pro untested.
 - License: MIT (original attribution in NOTICE).
 
-## Acknowledgments
+## License
 
-Thanks to the original author [yjh051108](https://github.com/yjh051108) and the **风神插件 (Fengshen plugin)**. This suite is a port of [dsh-routing-suite](https://github.com/yjh051108/dsh-routing-suite) (MIT); original attribution is in NOTICE.
+MIT (see NOTICE for original project attribution).
