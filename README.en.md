@@ -100,6 +100,7 @@ node uninstall.mjs      # cross-platform (recommended); on Windows PowerShell: .
 ## Docs
 
 - `docs/architecture.md` — mechanism mapping, contracts, and model status.
+- `docs/validation-report.md` — validation test report (Chinese).
 - `CHANGELOG.md` — version history.
 
 ## Compatibility
