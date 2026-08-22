@@ -17,8 +17,8 @@ import {
   bandFor, bandOf, coreFor, parseMode, personaFor, testinessFor,
 } from '../router-core.mjs'
 import {
-  LATEST_DIR, PERSONA_DIR, ROUTER_HOME, TMP_DIR, ensureDirs, readConfig, readState,
-  resolveLatestSessionId, routerModelFor, statePath, writeState,
+  LATEST_DIR, PERSONA_DIR, ROUTER_HOME, TMP_DIR, ensureDirs, modelClass, readConfig,
+  readState, resolveLatestSessionId, routerModelFor, statePath, writeState,
 } from '../hooks/router-common.mjs'
 
 const TOOLS = [
@@ -169,9 +169,13 @@ async function callTool(name, args) {
     const sessionId = resolveSession(args.session_id)
     const state = readState(sessionId)
     const mode = state.override ?? state.mode
-    const persona = cfg.routerMode === 'standard'
-      ? 'You are a helpful software engineer assistant.'
-      : personaFor(mode ?? 'weak', routerModelFor(state.model))
+    const mc = modelClass(state.model)
+    const supported = state.supported ?? (mc !== null)
+    const persona = !supported
+      ? '(workflow disabled: model is not DeepSeek V4 Flash/Pro)'
+      : (cfg.routerMode === 'standard'
+        ? 'You are a helpful software engineer assistant.'
+        : personaFor(mode ?? 'weak', routerModelFor(state.model)))
     return textResult([
       `session=${sessionId}`,
       `router-mode=${cfg.routerMode} (standard=RL sentence / spec=classified persona)`,
@@ -181,6 +185,7 @@ async function callTool(name, args) {
       `promoted=${state.promoted}`,
       `override=${state.override == null ? 'no' : fmtMode(state.override)}`,
       `anchoring=${cfg.anchoring}`,
+      `supported=${supported}`,
       `nativeAgents=${existsSync(join(ROUTER_HOME, 'agents', 'router-spec.toml')) ? 'installed' : 'missing'}`,
       `model=${state.model || 'unknown'}`,
     ].join('\n'))
@@ -269,15 +274,20 @@ async function runModeSubagent(args, cfg) {
   const task = String(args.task || '').trim()
   if (!task) return textResult('task is required')
 
+  const sessionId = resolveSession(undefined)
+  const st = readState(sessionId)
+  if (modelClass(st.model) === null) {
+    return textResult(`unsupported model "${st.model || ''}": the suite requires DeepSeek V4 Flash or Pro`)
+  }
+  const persona = personaFor(parsed, routerModelFor(st.model))
+
   mkdirSync(PERSONA_DIR, { recursive: true })
   mkdirSync(TMP_DIR, { recursive: true })
   const stamp = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
   const personaFile = join(PERSONA_DIR, `${String(args.mode).toLowerCase()}-${stamp}.md`)
   const outFile = join(TMP_DIR, `subagent-${stamp}.txt`)
-  const persona = personaFor(parsed, routerModelFor(readState(sessionId).model))
   writeFileSync(personaFile, persona, 'utf8')
 
-  const sessionId = resolveSession(undefined)
   const cwd = args.cwd
     ? resolve(String(args.cwd))
     : (resolveSessionCwd(sessionId) || process.cwd())

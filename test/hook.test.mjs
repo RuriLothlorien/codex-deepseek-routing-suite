@@ -111,14 +111,36 @@ test('user-prompt: spec mode weak persona includes flash anchors', () => {
   assert.ok(ctx.includes('classify this task'))
 })
 
-test('user-prompt: unknown/empty model defaults to Flash persona (guard)', () => {
+test('user-prompt: unsupported model disables workflow (no injection)', () => {
+  const { output, state } = runHook('router-user-prompt.mjs', {
+    ...BASE_INPUT,
+    model: 'gpt-5',
+    prompt: '帮我开发一个网页游戏',
+  })
+  assert.equal(output.hookSpecificOutput, undefined)
+  assert.equal(state.supported, false)
+})
+
+test('pre-tool: unsupported model allows everything (workflow disabled)', () => {
   const { output } = runHook(
-    'router-user-prompt.mjs',
-    { ...BASE_INPUT, model: '', prompt: '今天天气怎么样' },
-    { seedConfig: { routerMode: 'spec' } },
+    'router-pre-tool.mjs',
+    { ...BASE_INPUT, model: 'gpt-5', tool_name: 'mcp__some_server__do_thing', tool_input: {} },
+    {
+      seedState: {
+        mode: 1, band: 'react', firstUserText: '', complexity: null, promoted: false,
+        override: null, model: 'gpt-5', supported: false, modelClass: null,
+      },
+    },
   )
-  const ctx = output.hookSpecificOutput?.additionalContext || ''
-  assert.ok(ctx.includes('review what you have already done'), `flash anchors expected, got: ${ctx}`)
+  assert.equal(output.hookSpecificOutput, undefined)
+})
+
+test('pre-tool: unsupported model without prior state allows everything', () => {
+  const { output } = runHook(
+    'router-pre-tool.mjs',
+    { ...BASE_INPUT, model: 'gpt-5', tool_name: 'mcp__some_server__do_thing', tool_input: {} },
+  )
+  assert.equal(output.hookSpecificOutput, undefined)
 })
 
 test('user-prompt: complex weak task locks the deep guide', () => {
@@ -175,7 +197,7 @@ test('pre-tool: denies non-core tool before promotion', () => {
   const { output, state } = runHook(
     'router-pre-tool.mjs',
     { ...BASE_INPUT, tool_name: 'mcp__some_server__do_thing', tool_input: {} },
-    { seedState: { mode: 1, band: 'react', firstUserText: '', complexity: null, promoted: false, override: null, model: null } },
+    { seedState: { mode: 1, band: 'react', firstUserText: '', complexity: null, promoted: false, override: null, model: 'deepseek-v4-flash', supported: true, modelClass: 'flash' } },
   )
   assert.equal(output.hookSpecificOutput?.permissionDecision, 'deny')
   assert.match(output.hookSpecificOutput?.permissionDecisionReason || '', /router anchoring/)
@@ -183,7 +205,7 @@ test('pre-tool: denies non-core tool before promotion', () => {
 })
 
 test('pre-tool: core call promotes, then everything is allowed', () => {
-  const seed = { mode: 1, band: 'react', firstUserText: '', complexity: null, promoted: false, override: null, model: null }
+  const seed = { mode: 1, band: 'react', firstUserText: '', complexity: null, promoted: false, override: null, model: 'deepseek-v4-flash', supported: true, modelClass: 'flash' }
   const first = runHook('router-pre-tool.mjs', { ...BASE_INPUT, tool_name: 'apply_patch', tool_input: {} }, { seedState: seed })
   assert.equal(first.output.hookSpecificOutput, undefined)
   assert.equal(first.state.promoted, true)
@@ -199,13 +221,13 @@ test('pre-tool: anchoring=false allows everything', () => {
   const { output } = runHook(
     'router-pre-tool.mjs',
     { ...BASE_INPUT, tool_name: 'mcp__some_server__do_thing', tool_input: {} },
-    { seedState: { mode: 1, band: 'react', firstUserText: '', complexity: null, promoted: false, override: null, model: null }, seedConfig: { anchoring: false } },
+    { seedState: { mode: 1, band: 'react', firstUserText: '', complexity: null, promoted: false, override: null, model: 'deepseek-v4-flash', supported: true, modelClass: 'flash' }, seedConfig: { anchoring: false } },
   )
   assert.equal(output.hookSpecificOutput, undefined)
 })
 
 test('pre-tool: plan mode still anchors until first core call (DSH parity)', () => {
-  const seed = { mode: 1, band: 'react', firstUserText: '', complexity: null, promoted: false, override: null, model: null }
+  const seed = { mode: 1, band: 'react', firstUserText: '', complexity: null, promoted: false, override: null, model: 'deepseek-v4-flash', supported: true, modelClass: 'flash' }
   const denied = runHook(
     'router-pre-tool.mjs',
     { ...BASE_INPUT, permission_mode: 'plan', tool_name: 'mcp__some_server__do_thing', tool_input: {} },

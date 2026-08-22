@@ -58,6 +58,8 @@ export function readState(sessionId) {
     promoted: false,
     override: null,
     model: null,
+    supported: null,
+    modelClass: null,
   }
   writeFileSync(p, JSON.stringify(fresh, null, 2), 'utf8')
   return fresh
@@ -129,20 +131,35 @@ export function matchesCore(normalized, coreSet) {
   return false
 }
 
-/** Explicit Pro-family markers. Unknown/empty ids are NOT treated as Pro. */
+const FLASH_MODEL_RE = /flash/i
 const PRO_MODEL_RE = /pro|reasoner|r1\b|v4-pro/i
 
-/** True only for an explicit Pro-family model id (and not a Flash one). */
+/**
+ * Precise model-family classification: 'flash' / 'pro' / null.
+ * Anything that is neither an explicit Flash nor an explicit Pro id
+ * (aliases such as deepseek-chat, other models, empty/unknown) returns null,
+ * which disables the suite's workflow entirely.
+ */
+export function modelClass(modelId) {
+  const m = String(modelId || '').trim()
+  if (!m) return null
+  if (FLASH_MODEL_RE.test(m)) return 'flash'
+  if (PRO_MODEL_RE.test(m)) return 'pro'
+  return null
+}
+
+/** True only for an explicit Pro-family model id. */
 export function isProModel(modelId) {
-  const m = String(modelId || '')
-  return PRO_MODEL_RE.test(m) && !/flash/i.test(m)
+  return modelClass(modelId) === 'pro'
 }
 
 /**
- * Canonical model id for persona routing: only an explicit Pro id stays Pro;
- * anything unknown/empty falls back to the tested DeepSeek V4 Flash model.
+ * Canonical model id for persona routing: 'deepseek-v4-flash' or
+ * 'deepseek-v4-pro'; null when the model is not supported.
  */
 export function routerModelFor(modelId) {
-  const m = String(modelId || '').trim()
-  return isProModel(m) ? m : 'deepseek-v4-flash'
+  const c = modelClass(modelId)
+  if (c === 'flash') return 'deepseek-v4-flash'
+  if (c === 'pro') return 'deepseek-v4-pro'
+  return null
 }

@@ -8,7 +8,7 @@
  */
 import { bandOf, classifyTask } from '../router-core.mjs'
 import {
-  matchesCore, normalizeToolName, readConfig, readSessionInput, readState,
+  matchesCore, modelClass, normalizeToolName, readConfig, readSessionInput, readState,
   touchLatest, writeState,
 } from './router-common.mjs'
 
@@ -26,6 +26,16 @@ const cfg = readConfig()
 if (!cfg.anchoring) process.exit(0)
 
 let state = readState(sessionId)
+if (state.supported === false) process.exit(0)
+if (state.supported !== true) {
+  // No UserPromptSubmit state yet: derive support from the hook's model field.
+  const mc = modelClass(model)
+  if (mc === null) {
+    writeState(sessionId, { supported: false, modelClass: null, model })
+    process.exit(0)
+  }
+  state = writeState(sessionId, { supported: true, modelClass: mc, model })
+}
 if (state.promoted) process.exit(0)
 
 const mode = state.override ?? (state.mode ?? classifyTask(state.firstUserText || ''))

@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.3 (2026-08-22)
+
+- 严格模型门控：`modelClass` 精确区分 Flash / Pro，二者皆非（`deepseek-chat`、其他模型、缺失）时套件工作流整体停用——钩子不注入、不锚定，`dev_mode_subagent` 拒绝执行。
+- Flash 家族兼容：`deepseek-v4-flash-vision-exp` 等含 `flash` 的变体纳入 Flash 分支。
+- 修复 `dev_mode_subagent` 的 `sessionId` 声明顺序隐患（此前可能在运行时报错）。
+- `dev_router_status` 新增 `supported` 字段。
+- 测试：仓库 39 例，会话内 `dev_router_test` 38 例（安装器用例仅仓库）。
+
 ## 0.1.1 (2026-08-22)
 
 - 跨平台：新增 `install.mjs` / `uninstall.mjs`（Windows / macOS / Linux 通用，支持 `--home` 与 `--dry-run`）；Windows 保留 `install.ps1` / `uninstall.ps1`。

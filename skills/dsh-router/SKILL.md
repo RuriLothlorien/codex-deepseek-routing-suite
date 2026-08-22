@@ -9,6 +9,7 @@ description: 思维模式路由套件（dsh-routing-suite 的 Codex 移植版）
 
 ## 1. 模式与分类
 
+- 模型门控：仅 **DeepSeek V4 Flash / Pro** 生效（Flash 家族含 `deepseek-v4-flash-vision-exp` 等）；其他模型（如 `deepseek-chat`、缺失）时本套件工作流自动停用（不注入、不锚定）。
 - 分类：首条真实用户消息按关键词计数分到 `spec`（修复/排查/重构/规划/移植类）或 `react`（开发/构建/生成类）；平局或未命中 → `weak`（模型内路由，自己分类再行动）。
 - 量化：`spec` [0,0.2) 稳定带；`mixed` [0.2,0.5) 过渡带（陷阱，不自动选）；`react` [0.5,1] 稳定带。
 - routerMode：`standard`（默认，persona 恒为 RL 句 `You are a helpful software engineer assistant.`）；`spec`（按分类用 `personaFor` 选 persona，当前模型走 Flash 分支）。

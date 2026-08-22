@@ -8,7 +8,7 @@
  */
 import { bandOf, classifyTask, isComplexTask, personaFor } from '../router-core.mjs'
 import {
-  readConfig, readSessionInput, readState, routerModelFor, touchLatest, writeState,
+  modelClass, readConfig, readSessionInput, readState, routerModelFor, touchLatest, writeState,
 } from './router-common.mjs'
 
 const RL_PERSONA = 'You are a helpful software engineer assistant.'
@@ -26,6 +26,14 @@ const text = String(input.prompt || '').trim()
 
 if (!sessionId) process.exit(0)
 touchLatest(cwd, sessionId)
+
+const mc = modelClass(model)
+if (mc === null) {
+  writeState(sessionId, { supported: false, modelClass: null, model })
+  process.stdout.write(JSON.stringify({}))
+  process.exit(0)
+}
+writeState(sessionId, { supported: true, modelClass: mc, model })
 
 let state = readState(sessionId)
 if (text && !state.firstUserText) {
