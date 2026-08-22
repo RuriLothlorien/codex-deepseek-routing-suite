@@ -4,6 +4,7 @@
 
 - 严格模型门控：`modelClass` 精确区分 Flash / Pro，二者皆非（`deepseek-chat`、其他模型、缺失）时套件工作流整体停用——钩子不注入、不锚定，`dev_mode_subagent` 拒绝执行。
 - Flash 家族兼容：`deepseek-v4-flash-vision-exp` 等含 `flash` 的变体纳入 Flash 分支。
+- 修正门控范围：非 DeepSeek 模型的 `*-flash` / `*-pro`（如 `gpt-5-flash`）不再误判，一律停用工作流。
 - 修复 `dev_mode_subagent` 的 `sessionId` 声明顺序隐患（此前可能在运行时报错）。
 - `dev_router_status` 新增 `supported` 字段。
 - 测试：仓库 39 例，会话内 `dev_router_test` 38 例（安装器用例仅仓库）。

@@ -131,18 +131,20 @@ export function matchesCore(normalized, coreSet) {
   return false
 }
 
+const DEEPSEEK_MODEL_RE = /deepseek|^ds-/i
 const FLASH_MODEL_RE = /flash/i
 const PRO_MODEL_RE = /pro|reasoner|r1\b|v4-pro/i
 
 /**
  * Precise model-family classification: 'flash' / 'pro' / null.
- * Anything that is neither an explicit Flash nor an explicit Pro id
- * (aliases such as deepseek-chat, other models, empty/unknown) returns null,
- * which disables the suite's workflow entirely.
+ * Only DeepSeek models are considered; other vendors' ids that merely contain
+ * "flash" or "pro" (e.g. gpt-5-flash, qwen-flash, xxx-pro) return null, which
+ * disables the suite's workflow entirely.
  */
 export function modelClass(modelId) {
-  const m = String(modelId || '').trim()
+  const m = String(modelId || '').trim().toLowerCase()
   if (!m) return null
+  if (!DEEPSEEK_MODEL_RE.test(m)) return null
   if (FLASH_MODEL_RE.test(m)) return 'flash'
   if (PRO_MODEL_RE.test(m)) return 'pro'
   return null

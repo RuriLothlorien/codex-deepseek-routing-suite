@@ -51,7 +51,7 @@ Designed for Codex + DeepSeek and tested on **DeepSeek V4 Flash**:
 - Depth-adaptive guidance via `isComplexTask` (long text or architecture keywords, including Chinese): deep guide for complex tasks, fast guide for simple ones (P30).
 - Chinese task classification adaptation: `SPEC_RE` adds 规划/计划/方案/阅读/移植 to keep Chinese planning/porting tasks from being misrouted to react.
 - Mode-isolated subprocesses use `model_instructions_file` replacement, strip desktop thread env vars, and disable hooks/memories; `reasoning` maps to `model_reasoning_effort`.
-- Strict model gating: the model slug precisely distinguishes Flash / Pro; the Flash family includes `deepseek-v4-flash` and `deepseek-v4-flash-vision-exp`. Any other model (e.g., `deepseek-chat`, other models, missing) disables the suite workflow entirely (no injection, no anchoring, subagent refused).
+- Strict model gating: only DeepSeek models are classified precisely as Flash / Pro by slug (Flash family includes `deepseek-v4-flash`, `deepseek-v4-flash-vision-exp`, etc.). Any other vendor's `*-flash`/`*-pro` (e.g., `gpt-5-flash`), `deepseek-chat`, other models, or missing ids disable the workflow entirely (no injection, no anchoring, subagent refused).
 - Measurements cited (P11/P23/P24/P30) come from the original project's DSH environment; this port is tested on Codex + V4 Flash.
 
 ## Repository structure

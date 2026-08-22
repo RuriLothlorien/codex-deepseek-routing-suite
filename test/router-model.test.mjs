@@ -19,6 +19,12 @@ test('modelClass: precise flash/pro classification', () => {
 test('modelClass: non-DeepSeek/unknown/empty => null (workflow disabled)', () => {
   assert.equal(modelClass('deepseek-chat'), null)
   assert.equal(modelClass('gpt-5'), null)
+  assert.equal(modelClass('gpt-5-flash'), null)
+  assert.equal(modelClass('claude-3-flash'), null)
+  assert.equal(modelClass('qwen-flash'), null)
+  assert.equal(modelClass('xxx-flash'), null)
+  assert.equal(modelClass('xxx-pro'), null)
+  assert.equal(modelClass('v4-flash'), null)
   assert.equal(modelClass('custom-model'), null)
   assert.equal(modelClass(''), null)
   assert.equal(modelClass(undefined), null)
@@ -29,6 +35,7 @@ test('routerModelFor: canonical ids for supported models, null otherwise', () =>
   assert.equal(routerModelFor('deepseek-v4-flash-vision-exp'), 'deepseek-v4-flash')
   assert.equal(routerModelFor('deepseek-v4-pro'), 'deepseek-v4-pro')
   assert.equal(routerModelFor('deepseek-chat'), null)
+  assert.equal(routerModelFor('gpt-5-flash'), null)
   assert.equal(routerModelFor(''), null)
 })
 
