@@ -1,8 +1,10 @@
 # Changelog
 
-## Unreleased
+## 0.1.3 (2026-08-23)
 
 - 修复安装器重复运行在 `~/.codex/config.toml` 中累积空白行的问题（`install.mjs` / `install.ps1` 替换标记块时消费残留换行，并对 3+ 连续换行做归一化）；`uninstall.mjs` / `uninstall.ps1` 同步清理移除标记后的残留空行。
+- 影响平台：Windows / macOS / Linux（`install.sh` 委托 `install.mjs`，同一修复）。
+- 测试：新增安装器幂等回归（连续安装 config.toml 不变、无 3+ 连续换行）；仓库测试 40 例。
 
 ## 0.1.2 (2026-08-22)
 
