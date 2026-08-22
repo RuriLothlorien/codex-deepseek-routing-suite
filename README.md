@@ -81,7 +81,7 @@ codex-deepseek-routing-suite/
 
 ## 致谢
 
-感谢原作者 [yjh051108](https://github.com/yjh051108) 及 **风神插件**；本套件基于 [dsh-routing-suite](https://github.com/yjh051108/dsh-routing-suite)（MIT）移植，原项目归属详见 NOTICE。
+感谢 [yjh051108](https://github.com/yjh051108) 的 **风神插件**；本套件基于 [dsh-routing-suite](https://github.com/yjh051108/dsh-routing-suite)（MIT）移植，原项目归属详见 NOTICE。
 
 ## 版本兼容
 
