@@ -1,7 +1,5 @@
 # 架构与接口说明
 
-> 本文档为发布版整理：不含任何本机路径或私有信息；面向使用者与维护者。
-
 ## 1. 背景
 
 本套件移植自 DeepSeek Harness 生态的 [dsh-routing-suite](https://github.com/yjh051108/dsh-routing-suite)（MIT）。原项目在 DSH 侧用 `system-prompt/assemble` Waterfall 实现首轮 persona 注入与工具面裁剪；本套件用 Codex 对等扩展面实现相同语义：
