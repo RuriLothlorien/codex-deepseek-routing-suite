@@ -24,8 +24,10 @@ function Set-MarkerBlock {
   $end = "# >>> dsh-router ${Marker}: end <<<"
   $trimmed = $Block.TrimEnd()
   if ($Text.Contains($begin)) {
-    $pattern = [regex]::Escape($begin) + '.*?' + [regex]::Escape($end)
-    $Text = [regex]::Replace($Text, $pattern, $trimmed + "`n", [Text.RegularExpressions.RegexOptions]::Singleline)
+    # Consume the trailing whitespace left after the old end marker so
+    # repeated installs do not accumulate blank lines in config.toml.
+    $pattern = [regex]::Escape($begin) + '.*?' + [regex]::Escape($end) + '\s*'
+    $Text = [regex]::Replace($Text, $pattern, $trimmed + "`n`n", [Text.RegularExpressions.RegexOptions]::Singleline)
   } elseif ($InsertTop) {
     # Top-level keys must stay above the first [section]; inserting at the
     # end would attach them to the last TOML table.
@@ -95,6 +97,9 @@ model_instructions_file = "$fs/instructions/base.md"
   # Persona replacement via model_instructions_file is the only form
   # (closest to the original dsh-router-standard semantics).
   $toml = Set-MarkerBlock -Text $toml -Marker 'instructions' -Block $instructionsBlock -InsertTop
+  # Safety net: collapse any 3+ newline runs and keep a single trailing newline.
+  $toml = $toml -replace '\n{3,}', "`n`n"
+  $toml = $toml.TrimEnd() + "`n"
   Set-Content -LiteralPath $ConfigPath -Value $toml -Encoding UTF8
 }
 

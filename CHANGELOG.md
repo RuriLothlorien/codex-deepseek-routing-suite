@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- 修复安装器重复运行在 `~/.codex/config.toml` 中累积空白行的问题（`install.mjs` / `install.ps1` 替换标记块时消费残留换行，并对 3+ 连续换行做归一化）；`uninstall.mjs` / `uninstall.ps1` 同步清理移除标记后的残留空行。
+
 ## 0.1.2 (2026-08-22)
 
 - 严格模型门控：`modelClass` 精确区分 Flash / Pro，二者皆非（`deepseek-chat`、其他模型、缺失）时套件工作流整体停用——钩子不注入、不锚定，`dev_mode_subagent` 拒绝执行。

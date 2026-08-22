@@ -22,6 +22,9 @@ if (Test-Path -LiteralPath $configPath) {
     $pattern = [regex]::Escape($begin) + '.*?' + [regex]::Escape($end)
     $text = [regex]::Replace($text, $pattern, '', [Text.RegularExpressions.RegexOptions]::Singleline)
   }
+  # Remove leftover blank lines left behind by removed marker blocks.
+  $text = $text -replace '\n{3,}', "`n`n"
+  $text = $text -replace '^\n+', ''
   Set-Content -LiteralPath $configPath -Value ($text.TrimEnd() + "`n") -Encoding UTF8
 }
 

@@ -103,8 +103,10 @@ function setMarkerBlock(text, marker, block, { insertTop = false } = {}) {
   const end = `# >>> dsh-router ${marker}: end <<<`
   const trimmed = block.trimEnd()
   if (text.includes(begin)) {
-    const re = new RegExp(`${escapeRegExp(begin)}[\\s\\S]*?${escapeRegExp(end)}`)
-    return text.replace(re, `${trimmed}\n`)
+    // Consume the trailing whitespace left after the old end marker so
+    // repeated installs do not accumulate blank lines in config.toml.
+    const re = new RegExp(`${escapeRegExp(begin)}[\\s\\S]*?${escapeRegExp(end)}\\s*`)
+    return text.replace(re, `${trimmed}\n\n`)
   }
   if (insertTop) {
     const lines = text.split(/\r?\n/)
@@ -157,7 +159,9 @@ model_instructions_file = "${fs}/instructions/base.md"
   text = setMarkerBlock(text, 'hooks', hooksBlock)
   text = setMarkerBlock(text, 'mcp', mcpBlock)
   text = setMarkerBlock(text, 'instructions', instructionsBlock, { insertTop: true })
-  return text
+  // Safety net: collapse any 3+ newline runs (legacy accumulated blank lines)
+  // and keep a single trailing newline.
+  return `${text.replace(/\n{3,}/g, '\n\n').trimEnd()}\n`
 }
 
 step(1, `Backing up ${configPath}`)

@@ -50,6 +50,8 @@ if (existsSync(configPath)) {
       const pattern = `${begin.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}[\\s\\S]*?${end.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`
       text = text.replace(new RegExp(pattern), '')
     }
+    // Remove leftover blank lines left behind by removed marker blocks.
+    text = text.replace(/\n{3,}/g, '\n\n').replace(/^\n+/, '')
     writeFileSync(configPath, `${text.trimEnd()}\n`, 'utf8')
   }
 }

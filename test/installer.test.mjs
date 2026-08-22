@@ -41,3 +41,23 @@ test('install.mjs installs into a temp codex home; uninstall.mjs removes it', ()
   assert.ok(!existsSync(join(home, 'skills', 'dsh-router')))
   assert.ok(!readFileSync(join(home, 'config.toml'), 'utf8').includes('dsh-router hooks: begin'))
 })
+
+test('install.mjs is idempotent: repeated installs do not accumulate blank lines', () => {
+  const home = mkdtempSync(join(tmpdir(), 'router-idem-'))
+
+  let r = run('install.mjs', home)
+  assert.equal(r.status, 0, r.stderr || r.stdout)
+  const toml1 = readFileSync(join(home, 'config.toml'), 'utf8')
+
+  r = run('install.mjs', home)
+  assert.equal(r.status, 0, r.stderr || r.stdout)
+  const toml2 = readFileSync(join(home, 'config.toml'), 'utf8')
+
+  r = run('install.mjs', home)
+  assert.equal(r.status, 0, r.stderr || r.stdout)
+  const toml3 = readFileSync(join(home, 'config.toml'), 'utf8')
+
+  assert.equal(toml2, toml1, 'second install must not change config.toml')
+  assert.equal(toml3, toml2, 'third install must not change config.toml')
+  assert.ok(!/\n{3,}/.test(toml3), 'config.toml must not contain 3+ consecutive newlines')
+})
