@@ -46,6 +46,8 @@
 
 `node --test test/router.test.mjs test/router-model.test.mjs test/hook.test.mjs test/agents.test.mjs`（仓库 39 例；会话内 `dev_router_test` 38 例，安装器用例仅仓库运行），覆盖分类、band 量化、persona、模型门控、钩子状态机、plan 模式对等行为、agents 文件校验。
 
+真实会话的有效性核验记录（计划模式、模糊任务、多轮复杂会话等）见 `docs/validation-report.md`（中文）。
+
 ## 6. 模型适配状态
 
 - 本套件专门面向 **Codex + DeepSeek** 设计；实测环境：**Codex（桌面端/CLI）+ DeepSeek V4 Flash**（自定义 provider），Flash 分支 persona/引导按该组合实测调优。
@@ -53,6 +55,7 @@
 - 具体适配：① Flash 分支 persona 为默认（weak 用 Flash 最优形态 + recall/收敛/反跑题锚，P11/P23）；② RL 接口还原（`model_instructions_file` 注入 RL 句 + 首轮 `bash`/`apply_patch` 核心面）；③ 深度自适应引导（`isComplexTask` 含中文关键词 → deep/fast guide，P30）；④ 中文分类关键词扩展（`规划|计划|方案|阅读|移植`）；⑤ `dev_mode_subagent` 的 `reasoning` 映射 `model_reasoning_effort`。
 - 模型门控（严格）：`modelClass` 先要求 DeepSeek 家族（`deepseek` 或 `ds-` 前缀），再精确返回 `flash` / `pro` / `null`——Flash 家族含 `deepseek-v4-flash`、`deepseek-v4-flash-vision-exp` 等；Pro 家族含 `pro|reasoner|r1|v4-pro`。其他厂商的 `*-flash`/`*-pro`、`deepseek-chat`、缺失均返回 `null`，套件工作流整体停用：钩子不注入、不锚定，`dev_mode_subagent` 拒绝执行。
 - 测量依据来自原项目（P11/P23/P24/P30，DSH 环境）；本移植在 Codex + V4 Flash 组合实测。
+- 有效性核验：计划模式、模糊任务、多轮复杂会话等场景已在真实 Codex 会话中验证，详见 `docs/validation-report.md`。
 
 ## 7. 边界与已知代价
 
@@ -64,5 +67,15 @@
 ## 8. 平台与 Agent 形态兼容
 
 - 平台：Windows / macOS / Linux；安装器为跨平台 `node install.mjs`（支持 `--home` 与 `--dry-run`），并提供 `install.sh`（macOS/Linux POSIX 入口）与 Windows PowerShell 版 `install.ps1`；卸载对应 `node uninstall.mjs` / `uninstall.sh` / `uninstall.ps1`。
-- Agent 形态：Codex 桌面端与 CLI 共用 `~/.codex/config.toml`、skills 与 MCP 配置，两者均可运行本套件钩子与工具；桌面端已实测，CLI 走同一机制（安装后需重启并在 `codex /hooks` 或桌面端信任两个新钩子）。
+- Agent 形态：Codex 桌面端与 CLI 共用 `~/.codex/config.toml`、skills 与 MCP 配置，两者均已实测/验证（同一机制；安装后需重启并在 `codex /hooks` 或桌面端信任两个新钩子）。
 - `dev_mode_subagent` 依赖本机 codex CLI：安装时自动探测（Windows：AppData bin 最新目录；macOS/Linux：PATH），失败时工具返回明确错误。
+
+## 9. 安全与隐私
+
+- 全本地运行：钩子与 MCP 服务器为本机零依赖 Node 脚本；路由（分类、注入、锚定、状态读写）不产生网络请求或遥测。
+- 数据边界：状态仅写入 `~/.codex/routing-suite/state/`（会话 id、首条消息文本、模式/复杂度/提升状态）；不读取、不保存密钥或令牌。
+- 权限最小化：`UserPromptSubmit` 只返回注入文本；`PreToolUse` 只返回放行/拒绝决策；`model_instructions_file` 指向只读 Markdown。
+- 可审计、可回滚：行为可在会话记录复核；`config.json` 与状态文件可人工检查；卸载脚本完整移除配置标记、运行时、技能与 agents。
+- 信任链：两个钩子需显式信任（`codex /hooks` 或桌面端）后才生效；源码开源可审阅。
+- 子代理隔离：`dev_mode_subagent` 本地一次性 `codex exec` 子进程，剥离桌面端环境变量、禁用 hooks/memories、临时 persona 用后即删；复用现有 codex CLI / DeepSeek API 链路，不新增凭据存储。
+- 模型门控兜底：非 DeepSeek 或未识别模型自动停用工作流。

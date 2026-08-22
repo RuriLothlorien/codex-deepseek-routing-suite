@@ -8,6 +8,7 @@
 - 修复 `dev_mode_subagent` 的 `sessionId` 声明顺序隐患（此前可能在运行时报错）。
 - `dev_router_status` 新增 `supported` 字段。
 - 测试：仓库 39 例，会话内 `dev_router_test` 38 例（安装器用例仅仓库）。
+- 文档：README 合并“功能特性 / DeepSeek 适配 / 双后端”为单一章节，新增安全性分析与模型声明有效性说明；新增 `docs/validation-report.md`（中文有效性测试报告）；SKILL 引用与字段说明同步。
 
 ## 0.1.1 (2026-08-22)
 
