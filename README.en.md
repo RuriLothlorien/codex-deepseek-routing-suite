@@ -29,12 +29,18 @@ This suite turns those measurements into defaults for Codex + DeepSeek: band-bas
 
 ## Highlights
 
-- The only release form: `model_instructions_file` replaces the built-in identity (RL sentence + routing rules), with per-turn persona/guidance injected by hooks.
-- Four MCP tools + self-test: `dev_router_status` / `dev_router_mode` / `dev_mode_subagent` / `dev_router_test`.
-- Automatic model detection: the model slug is auto-classified as DeepSeek Flash / Pro with matching personas; non-DeepSeek models (e.g., other vendors' `*-flash`) automatically disable the workflow.
-- Zero runtime dependencies: hooks and the MCP server are zero-dependency Node scripts; install/uninstall are idempotent and reversible.
-- Optional native multi-agent backend: `router_spec` / `router_react` / `router_weak` custom agents.
-- Direct Codex install; if you manage configs with CC Switch, you can optionally sync with the [CCSwitch-operations](https://github.com/RuriLothlorien/CCSwitch-operations) skill.
+- **Persona replacement (the only release form)**: `model_instructions_file` injects the RL sentence + routing rules (RL interface restoration); the first-turn core surface is `Bash`/`exec_command` + `apply_patch`; hooks add per-turn persona/guidance.
+- **Task-aware routing + first-turn anchoring**: build → react, fix/refactor/planning → spec, ambiguous → weak; only core tools pass until the first tool call, then the full catalog unlocks.
+- **Automatic model detection + Flash-branch defaults**: the slug is precisely classified as DeepSeek Flash / Pro (Flash family includes `deepseek-v4-flash-vision-exp`); weak mode uses the Flash-optimal persona (neutral + classify + recall/convergence/anti-runaway anchors, P11/P23); non-DeepSeek or unrecognized models disable the workflow entirely; the Pro branch is retained but untested.
+- **Depth-adaptive guidance**: `isComplexTask` (long text or architecture keywords, including Chinese) selects deep/fast guides (P30).
+- **Chinese classification adaptation**: `SPEC_RE` adds 规划/计划/方案/阅读/移植 to keep Chinese planning/porting tasks from being misrouted to react.
+- **Dual-backend mode isolation**:
+  - Default: one-shot `codex exec` subprocess via `dev_mode_subagent <spec|react|weak> <task> [reasoning=...]` — full `model_instructions_file` replacement, desktop thread env stripped, hooks/memories disabled, `reasoning` maps to `model_reasoning_effort`; no multi-agent config required.
+  - Optional: native agents via `spawn_agent(agent_type="router_spec"|"router_react"|"router_weak", message="<task>")` when the session has `spawn_agent`; does not force `features.multi_agent`.
+  - `dev_router_status` shows `nativeAgents` installation status.
+- **Four MCP tools + self-test**: `dev_router_status` / `dev_router_mode` / `dev_mode_subagent` / `dev_router_test`.
+- **Zero runtime dependencies**: zero-dependency Node hooks/MCP; idempotent install/uninstall; direct Codex install (optional CC Switch sync via [CCSwitch-operations](https://github.com/RuriLothlorien/CCSwitch-operations)).
+- Measurements cited (P11/P23/P24/P30) come from the original project's DSH environment; this port is tested on Codex + V4 Flash.
 
 ## How it works
 
@@ -52,18 +58,6 @@ This suite turns those measurements into defaults for Codex + DeepSeek: band-bas
 - Trust chain: the two hooks only run after you explicitly trust them (`codex /hooks` or the desktop prompt); all install/hook code is open source and reviewable.
 - Subagent isolation: `dev_mode_subagent` runs in a local one-shot `codex exec` subprocess with desktop thread env stripped, hooks/memories disabled, and temp persona files removed afterwards; it reuses your existing codex CLI / DeepSeek API path and adds no credential storage.
 - Model gating fallback: non-DeepSeek or unrecognized models automatically disable the workflow, reducing unintended intervention.
-
-## DeepSeek-specific adaptations
-
-Designed for Codex + DeepSeek and tested on **DeepSeek V4 Flash**:
-
-- Flash-branch personas are the default: weak mode uses the Flash optimum (neutral + classify-then-act + recall/convergence/anti-runaway anchors, P11/P23). The Pro branch from the original project is retained but untested.
-- RL interface restoration: `model_instructions_file` injects the RL sentence plus routing rules; the first-turn core surface is `Bash`/`exec_command` + `apply_patch` (the Codex equivalent of the original shell + str_replace_editor RL shape).
-- Depth-adaptive guidance via `isComplexTask` (long text or architecture keywords, including Chinese): deep guide for complex tasks, fast guide for simple ones (P30).
-- Chinese task classification adaptation: `SPEC_RE` adds 规划/计划/方案/阅读/移植 to keep Chinese planning/porting tasks from being misrouted to react.
-- Mode-isolated subprocesses use `model_instructions_file` replacement, strip desktop thread env vars, and disable hooks/memories; `reasoning` maps to `model_reasoning_effort`.
-- Strict model gating: only DeepSeek models are classified precisely as Flash / Pro by slug (Flash family includes `deepseek-v4-flash`, `deepseek-v4-flash-vision-exp`, etc.). Any other vendor's `*-flash`/`*-pro` (e.g., `gpt-5-flash`), `deepseek-chat`, other models, or missing ids disable the workflow entirely (no injection, no anchoring, subagent refused).
-- Measurements cited (P11/P23/P24/P30) come from the original project's DSH environment; this port is tested on Codex + V4 Flash.
 
 ## Repository structure
 
@@ -93,15 +87,6 @@ node install.mjs        # cross-platform (recommended); on Windows PowerShell: .
 ```
 
 Then restart Codex (desktop or CLI), trust the two new hooks (`codex /hooks` or the desktop trust prompt), and verify with `dev_router_status` in a new session.
-
-## Dual-backend mode isolation
-
-| Backend | How to trigger | Dependency |
-|---|---|---|
-| MCP exec (default) | `dev_mode_subagent <spec\|react\|weak> <task> [reasoning=...]` | none (one-shot `codex exec` subprocess) |
-| Native multi-agent (optional) | `spawn_agent(agent_type="router_spec"\|"router_react"\|"router_weak", message="<task>")` | session has `spawn_agent`; **does not force** `features.multi_agent` |
-
-`dev_router_status` shows whether the three agents are installed via its `nativeAgents` field.
 
 ## Uninstall
 

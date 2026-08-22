@@ -35,12 +35,18 @@
 
 ## 功能特性
 
-- 主会话唯一形态：`model_instructions_file` 替换内置 identity（RL 句 + 路由规则），钩子按轮追加 persona/引导。
-- 四个 MCP 工具 + 自检：`dev_router_status` / `dev_router_mode` / `dev_mode_subagent` / `dev_router_test`。
-- **自动模型识别**：按模型 slug 自动识别 DeepSeek Flash / Pro 并分配对应 persona；非 DeepSeek 模型（如其他厂商的 `*-flash`）自动停用整套工作流。
-- 零运行时依赖：钩子与 MCP 服务器均为零依赖 Node 脚本；安装/卸载脚本幂等且可逆。
-- 可选原生多智能体后端：`router_spec` / `router_react` / `router_weak` 自定义 agents。
-- 安装为 Codex 直装；若使用 CC Switch 管理配置，可另行用 [CCSwitch-operations](https://github.com/RuriLothlorien/CCSwitch-operations) 技能同步。
+- **主会话 persona 替换（唯一形态）**：`model_instructions_file` 注入 RL 句 + 路由规则（RL 接口还原），首轮核心面 = `Bash`/`exec_command` + `apply_patch`；钩子按轮追加 persona/引导。
+- **任务感知路由 + 首轮硬锚定**：构建 → react，修复/重构/规划 → spec，模糊 → weak；首个核心工具调用前仅核心面，之后全量放开。
+- **自动模型识别 + Flash 分支默认**：按 slug 精确识别 DeepSeek Flash / Pro（Flash 家族含 `deepseek-v4-flash-vision-exp` 等）；weak 用 Flash 最优 persona（neutral + classify + recall/收敛/反跑题锚，P11/P23）；非 DeepSeek 或未识别模型自动停用整套工作流；Pro 分支保留但未实测。
+- **深度自适应引导**：`isComplexTask`（长文本或 架构/设计/重构 等关键词，含中文）→ deep/fast guide（P30）。
+- **中文分类适配**：`SPEC_RE` 增加 `规划|计划|方案|阅读|移植`，降低中文规划/移植任务被“实现”误判为 react。
+- **双后端模式隔离**：
+  - 默认：一次性 `codex exec` 子进程——`dev_mode_subagent <spec|react|weak> <task> [reasoning=...]`，`model_instructions_file` 完整替换、剥离桌面端环境变量、禁用 hooks/memories、`reasoning` 映射 `model_reasoning_effort`，无需多智能体配置。
+  - 可选：原生 agents——`spawn_agent(agent_type="router_spec"|"router_react"|"router_weak", message="<task>")`，会话具备 `spawn_agent` 时可用，不强制开启 `features.multi_agent`。
+  - `dev_router_status` 的 `nativeAgents` 字段显示三个 agent 是否已安装。
+- **四个 MCP 工具 + 自检**：`dev_router_status` / `dev_router_mode` / `dev_mode_subagent` / `dev_router_test`。
+- **零运行时依赖**：钩子与 MCP 服务器为零依赖 Node 脚本；安装/卸载幂等可逆、Codex 直装（若使用 CC Switch 管理配置，可另行用 [CCSwitch-operations](https://github.com/RuriLothlorien/CCSwitch-operations) 技能同步）。
+- 测量依据来自原项目（P11/P23/P24/P30，DSH 环境）；本移植在 Codex + V4 Flash 组合实测。
 
 ## 工作原理
 
@@ -58,18 +64,6 @@
 - **信任链**：两个钩子需你在 `codex /hooks` 或桌面端显式信任后才生效；安装脚本与钩子源码全部开源，安装前可审阅。
 - **子代理隔离**：`dev_mode_subagent` 在本地一次性 `codex exec` 子进程中运行，剥离桌面端线程环境变量、禁用 hooks/memories、临时 persona 文件用后即删；只复用你已配置的 codex CLI / DeepSeek API 链路，不新增凭据存储。
 - **模型门控兜底**：非 DeepSeek 或未识别模型时工作流自动停用，减少对非目标模型的干预。
-
-## DeepSeek 特定适配
-
-本套件面向 **Codex + DeepSeek** 设计，在 **DeepSeek V4 Flash** 上实测调优，主要适配点：
-
-- **Flash 分支 persona 为默认**：weak 模式采用 Flash 最优形态（neutral + classify-then-act + recall/收敛/反跑题锚，依据原项目 P11/P23）；`router-core.mjs` 保留 Pro 分支（来自原项目）但未实测。
-- **RL 接口还原**：用 `model_instructions_file` 注入 RL 训练句（`You are a helpful software engineer assistant.`）+ 路由规则；首轮核心面 = `Bash`/`exec_command` + `apply_patch`，对应原项目 shell + str_replace_editor 的 RL 形态测量（行动率更高、推理更短）。
-- **深度自适应引导**：按 `isComplexTask`（长文本或 架构/设计/重构 等关键词，含中文）选择 deep-guide / fast-guide（P30：深度 +12% 且收敛更快）。
-- **中文任务分类适配**：`SPEC_RE` 增加 `规划|计划|方案|阅读|移植`，降低 DeepSeek 中文规划/移植任务被“实现”误判为 react 的概率。
-- **模式隔离子进程**：`dev_mode_subagent` 用 `model_instructions_file` 做完整 persona 替换，剥离桌面端线程环境变量、禁用 hooks/memories；`reasoning` 参数映射 `model_reasoning_effort`。
-- **严格模型门控**：仅 DeepSeek 模型按 slug 精确区分 Flash / Pro（Flash 家族含 `deepseek-v4-flash`、`deepseek-v4-flash-vision-exp` 等）；其他厂商的 `*-flash` / `*-pro`（如 `gpt-5-flash`）或 `deepseek-chat`、缺失时，工作流自动停用（不注入、不锚定、子代理拒绝）。
-- 上述测量依据来自原项目（P11/P23/P24/P30 等，DSH 环境）；本移植在 Codex + V4 Flash 组合上实测。
 
 ## 仓库结构
 
@@ -99,15 +93,6 @@ node install.mjs        # 跨平台（推荐）；Windows PowerShell 亦可：.\
 ```
 
 安装后：重启 Codex（桌面端或 CLI）→ 信任两个新钩子（CLI `codex /hooks` 或桌面端信任提示）→ 新会话调用 `dev_router_status` 验证。
-
-## 模式隔离子代理：双后端
-
-| 后端 | 触发方式 | 依赖 |
-|---|---|---|
-| MCP exec（默认） | `dev_mode_subagent <spec\|react\|weak> <task> [reasoning=...]` | 无（一次性 `codex exec` 子进程） |
-| 原生多智能体（可选） | `spawn_agent(agent_type="router_spec"\|"router_react"\|"router_weak", message="<task>")` | 会话具备 `spawn_agent`；**不强制**开启 `features.multi_agent` |
-
-`dev_router_status` 的 `nativeAgents` 字段显示三个 agent 是否已安装。
 
 ## 卸载
 
