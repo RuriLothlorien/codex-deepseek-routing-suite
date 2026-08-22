@@ -33,7 +33,7 @@
 - 四个 MCP 工具 + 自检：`dev_router_status` / `dev_router_mode` / `dev_mode_subagent` / `dev_router_test`。
 - 零运行时依赖：钩子与 MCP 服务器均为零依赖 Node 脚本；安装/卸载脚本幂等且可逆。
 - 可选原生多智能体后端：`router_spec` / `router_react` / `router_weak` 自定义 agents。
-- 安装为 Codex 直装，不依赖 CC Switch（若使用 CC Switch 管理配置，可另行用 ccs-operations 技能同步）。
+- 安装为 Codex 直装，不依赖 CC Switch（若使用 CC Switch 管理配置，可另行用 [CCSwitch-operations](https://github.com/RuriLothlorien/CCSwitch-operations) 技能同步）。
 
 ## 工作原理
 

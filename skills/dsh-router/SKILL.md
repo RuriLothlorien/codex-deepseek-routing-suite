@@ -38,7 +38,7 @@ description: 思维模式路由套件（dsh-routing-suite 的 Codex 移植版）
 - 钩子不生效：确认已重启 Codex、并已信任两个钩子（CLI `codex /hooks` 或桌面端信任提示）。
 - 计划模式下的 persona/锚定是 DSH 原始行为（plan 段由宿主保留，路由器照常工作），不是故障；如想临时关闭锚定，设 `config.json` 的 `anchoring=false`。
 - 工具被误拒：首轮锚定中，先调 `exec_command` 或 `apply_patch`；或临时设 `anchoring=false`。
-- 注入文本没出现：确认 `~/.codex/routing-suite/config.json` 存在、hooks 配置块在 `~/.codex/config.toml` 中未被覆盖（若使用 CC Switch 管理配置，切换供应商后需按 ccs-operations 技能重新同步，可选）。
+- 注入文本没出现：确认 `~/.codex/routing-suite/config.json` 存在、hooks 配置块在 `~/.codex/config.toml` 中未被覆盖（若使用 CC Switch 管理配置，切换供应商后需按 [CCSwitch-operations](https://github.com/RuriLothlorien/CCSwitch-operations) 技能重新同步，可选）。
 - 卸载：运行仓库内 `uninstall.ps1`（会移除 config.toml 中的 dsh-router 块并保留备份）。
 
 ## 6. 参考

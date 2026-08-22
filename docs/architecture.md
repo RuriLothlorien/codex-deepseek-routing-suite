@@ -58,4 +58,4 @@
 - 不移植 DSH 内部机制：运行时注入器（junction/loader/HMR/staging/UI 管理页/路由自愈）与 dsh-probe 评测矩阵。
 - 缓存代价：切换 mode 会使下一请求前缀缓存 miss；persona/引导按会话锁定以保缓存稳定。
 - `dev_mode_subagent` 每次调用约 8–25 秒 + 25k–31k token（含 max 推理）。
-- 安装器为 Codex 直装，不依赖 CC Switch；如使用 CC Switch 管理配置，可另行用 ccs-operations 技能做可选同步。
+- 安装器为 Codex 直装，不依赖 CC Switch；如使用 CC Switch 管理配置，可另行用 [CCSwitch-operations](https://github.com/RuriLothlorien/CCSwitch-operations) 技能做可选同步。
