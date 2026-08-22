@@ -1,0 +1,13 @@
+codex-routing-suite is a Codex port of dsh-routing-suite:
+
+- dsh-super-injector (https://github.com/yjh051108/dsh-super-injector) - MIT
+- dsh-router-standard (https://github.com/yjh051108/dsh-router-standard) - MIT
+
+The router logic (router-core.mjs) and measurement claims (P23/P24/P30) derive
+from dsh-router-standard, which in turn references:
+
+- xiaobright/modeltest (V4.1b evaluation) - MIT
+- xiaobright/dsh-anchored-standard (two-phase anchoring) - MIT
+
+DeepSeek Harness official `minimal` preset snapshot informs the RL-alignment
+claim. See LICENSE.
