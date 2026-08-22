@@ -10,9 +10,9 @@ A Codex port of **[dsh-routing-suite](https://github.com/yjh051108/dsh-routing-s
 
 > ⚠️ **Model status**: designed specifically for **Codex + DeepSeek**; tested and tuned on **Codex (desktop/CLI) with DeepSeek V4 Flash**. **DeepSeek V4 Pro is NOT tested**; the Pro branch in `router-core.mjs` is inherited from the original project and should be treated as unverified.
 
-## Why DeepSeek-specific optimizations
+## Why (when Codex/ChatGPT is the agent for DeepSeek)
 
-Measured on DeepSeek (P1-P30 in the original project), these adaptations are not optional:
+Measured on DeepSeek (P1-P30 in the original project), when Codex/ChatGPT acts as DeepSeek's agent, these adaptations are not optional:
 
 - Behavior along the persona axis collapses into stable bands (spec / mixed trap / react); V4 Flash is threshold-like (0-0.5 all spec, jumps at 0.75+).
 - The first request commits the path: persona and tool-schema surface decide the whole trajectory; mid-session mode switches are mostly ineffective and invalidate the prefix cache.

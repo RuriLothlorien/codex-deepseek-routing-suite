@@ -10,9 +10,9 @@
 
 > ⚠️ **模型适配声明**：本套件专门面向 **Codex + DeepSeek** 设计，仅在 **Codex（桌面端/CLI）搭配 DeepSeek V4 Flash** 组合上实测调优；**DeepSeek V4 Pro 未测试，效果未验证**。`router-core.mjs` 中的 Pro 分支来自原项目移植，请按“未实测”对待。
 
-## 为什么需要（DeepSeek 特定优化）
+## 为什么需要（当 Codex/ChatGPT 作为 DeepSeek 的 Agent 时）
 
-原项目在 DeepSeek 系列上的实测（P1-P30）表明，这套适配不是可选项：
+原项目在 DeepSeek 系列上的实测（P1-P30）表明，当你用 Codex/ChatGPT 作为 DeepSeek 的 Agent 时，这套适配不是可选项：
 
 - **行为是分相的，不是连续可调**：persona 轴坍缩为 spec / mixed（陷阱）/ react 三个稳定带；V4 Flash 更是阈值式——0-0.5 全在 spec 侧，0.75+ 才跳到 react。
 - **首轮即路径承诺**：第一次请求的 persona 与工具 schema 面决定整条会话轨迹，中途换模式基本无效，还会废掉前缀缓存。
