@@ -64,9 +64,11 @@ codex-deepseek-routing-suite/
 ├─ skills/dsh-router/      # 技能手册与 persona 参考
 ├─ agents/                 # 可选原生 agents（router_*）
 ├─ instructions/base.md    # 主会话 persona 替换基础指令
-├─ test/                   # 31 例单元/钩子/agents 测试
+├─ test/                   # 仓库 32 例（会话内自检 31 例）
 ├─ docs/architecture.md    # 机制映射、接口契约与模型适配说明
-├─ install.ps1 / uninstall.ps1
+├─ install.mjs / uninstall.mjs  # 跨平台安装/卸载（推荐）
+├─ install.sh / uninstall.sh    # macOS/Linux POSIX 入口
+├─ install.ps1 / uninstall.ps1  # Windows PowerShell 版
 ├─ LICENSE / NOTICE / CHANGELOG.md
 └─ README.md / README.en.md
 ```
@@ -106,7 +108,7 @@ node uninstall.mjs      # 跨平台（推荐）；Windows PowerShell 亦可：.\
 
 ## 版本兼容
 
-- Codex 桌面端 / CLI（实测 0.149+）；Node >= 22；Windows PowerShell。
+- Codex 桌面端 / CLI（实测 0.149+）；Node >= 22；安装入口：`node install.mjs`（跨平台）、`./install.sh`（macOS/Linux）、`.\install.ps1`（Windows）。
 - 平台：Windows / macOS / Linux；Agent 形态：Codex 桌面端与 CLI 均兼容（共用同一套 hooks/MCP/技能配置）。
 - 模型：专门面向 Codex + DeepSeek 设计；实测组合为 V4 Flash；V4 Pro 未测试。
 - 许可证：MIT（原套装归属见 NOTICE）。

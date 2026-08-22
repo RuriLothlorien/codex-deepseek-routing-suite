@@ -25,12 +25,18 @@ This suite turns those measurements into defaults for Codex + DeepSeek: band-bas
 
 ## Highlights
 
-- Classifies each session from its first user message: build → react, fix/refactor/planning → spec, ambiguous → weak.
-- First-turn hard anchoring: only `Bash`/`exec_command` and `apply_patch` until the first core tool call, then the full catalog unlocks.
-- Per-turn persona + near-field guidance injection; plan-mode behavior matches the original DSH preset.
-- Dual-backend mode isolation: one-shot `codex exec` subprocess (default) or optional native `router_*` agents — no forced multi-agent config.
-- `model_instructions_file` persona replacement is the only release form.
-- Zero runtime dependencies; idempotent install/uninstall. If you manage configs with CC Switch, you can optionally sync with the [CCSwitch-operations](https://github.com/RuriLothlorien/CCSwitch-operations) skill.
+- The only release form: `model_instructions_file` replaces the built-in identity (RL sentence + routing rules), with per-turn persona/guidance injected by hooks.
+- Four MCP tools + self-test: `dev_router_status` / `dev_router_mode` / `dev_mode_subagent` / `dev_router_test`.
+- Zero runtime dependencies: hooks and the MCP server are zero-dependency Node scripts; install/uninstall are idempotent and reversible.
+- Optional native multi-agent backend: `router_spec` / `router_react` / `router_weak` custom agents.
+- Direct Codex install; if you manage configs with CC Switch, you can optionally sync with the [CCSwitch-operations](https://github.com/RuriLothlorien/CCSwitch-operations) skill.
+
+## How it works
+
+- `UserPromptSubmit` hook: records the first user message, classifies the session, and returns persona + guidance (`additionalContext`) per turn.
+- `PreToolUse` hook: only core tools pass before the first tool call, then `promoted=true` unlocks the full catalog.
+- Session state is persisted under `~/.codex/routing-suite/state/`, so resume/continuation does not lose it.
+- The MCP server reads/writes the same state: view or switch modes, run self-tests, and spawn isolated subprocesses.
 
 ## DeepSeek-specific adaptations
 
@@ -42,6 +48,24 @@ Designed for Codex + DeepSeek and tested on **DeepSeek V4 Flash**:
 - Chinese task classification adaptation: `SPEC_RE` adds 规划/计划/方案/阅读/移植 to keep Chinese planning/porting tasks from being misrouted to react.
 - Mode-isolated subprocesses use `model_instructions_file` replacement, strip desktop thread env vars, and disable hooks/memories; `reasoning` maps to `model_reasoning_effort`.
 - Measurements cited (P11/P23/P24/P30) come from the original project's DSH environment; this port is tested on Codex + V4 Flash.
+
+## Repository structure
+
+```text
+codex-deepseek-routing-suite/
+├─ hooks/                  # UserPromptSubmit + PreToolUse hooks
+├─ mcp/server.mjs          # zero-dependency MCP server (dev_router_*)
+├─ skills/dsh-router/      # skill manual and persona references
+├─ agents/                 # optional native agents (router_*)
+├─ instructions/base.md    # base instructions for persona replacement
+├─ test/                   # 32 tests in the repo (31 in-session self-test)
+├─ docs/architecture.md    # mechanism mapping, contracts, model status
+├─ install.mjs / uninstall.mjs  # cross-platform install/uninstall (recommended)
+├─ install.sh / uninstall.sh    # macOS/Linux POSIX entrypoints
+├─ install.ps1 / uninstall.ps1  # Windows PowerShell versions
+├─ LICENSE / NOTICE / CHANGELOG.md
+└─ README.md / README.en.md
+```
 
 ## Install
 
@@ -56,6 +80,22 @@ Then restart Codex (desktop or CLI), trust the two new hooks (`codex /hooks` or 
 
 Skill-only usage: copy or symlink `skills/dsh-router` into `~/.codex/skills/` (or your agent's skills directory).
 
+## Dual-backend mode isolation
+
+| Backend | How to trigger | Dependency |
+|---|---|---|
+| MCP exec (default) | `dev_mode_subagent <spec\|react\|weak> <task> [reasoning=...]` | none (one-shot `codex exec` subprocess) |
+| Native multi-agent (optional) | `spawn_agent(agent_type="router_spec"\|"router_react"\|"router_weak", message="<task>")` | session has `spawn_agent`; **does not force** `features.multi_agent` |
+
+`dev_router_status` shows whether the three agents are installed via its `nativeAgents` field.
+
+## Uninstall
+
+```sh
+node uninstall.mjs      # cross-platform (recommended); on Windows PowerShell: .\uninstall.ps1
+./uninstall.sh          # macOS/Linux (POSIX entrypoint for the Node uninstaller)
+```
+
 ## Docs
 
 - `docs/architecture.md` — mechanism mapping, contracts, and model status.
@@ -63,15 +103,12 @@ Skill-only usage: copy or symlink `skills/dsh-router` into `~/.codex/skills/` (o
 
 ## Compatibility
 
+- Codex desktop / CLI (tested on 0.149+); Node >= 22; entrypoints: `node install.mjs` (cross-platform), `./install.sh` (macOS/Linux), `.\install.ps1` (Windows).
 - Platforms: Windows / macOS / Linux.
 - Agent forms: Codex desktop and CLI both work (they share the same hooks/MCP/skill configuration); desktop is tested, CLI uses the same mechanism.
-- Uninstall: `node uninstall.mjs` (cross-platform) or `.\uninstall.ps1` on Windows.
-- POSIX entrypoints: `./install.sh` / `./uninstall.sh` on macOS/Linux.
+- Model: designed for Codex + DeepSeek; tested on V4 Flash; V4 Pro untested.
+- License: MIT (original attribution in NOTICE).
 
 ## Acknowledgments
 
 Thanks to the original author [yjh051108](https://github.com/yjh051108) and the **风神插件 (Fengshen plugin)**. This suite is a port of [dsh-routing-suite](https://github.com/yjh051108/dsh-routing-suite) (MIT); original attribution is in NOTICE.
-
-## License
-
-MIT (see NOTICE for original project attribution).
