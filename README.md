@@ -69,7 +69,7 @@ codex-deepseek-routing-suite/
 ├─ skills/dsh-router/      # 技能手册与 persona 参考
 ├─ agents/                 # 可选原生 agents（router_*）
 ├─ instructions/base.md    # 主会话 persona 替换基础指令
-├─ test/                   # 仓库 32 例（会话内自检 31 例）
+├─ test/                   # 仓库 39 例（会话内自检 38 例）
 ├─ docs/architecture.md    # 机制映射、接口契约与模型适配说明
 ├─ install.mjs / uninstall.mjs  # 跨平台安装/卸载（推荐）
 ├─ install.sh / uninstall.sh    # macOS/Linux POSIX 入口

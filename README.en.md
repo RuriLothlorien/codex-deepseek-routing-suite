@@ -63,7 +63,7 @@ codex-deepseek-routing-suite/
 ├─ skills/dsh-router/      # skill manual and persona references
 ├─ agents/                 # optional native agents (router_*)
 ├─ instructions/base.md    # base instructions for persona replacement
-├─ test/                   # 32 tests in the repo (31 in-session self-test)
+├─ test/                   # 39 tests in the repo (38 in-session self-test)
 ├─ docs/architecture.md    # mechanism mapping, contracts, model status
 ├─ install.mjs / uninstall.mjs  # cross-platform install/uninstall (recommended)
 ├─ install.sh / uninstall.sh    # macOS/Linux POSIX entrypoints

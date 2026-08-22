@@ -44,7 +44,7 @@
 
 ## 5. 测试
 
-`node --test test/router.test.mjs test/hook.test.mjs test/agents.test.mjs`（31 例），覆盖分类、band 量化、persona、钩子状态机、plan 模式对等行为、agents 文件校验；`dev_router_test` 可在会话内运行同一套测试。
+`node --test test/router.test.mjs test/router-model.test.mjs test/hook.test.mjs test/agents.test.mjs`（仓库 39 例；会话内 `dev_router_test` 38 例，安装器用例仅仓库运行），覆盖分类、band 量化、persona、模型门控、钩子状态机、plan 模式对等行为、agents 文件校验。
 
 ## 6. 模型适配状态
 
