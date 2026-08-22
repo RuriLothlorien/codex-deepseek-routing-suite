@@ -88,7 +88,7 @@ async function handle(msg) {
       send(msg.id, {
         protocolVersion: '2025-03-26',
         capabilities: { tools: {} },
-        serverInfo: { name: 'codex-deepseek-routing-suite', version: '0.1.3' },
+        serverInfo: { name: 'codex-deepseek-routing-suite', version: '0.1.4' },
       })
       break
     case 'notifications/initialized':

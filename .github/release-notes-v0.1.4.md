@@ -14,7 +14,7 @@
 
 ## 资源
 
-- 发布包：附件 `codex-deepseek-routing-suite-v0.1.2.zip`（顶层目录 `codex-deepseek-routing-suite/`）。
+- 发布包：附件 `codex-deepseek-routing-suite-v0.1.4.zip`（顶层目录 `codex-deepseek-routing-suite/`）。
 
 ---
 
