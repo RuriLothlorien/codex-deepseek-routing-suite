@@ -31,6 +31,7 @@ This suite turns those measurements into defaults for Codex + DeepSeek: band-bas
 
 - The only release form: `model_instructions_file` replaces the built-in identity (RL sentence + routing rules), with per-turn persona/guidance injected by hooks.
 - Four MCP tools + self-test: `dev_router_status` / `dev_router_mode` / `dev_mode_subagent` / `dev_router_test`.
+- Automatic model detection: the model slug is auto-classified as DeepSeek Flash / Pro with matching personas; non-DeepSeek models (e.g., other vendors' `*-flash`) automatically disable the workflow.
 - Zero runtime dependencies: hooks and the MCP server are zero-dependency Node scripts; install/uninstall are idempotent and reversible.
 - Optional native multi-agent backend: `router_spec` / `router_react` / `router_weak` custom agents.
 - Direct Codex install; if you manage configs with CC Switch, you can optionally sync with the [CCSwitch-operations](https://github.com/RuriLothlorien/CCSwitch-operations) skill.
