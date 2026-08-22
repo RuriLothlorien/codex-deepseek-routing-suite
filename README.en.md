@@ -28,7 +28,7 @@ This suite turns those measurements into defaults for Codex + DeepSeek: band-bas
 - Per-turn persona + near-field guidance injection; plan-mode behavior matches the original DSH preset.
 - Dual-backend mode isolation: one-shot `codex exec` subprocess (default) or optional native `router_*` agents — no forced multi-agent config.
 - `model_instructions_file` persona replacement is the only release form.
-- Zero runtime dependencies; idempotent install/uninstall; no CC Switch dependency (if you manage configs with CC Switch, you can optionally sync with the [CCSwitch-operations](https://github.com/RuriLothlorien/CCSwitch-operations) skill).
+- Zero runtime dependencies; idempotent install/uninstall. If you manage configs with CC Switch, you can optionally sync with the [CCSwitch-operations](https://github.com/RuriLothlorien/CCSwitch-operations) skill.
 
 ## DeepSeek-specific adaptations
 
