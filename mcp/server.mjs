@@ -11,7 +11,7 @@
  */
 import { spawn, spawnSync } from 'node:child_process'
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs'
-import { join, resolve } from 'node:path'
+import { delimiter, join, resolve } from 'node:path'
 import { homedir } from 'node:os'
 import {
   bandFor, bandOf, coreFor, parseMode, personaFor, testinessFor,
@@ -224,22 +224,37 @@ function runTests() {
 function discoverCli() {
   const envCli = process.env.CODEX_CLI_PATH
   if (envCli && existsSync(envCli)) return envCli
-  const binRoot = join(process.env.LOCALAPPDATA || join(homedir(), 'AppData', 'Local'), 'OpenAI', 'Codex', 'bin')
-  if (existsSync(binRoot)) {
-    let newest = null
-    let newestTime = 0
-    for (const dir of readdirSync(binRoot)) {
-      const candidate = join(binRoot, dir, 'codex.exe')
-      if (!existsSync(candidate)) continue
+  const isWin = process.platform === 'win32'
+  if (isWin) {
+    const binRoot = join(process.env.LOCALAPPDATA || join(homedir(), 'AppData', 'Local'), 'OpenAI', 'Codex', 'bin')
+    if (existsSync(binRoot)) {
+      let newest = null
+      let newestTime = 0
+      for (const dir of readdirSync(binRoot)) {
+        const candidate = join(binRoot, dir, 'codex.exe')
+        if (!existsSync(candidate)) continue
+        try {
+          const st = statSync(candidate)
+          if (st.mtimeMs > newestTime) {
+            newestTime = st.mtimeMs
+            newest = candidate
+          }
+        } catch { /* skip */ }
+      }
+      if (newest) return newest
+    }
+  }
+  // Cross-platform fallback: codex on PATH (macOS/Linux and Windows shells).
+  const exe = isWin ? 'codex.exe' : 'codex'
+  for (const dir of (process.env.PATH || '').split(delimiter)) {
+    if (!dir) continue
+    const candidate = join(dir, exe)
+    if (existsSync(candidate)) {
       try {
         const st = statSync(candidate)
-        if (st.mtimeMs > newestTime) {
-          newestTime = st.mtimeMs
-          newest = candidate
-        }
+        if (st.isFile()) return candidate
       } catch { /* skip */ }
     }
-    if (newest) return newest
   }
   return null
 }

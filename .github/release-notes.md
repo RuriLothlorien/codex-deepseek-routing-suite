@@ -7,13 +7,14 @@
 - 主会话唯一形态：`model_instructions_file` 替换内置 identity（RL 句 + 路由规则）
 - 首轮硬锚定：首个核心工具调用前仅 `Bash`/`exec_command` + `apply_patch`
 - 双后端：默认一次性 `codex exec` 子进程；可选原生 `router_*` agents（不强制开启多智能体配置）
-- 零运行时依赖；安装/卸载脚本幂等且可逆；Codex 直装，不依赖 CC Switch
+- 零运行时依赖；安装/卸载脚本幂等且可逆；Codex 直装
+- 跨平台（Windows / macOS / Linux），Codex 桌面端与 CLI 兼容；完整安装 `node install.mjs`（Windows 亦可用 `install.ps1`）
 - 模型适配：**本套件专门面向 Codex + DeepSeek 设计；仅 Codex + DeepSeek V4 Flash 组合实测；DeepSeek V4 Pro 未测试，效果未验证**
 - DeepSeek 特定适配：Flash 分支 persona 默认、RL 接口还原（`model_instructions_file` + 首轮 bash/apply_patch）、深度自适应引导、中文分类关键词扩展（规划/计划/方案/阅读/移植）
 
 ## 安装
 
-- **完整安装（hooks + MCP + 技能 + agents）**：解压后运行 `install.ps1`（Windows PowerShell），重启 Codex 并信任两个新钩子（`codex /hooks` 或桌面端信任提示），新会话用 `dev_router_status` 验证。
+- **完整安装（hooks + MCP + 技能 + agents，Windows / macOS / Linux）**：解压后运行 `node install.mjs`（Windows 亦可用 `install.ps1`），重启 Codex 并信任两个新钩子（`codex /hooks` 或桌面端信任提示），新会话用 `dev_router_status` 验证。
 - **纯技能用法**：把 `skills/dsh-router` 复制或软链接到 `~/.codex/skills/`（或其他 SKILL.md agent 的 skills 目录）。
 
 ## 文档
@@ -22,7 +23,7 @@
 
 ## 资源
 
-- 发布包：附件 `codex-deepseek-routing-suite-v0.1.0.zip`（顶层目录 `codex-deepseek-routing-suite/`）。
+- 发布包：附件 `codex-deepseek-routing-suite-v0.1.1.zip`（顶层目录 `codex-deepseek-routing-suite/`）。
 
 ---
 
@@ -35,13 +36,14 @@
 - `model_instructions_file` persona replacement is the only release form
 - First-turn hard anchoring: only `Bash`/`exec_command` and `apply_patch` until the first core tool call
 - Dual backend: one-shot `codex exec` subprocess by default; optional native `router_*` agents (no forced multi-agent config)
-- Zero runtime dependencies; idempotent install/uninstall; direct Codex install, no CC Switch dependency
+- Zero runtime dependencies; idempotent install/uninstall; direct Codex install
+- Cross-platform (Windows / macOS / Linux), compatible with Codex desktop and CLI; full install via `node install.mjs` (or `install.ps1` on Windows)
 - Model status: **designed for Codex + DeepSeek; tested on Codex + DeepSeek V4 Flash only; DeepSeek V4 Pro NOT tested**
 - DeepSeek-specific adaptations: Flash-branch personas by default, RL interface restoration (`model_instructions_file` + first-turn bash/apply_patch), depth-adaptive guidance, and Chinese planning/porting keyword classification
 
 ### Install
 
-- Full install (hooks + MCP + skill + agents): unzip and run `install.ps1`, restart Codex, trust the two hooks, verify with `dev_router_status`.
+- Full install (hooks + MCP + skill + agents; Windows / macOS / Linux): unzip and run `node install.mjs` (or `install.ps1` on Windows), restart Codex, trust the two hooks, verify with `dev_router_status`.
 - Skill-only: copy or symlink `skills/dsh-router` into `~/.codex/skills/`.
 
 ### Docs
@@ -50,4 +52,4 @@ See `README.md` / `README.en.md` and `docs/architecture.md`.
 
 ### Assets
 
-- `codex-deepseek-routing-suite-v0.1.0.zip` (top-level folder `codex-deepseek-routing-suite/`).
+- `codex-deepseek-routing-suite-v0.1.1.zip` (top-level folder `codex-deepseek-routing-suite/`).

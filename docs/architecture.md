@@ -59,3 +59,9 @@
 - 缓存代价：切换 mode 会使下一请求前缀缓存 miss；persona/引导按会话锁定以保缓存稳定。
 - `dev_mode_subagent` 每次调用约 8–25 秒 + 25k–31k token（含 max 推理）。
 - 安装器为 Codex 直装；如使用 CC Switch 管理配置，可另行用 [CCSwitch-operations](https://github.com/RuriLothlorien/CCSwitch-operations) 技能做可选同步。
+
+## 8. 平台与 Agent 形态兼容
+
+- 平台：Windows / macOS / Linux；安装器为跨平台 `node install.mjs`（支持 `--home` 与 `--dry-run`），Windows 另保留 PowerShell 版 `install.ps1`；卸载对应 `node uninstall.mjs` / `uninstall.ps1`。
+- Agent 形态：Codex 桌面端与 CLI 共用 `~/.codex/config.toml`、skills 与 MCP 配置，两者均可运行本套件钩子与工具；桌面端已实测，CLI 走同一机制（安装后需重启并在 `codex /hooks` 或桌面端信任两个新钩子）。
+- `dev_mode_subagent` 依赖本机 codex CLI：安装时自动探测（Windows：AppData bin 最新目录；macOS/Linux：PATH），失败时工具返回明确错误。

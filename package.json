@@ -1,6 +1,6 @@
 {
   "name": "codex-deepseek-routing-suite",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "dsh-routing-suite port for Codex: task-aware reasoning-mode router with hooks, MCP tools, optional native agents, model_instructions_file persona replacement, and no forced multi-agent config.",
   "private": false,
   "license": "MIT",
@@ -19,6 +19,8 @@
     "docs/",
     "install.ps1",
     "uninstall.ps1",
+    "install.mjs",
+    "uninstall.mjs",
     "README.md",
     "README.en.md",
     "CHANGELOG.md",
@@ -26,6 +28,6 @@
     "NOTICE"
   ],
   "scripts": {
-    "test": "node --test test/router.test.mjs test/hook.test.mjs test/agents.test.mjs"
+    "test": "node --test test/router.test.mjs test/hook.test.mjs test/agents.test.mjs test/installer.test.mjs"
   }
 }

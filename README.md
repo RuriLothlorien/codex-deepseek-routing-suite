@@ -71,13 +71,13 @@ codex-deepseek-routing-suite/
 
 ## 安装
 
-**完整安装（hooks + MCP + 技能 + agents）**：
+**完整安装（hooks + MCP + 技能 + agents，Windows / macOS / Linux 通用）**：
 
-```powershell
-.\install.ps1
+```sh
+node install.mjs        # 跨平台（推荐）；Windows PowerShell 亦可：.\install.ps1
 ```
 
-安装后：重启 Codex → 信任两个新钩子（CLI `codex /hooks` 或桌面端信任提示）→ 新会话调用 `dev_router_status` 验证。
+安装后：重启 Codex（桌面端或 CLI）→ 信任两个新钩子（CLI `codex /hooks` 或桌面端信任提示）→ 新会话调用 `dev_router_status` 验证。
 
 **纯技能用法**：把 `skills/dsh-router` 复制或软链接到 `~/.codex/skills/`（或其他 SKILL.md agent 的 skills 目录）。
 
@@ -92,8 +92,8 @@ codex-deepseek-routing-suite/
 
 ## 卸载
 
-```powershell
-.\uninstall.ps1
+```sh
+node uninstall.mjs      # 跨平台（推荐）；Windows PowerShell 亦可：.\uninstall.ps1
 ```
 
 ## 致谢
@@ -103,5 +103,6 @@ codex-deepseek-routing-suite/
 ## 版本兼容
 
 - Codex 桌面端 / CLI（实测 0.149+）；Node >= 22；Windows PowerShell。
+- 平台：Windows / macOS / Linux；Agent 形态：Codex 桌面端与 CLI 均兼容（共用同一套 hooks/MCP/技能配置）。
 - 模型：专门面向 Codex + DeepSeek 设计；实测组合为 V4 Flash；V4 Pro 未测试。
 - 许可证：MIT（原套装归属见 NOTICE）。

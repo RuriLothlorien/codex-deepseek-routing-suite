@@ -1,7 +1,7 @@
 # Builds the publishable release zip for codex-deepseek-routing-suite.
 # Usage: .\scripts\build-release.ps1 [-Version 0.1.0]
 param(
-  [string]$Version = '0.1.0',
+  [string]$Version = '0.1.1',
   [string]$Repo = (Split-Path -Parent $MyInvocation.MyCommand.Path | Split-Path -Parent)
 )
 $ErrorActionPreference = 'Stop'
@@ -21,7 +21,7 @@ New-Item -ItemType Directory -Force -Path $pkgDir | Out-Null
 $include = @(
   'hooks', 'mcp', 'skills', 'agents', 'instructions', 'test', 'docs',
   'README.md', 'README.en.md', 'LICENSE', 'NOTICE', 'CHANGELOG.md',
-  'install.ps1', 'uninstall.ps1'
+  'install.ps1', 'uninstall.ps1', 'install.mjs', 'uninstall.mjs'
 )
 foreach ($item in $include) {
   $src = Join-Path $repoRoot $item

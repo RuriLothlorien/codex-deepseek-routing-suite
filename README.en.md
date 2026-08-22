@@ -43,13 +43,13 @@ Designed for Codex + DeepSeek and tested on **DeepSeek V4 Flash**:
 
 ## Install
 
-Full install (hooks + MCP + skill + agents):
+Full install (hooks + MCP + skill + agents; Windows / macOS / Linux):
 
-```powershell
-.\install.ps1
+```sh
+node install.mjs        # cross-platform (recommended); on Windows PowerShell: .\install.ps1
 ```
 
-Then restart Codex, trust the two new hooks (`codex /hooks` or the desktop trust prompt), and verify with `dev_router_status` in a new session.
+Then restart Codex (desktop or CLI), trust the two new hooks (`codex /hooks` or the desktop trust prompt), and verify with `dev_router_status` in a new session.
 
 Skill-only usage: copy or symlink `skills/dsh-router` into `~/.codex/skills/` (or your agent's skills directory).
 
@@ -57,6 +57,12 @@ Skill-only usage: copy or symlink `skills/dsh-router` into `~/.codex/skills/` (o
 
 - `docs/architecture.md` — mechanism mapping, contracts, and model status.
 - `CHANGELOG.md` — version history.
+
+## Compatibility
+
+- Platforms: Windows / macOS / Linux.
+- Agent forms: Codex desktop and CLI both work (they share the same hooks/MCP/skill configuration); desktop is tested, CLI uses the same mechanism.
+- Uninstall: `node uninstall.mjs` (cross-platform) or `.\uninstall.ps1` on Windows.
 
 ## Acknowledgments
 
