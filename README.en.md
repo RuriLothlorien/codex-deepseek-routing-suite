@@ -88,6 +88,8 @@ node install.mjs        # cross-platform (recommended); on Windows PowerShell: .
 
 Then restart Codex (desktop or CLI), trust the two new hooks (`codex /hooks` or the desktop trust prompt), and verify with `dev_router_status` in a new session.
 
+> **Optional**: to use the native-agents subagent backend (`spawn_agent`), manually enable Codex's multi-agent feature — set `features.multi_agent = true` in `~/.codex/config.toml` (or enable it in the desktop settings). The installer does **not** modify this setting automatically; the default `dev_mode_subagent` (one-shot `codex exec` subprocess) works without it.
+
 ## Uninstall
 
 ```sh

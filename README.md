@@ -94,6 +94,8 @@ node install.mjs        # 跨平台（推荐）；Windows PowerShell 亦可：.\
 
 安装后：重启 Codex（桌面端或 CLI）→ 信任两个新钩子（CLI `codex /hooks` 或桌面端信任提示）→ 新会话调用 `dev_router_status` 验证。
 
+> **可选**：如需使用原生 agents 子代理后端（`spawn_agent` 方式），请手动开启 Codex 的多智能体特性——在 `~/.codex/config.toml` 中设置 `features.multi_agent = true`（或在桌面端设置中开启）。本安装器**不会**自动修改该配置；默认的 `dev_mode_subagent`（一次性 `codex exec` 子进程）无需开启即可使用。
+
 ## 卸载
 
 ```sh
