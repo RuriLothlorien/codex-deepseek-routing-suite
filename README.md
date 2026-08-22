@@ -8,6 +8,8 @@
 
 **[dsh-routing-suite](https://github.com/yjh051108/dsh-routing-suite) 的 Codex 移植版**：任务感知思维模式路由（spec / react / weak），通过 Hooks + MCP 工具让 Codex 按任务类型采用匹配的思维模式，并在首轮对工具面做硬锚定。
 
+如果这个套件对你有帮助，欢迎点个 Star ⭐。
+
 > ⚠️ **模型适配声明**：本套件专门面向 **Codex + DeepSeek** 设计，仅在 **Codex（桌面端/CLI）搭配 DeepSeek V4 Flash** 组合上实测调优；**DeepSeek V4 Pro 未测试，效果未验证**。`router-core.mjs` 中的 Pro 分支来自原项目移植，请按“未实测”对待。
 
 ## 为什么需要（当 Codex/ChatGPT 作为 DeepSeek 的 Agent 时）
