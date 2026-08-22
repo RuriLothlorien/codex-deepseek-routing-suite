@@ -50,6 +50,8 @@
 
 - 本套件专门面向 **Codex + DeepSeek** 设计；实测环境：**Codex（桌面端/CLI）+ DeepSeek V4 Flash**（自定义 provider），Flash 分支 persona/引导按该组合实测调优。
 - **DeepSeek V4 Pro 未测试**：`router-core.mjs` 保留 Pro 分支（原项目移植），效果未验证，欢迎反馈。
+- 具体适配：① Flash 分支 persona 为默认（weak 用 Flash 最优形态 + recall/收敛/反跑题锚，P11/P23）；② RL 接口还原（`model_instructions_file` 注入 RL 句 + 首轮 `bash`/`apply_patch` 核心面）；③ 深度自适应引导（`isComplexTask` 含中文关键词 → deep/fast guide，P30）；④ 中文分类关键词扩展（`规划|计划|方案|阅读|移植`）；⑤ `dev_mode_subagent` 的 `reasoning` 映射 `model_reasoning_effort`。
+- 测量依据来自原项目（P11/P23/P24/P30，DSH 环境）；本移植在 Codex + V4 Flash 组合实测。
 
 ## 7. 边界与已知代价
 

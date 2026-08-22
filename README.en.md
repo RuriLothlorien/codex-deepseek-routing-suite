@@ -19,6 +19,17 @@ A Codex port of **[dsh-routing-suite](https://github.com/yjh051108/dsh-routing-s
 - `model_instructions_file` persona replacement is the only release form.
 - Zero runtime dependencies; idempotent install/uninstall; no CC Switch dependency.
 
+## DeepSeek-specific adaptations
+
+Designed for Codex + DeepSeek and tested on **DeepSeek V4 Flash**:
+
+- Flash-branch personas are the default: weak mode uses the Flash optimum (neutral + classify-then-act + recall/convergence/anti-runaway anchors, P11/P23). The Pro branch from the original project is retained but untested.
+- RL interface restoration: `model_instructions_file` injects the RL sentence plus routing rules; the first-turn core surface is `Bash`/`exec_command` + `apply_patch` (the Codex equivalent of the original shell + str_replace_editor RL shape).
+- Depth-adaptive guidance via `isComplexTask` (long text or architecture keywords, including Chinese): deep guide for complex tasks, fast guide for simple ones (P30).
+- Chinese task classification adaptation: `SPEC_RE` adds 规划/计划/方案/阅读/移植 to keep Chinese planning/porting tasks from being misrouted to react.
+- Mode-isolated subprocesses use `model_instructions_file` replacement, strip desktop thread env vars, and disable hooks/memories; `reasoning` maps to `model_reasoning_effort`.
+- Measurements cited (P11/P23/P24/P30) come from the original project's DSH environment; this port is tested on Codex + V4 Flash.
+
 ## Install
 
 Full install (hooks + MCP + skill + agents):

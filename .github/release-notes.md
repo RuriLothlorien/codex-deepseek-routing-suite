@@ -9,6 +9,7 @@
 - 双后端：默认一次性 `codex exec` 子进程；可选原生 `router_*` agents（不强制开启多智能体配置）
 - 零运行时依赖；安装/卸载脚本幂等且可逆；Codex 直装，不依赖 CC Switch
 - 模型适配：**本套件专门面向 Codex + DeepSeek 设计；仅 Codex + DeepSeek V4 Flash 组合实测；DeepSeek V4 Pro 未测试，效果未验证**
+- DeepSeek 特定适配：Flash 分支 persona 默认、RL 接口还原（`model_instructions_file` + 首轮 bash/apply_patch）、深度自适应引导、中文分类关键词扩展（规划/计划/方案/阅读/移植）
 
 ## 安装
 
@@ -36,6 +37,7 @@
 - Dual backend: one-shot `codex exec` subprocess by default; optional native `router_*` agents (no forced multi-agent config)
 - Zero runtime dependencies; idempotent install/uninstall; direct Codex install, no CC Switch dependency
 - Model status: **designed for Codex + DeepSeek; tested on Codex + DeepSeek V4 Flash only; DeepSeek V4 Pro NOT tested**
+- DeepSeek-specific adaptations: Flash-branch personas by default, RL interface restoration (`model_instructions_file` + first-turn bash/apply_patch), depth-adaptive guidance, and Chinese planning/porting keyword classification
 
 ### Install
 

@@ -36,6 +36,17 @@
 - 会话状态落盘于 `~/.codex/routing-suite/state/`，resume/续接不丢。
 - MCP 服务器读写同一状态，支持查看/切换模式、运行自检、派生隔离子进程。
 
+## DeepSeek 特定适配
+
+本套件面向 **Codex + DeepSeek** 设计，在 **DeepSeek V4 Flash** 上实测调优，主要适配点：
+
+- **Flash 分支 persona 为默认**：weak 模式采用 Flash 最优形态（neutral + classify-then-act + recall/收敛/反跑题锚，依据原项目 P11/P23）；`router-core.mjs` 保留 Pro 分支（来自原项目）但未实测。
+- **RL 接口还原**：用 `model_instructions_file` 注入 RL 训练句（`You are a helpful software engineer assistant.`）+ 路由规则；首轮核心面 = `Bash`/`exec_command` + `apply_patch`，对应原项目 shell + str_replace_editor 的 RL 形态测量（行动率更高、推理更短）。
+- **深度自适应引导**：按 `isComplexTask`（长文本或 架构/设计/重构 等关键词，含中文）选择 deep-guide / fast-guide（P30：深度 +12% 且收敛更快）。
+- **中文任务分类适配**：`SPEC_RE` 增加 `规划|计划|方案|阅读|移植`，降低 DeepSeek 中文规划/移植任务被“实现”误判为 react 的概率。
+- **模式隔离子进程**：`dev_mode_subagent` 用 `model_instructions_file` 做完整 persona 替换，剥离桌面端线程环境变量、禁用 hooks/memories；`reasoning` 参数映射 `model_reasoning_effort`。
+- 上述测量依据来自原项目（P11/P23/P24/P30 等，DSH 环境）；本移植在 Codex + V4 Flash 组合上实测。
+
 ## 仓库结构
 
 ```text
