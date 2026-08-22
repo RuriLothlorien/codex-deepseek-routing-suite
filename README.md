@@ -10,16 +10,22 @@
 
 > ⚠️ **模型适配声明**：本套件专门面向 **Codex + DeepSeek** 设计，仅在 **Codex（桌面端/CLI）搭配 DeepSeek V4 Flash** 组合上实测调优；**DeepSeek V4 Pro 未测试，效果未验证**。`router-core.mjs` 中的 Pro 分支来自原项目移植，请按“未实测”对待。
 
-## 为什么需要
+## 为什么需要（DeepSeek 特定优化）
 
-模型的首轮请求结构会决定整条会话的策略轨迹：构建任务适合“直接动手”，修复/规划任务适合“先查后改”，模糊任务适合让模型自己分类。模式错配会带来明显的质量损失；而完整工具目录会稀释首轮注意力并推高无缓存 prefill 成本。
+原项目在 DeepSeek 系列上的实测（P1-P30）表明，这套适配不是可选项：
 
-这套工具把“任务感知路由”带进 Codex：
+- **行为是分相的，不是连续可调**：persona 轴坍缩为 spec / mixed（陷阱）/ react 三个稳定带；V4 Flash 更是阈值式——0-0.5 全在 spec 侧，0.75+ 才跳到 react。
+- **首轮即路径承诺**：第一次请求的 persona 与工具 schema 面决定整条会话轨迹，中途换模式基本无效，还会废掉前缀缓存。
+- **RL 接口还原显著**：首轮只给 shell + 编辑器（RL 形态）时行动率 100%、推理更短；完整目录稀释首轮注意力，且首轮 prefill 最贵（缓存命中便宜约 10 倍）。
+- **模糊任务应交模型自分类**：weak 内路由比硬分类更准；Flash 与 Pro 的最优 persona 不可互换（Flash 要 neutral + classify + 锚，Pro 要 spec 句 + few-shot）。
 
-- **按任务分类**：构建 → react（hands-on）；修复/重构/规划 → spec（inspect-and-plan）；模糊 → weak（模型内路由）。
-- **首轮硬锚定**：首个核心工具调用前只暴露 `Bash`/`exec_command` 与 `apply_patch`，之后自动放开全部工具。
-- **每轮注入 persona 与引导**：近距离、缓存友好，plan 模式下与 DSH 原始行为一致。
-- **双后端模式隔离**：可用一次性 `codex exec` 子进程，也可在具备 `spawn_agent` 的会话用原生 agents——不强制开启多智能体配置。
+本套件把这些测量固化为 Codex + DeepSeek 的默认行为：
+
+- **按任务分类**：构建 → react；修复/重构/规划 → spec；模糊 → weak。
+- **首轮硬锚定**：首个核心工具调用前只暴露 `Bash`/`exec_command` 与 `apply_patch`。
+- **每轮近距离注入** persona + 引导（缓存友好，plan 模式与 DSH 一致）。
+- **Flash 分支默认** + 中文规划/移植分类修正 + 深度自适应引导。
+- **双后端模式隔离**：`codex exec` 子进程（默认）或可选原生 agents。
 
 ## 功能特性
 

@@ -10,6 +10,17 @@ A Codex port of **[dsh-routing-suite](https://github.com/yjh051108/dsh-routing-s
 
 > ⚠️ **Model status**: designed specifically for **Codex + DeepSeek**; tested and tuned on **Codex (desktop/CLI) with DeepSeek V4 Flash**. **DeepSeek V4 Pro is NOT tested**; the Pro branch in `router-core.mjs` is inherited from the original project and should be treated as unverified.
 
+## Why DeepSeek-specific optimizations
+
+Measured on DeepSeek (P1-P30 in the original project), these adaptations are not optional:
+
+- Behavior along the persona axis collapses into stable bands (spec / mixed trap / react); V4 Flash is threshold-like (0-0.5 all spec, jumps at 0.75+).
+- The first request commits the path: persona and tool-schema surface decide the whole trajectory; mid-session mode switches are mostly ineffective and invalidate the prefix cache.
+- RL interface restoration matters: shell + editor only yields 100% action with shorter reasoning; the full catalog dilutes first-turn attention, and first-turn prefill is the most expensive (cache hits are ~10x cheaper).
+- Ambiguous tasks are better left to weak internal routing; Flash and Pro need different optimal personas (neutral + classify + anchors vs spec sentence + few-shot).
+
+This suite turns those measurements into defaults for Codex + DeepSeek: band-based classification, first-turn anchoring, per-turn near-field injection, Flash-branch personas by default, Chinese planning/porting classification fixes, and depth-adaptive guidance.
+
 ## Highlights
 
 - Classifies each session from its first user message: build → react, fix/refactor/planning → spec, ambiguous → weak.
