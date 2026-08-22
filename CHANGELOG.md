@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.3 (2026-08-22)
+## 0.1.2 (2026-08-22)
 
 - 严格模型门控：`modelClass` 精确区分 Flash / Pro，二者皆非（`deepseek-chat`、其他模型、缺失）时套件工作流整体停用——钩子不注入、不锚定，`dev_mode_subagent` 拒绝执行。
 - Flash 家族兼容：`deepseek-v4-flash-vision-exp` 等含 `flash` 的变体纳入 Flash 分支。

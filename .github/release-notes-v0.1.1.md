@@ -1,15 +1,9 @@
-## 简介
+## 更新内容（自 v0.1.0）
 
-**codex-deepseek-routing-suite** 是 [dsh-routing-suite](https://github.com/yjh051108/dsh-routing-suite) 的 Codex 移植版：任务感知思维模式路由（spec / react / weak），通过 Hooks + MCP 工具实现首轮 persona 注入、工具面硬锚定与双后端模式隔离子代理。
-
-- 致谢：[yjh051108](https://github.com/yjh051108) 的 **风神插件**；本套件基于 dsh-routing-suite（MIT）移植
-- 主会话唯一形态：`model_instructions_file` 替换内置 identity（RL 句 + 路由规则）
-- 首轮硬锚定：首个核心工具调用前仅 `Bash`/`exec_command` + `apply_patch`
-- 双后端：默认一次性 `codex exec` 子进程；可选原生 `router_*` agents（不强制开启多智能体配置）
-- 跨平台（Windows / macOS / Linux）：新增 `install.mjs` / `uninstall.mjs`（推荐）与 macOS/Linux `install.sh` / `uninstall.sh`，Windows 保留 `install.ps1`
-- Codex 桌面端与 CLI 兼容（共用同一套 hooks/MCP/技能配置）
-- 零运行时依赖；安装/卸载脚本幂等且可逆
-- 模型适配：**专门面向 Codex + DeepSeek 设计；Codex + DeepSeek V4 Flash 组合实测；DeepSeek V4 Pro 未测试，效果未验证**
+- **跨平台安装**：新增 `install.mjs` / `uninstall.mjs`（Windows / macOS / Linux，支持 `--home` 与 `--dry-run`）；macOS/Linux 提供 `install.sh` / `uninstall.sh`；Windows 保留 `install.ps1` / `uninstall.ps1`。
+- **Agent 形态**：明确 Codex 桌面端与 CLI 兼容（共用同一套 hooks/MCP/技能配置）。
+- `dev_mode_subagent`：CLI 探测补充 PATH 回退（macOS/Linux）。
+- 文档：README 中英同步；`docs/architecture.md` 新增“平台与 Agent 形态兼容”。
 
 ## 安装
 
@@ -25,18 +19,12 @@
 
 ---
 
-## Overview (English)
+## What's new (since v0.1.0)
 
-**codex-deepseek-routing-suite** is a Codex port of [dsh-routing-suite](https://github.com/yjh051108/dsh-routing-suite): task-aware reasoning-mode routing (spec / react / weak) with first-turn persona injection, tool anchoring, and dual-backend mode isolation via Hooks + MCP tools.
-
-- Thanks to **风神插件 (Fengshen plugin)** by [yjh051108](https://github.com/yjh051108); ported from dsh-routing-suite (MIT)
-- `model_instructions_file` persona replacement is the only release form
-- First-turn hard anchoring: only `Bash`/`exec_command` and `apply_patch` until the first core tool call
-- Dual backend: one-shot `codex exec` subprocess by default; optional native `router_*` agents (no forced multi-agent config)
-- Cross-platform (Windows / macOS / Linux): `install.mjs` / `uninstall.mjs` (recommended), macOS/Linux `install.sh` / `uninstall.sh`, Windows `install.ps1`
-- Compatible with Codex desktop and CLI (shared hooks/MCP/skill configuration)
-- Zero runtime dependencies; idempotent install/uninstall
-- Model status: **designed for Codex + DeepSeek; tested on Codex + DeepSeek V4 Flash only; DeepSeek V4 Pro NOT tested**
+- **Cross-platform install**: added `install.mjs` / `uninstall.mjs` (Windows / macOS / Linux, with `--home` and `--dry-run`); `install.sh` / `uninstall.sh` for macOS/Linux; Windows keeps `install.ps1` / `uninstall.ps1`.
+- **Agent forms**: Codex desktop and CLI are both supported (shared hooks/MCP/skill configuration).
+- `dev_mode_subagent`: added PATH-based CLI discovery fallback (macOS/Linux).
+- Docs: README zh/en synced; `docs/architecture.md` gained a platform and agent-form compatibility section.
 
 ### Install
 

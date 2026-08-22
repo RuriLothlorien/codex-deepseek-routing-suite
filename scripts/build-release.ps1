@@ -1,7 +1,7 @@
 # Builds the publishable release zip for codex-deepseek-routing-suite.
 # Usage: .\scripts\build-release.ps1 [-Version 0.1.0]
 param(
-  [string]$Version = '0.1.3',
+  [string]$Version = '0.1.2',
   [string]$Repo = (Split-Path -Parent $MyInvocation.MyCommand.Path | Split-Path -Parent)
 )
 $ErrorActionPreference = 'Stop'
