@@ -17,7 +17,7 @@
 ## 安装
 
 - **完整安装（hooks + MCP + 技能 + agents，Windows / macOS / Linux）**：解压后运行 `node install.mjs`（Windows 亦可用 `install.ps1`），重启 Codex 并信任两个新钩子（`codex /hooks` 或桌面端信任提示），新会话用 `dev_router_status` 验证。
-- **纯技能用法**：把 `skills/dsh-router` 复制或软链接到 `~/.codex/skills/`（或其他 SKILL.md agent 的 skills 目录）。
+- **仅手册用法（不启用路由）**：把 `skills/dsh-router` 复制到 skills 目录只能读取操作手册；hooks / MCP / agents 未安装，路由不生效，`dev_router_*` 不可用。请用完整安装。
 
 ## 文档
 
@@ -48,7 +48,7 @@
 ### Install
 
 - Full install (hooks + MCP + skill + agents; Windows / macOS / Linux): unzip and run `node install.mjs` (or `install.ps1` on Windows), restart Codex, trust the two hooks, verify with `dev_router_status`.
-- Skill-only: copy or symlink `skills/dsh-router` into `~/.codex/skills/`.
+- Manual-only (routing NOT enabled): copying `skills/dsh-router` into a skills directory only provides the manual; hooks/MCP/agents are not installed and `dev_router_*` is unavailable. Use the full install.
 
 ### Docs
 
