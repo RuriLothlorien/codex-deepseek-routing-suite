@@ -14,7 +14,7 @@ If this suite helps you, please give it a ⭐.
 
 ## Acknowledgments
 
-Thanks to the original author [yjh051108](https://github.com/yjh051108) and the **风神插件 (Fengshen plugin)**. This suite is a port of [dsh-routing-suite](https://github.com/yjh051108/dsh-routing-suite) (MIT); original attribution is in NOTICE.
+Thanks to **风神插件 (Fengshen plugin)** by [yjh051108](https://github.com/yjh051108). This suite is a port of [dsh-routing-suite](https://github.com/yjh051108/dsh-routing-suite) (MIT); original attribution is in NOTICE.
 
 ## Why (when Codex/ChatGPT is the agent for DeepSeek)
 
