@@ -89,8 +89,6 @@ node install.mjs        # 跨平台（推荐）；Windows PowerShell 亦可：.\
 
 安装后：重启 Codex（桌面端或 CLI）→ 信任两个新钩子（CLI `codex /hooks` 或桌面端信任提示）→ 新会话调用 `dev_router_status` 验证。
 
-**仅手册用法（不会启用路由）**：把 `skills/dsh-router` 复制或软链接到 `~/.codex/skills/`（或其他 SKILL.md agent 的 skills 目录）只能让 agent 读取操作手册；此时 hooks / MCP 服务器 / agents 均未安装，路由不会生效，`dev_router_*` 工具不可用。完整功能请使用上面的完整安装。
-
 ## 模式隔离子代理：双后端
 
 | 后端 | 触发方式 | 依赖 |

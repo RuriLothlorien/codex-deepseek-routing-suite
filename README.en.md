@@ -83,8 +83,6 @@ node install.mjs        # cross-platform (recommended); on Windows PowerShell: .
 
 Then restart Codex (desktop or CLI), trust the two new hooks (`codex /hooks` or the desktop trust prompt), and verify with `dev_router_status` in a new session.
 
-Manual-only usage (routing NOT enabled): copying or symlinking `skills/dsh-router` into `~/.codex/skills/` (or your agent's skills directory) only lets the agent read the manual. Hooks, the MCP server, and agents are not installed, so routing does not run and the `dev_router_*` tools are unavailable. Use the full install above for working functionality.
-
 ## Dual-backend mode isolation
 
 | Backend | How to trigger | Dependency |
