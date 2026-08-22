@@ -43,6 +43,16 @@ This suite turns those measurements into defaults for Codex + DeepSeek: band-bas
 - Session state is persisted under `~/.codex/routing-suite/state/`, so resume/continuation does not lose it.
 - The MCP server reads/writes the same state: view or switch modes, run self-tests, and spawn isolated subprocesses.
 
+### Security analysis
+
+- Fully local: hooks and the MCP server are zero-dependency local Node scripts; routing itself (classification, injection, anchoring, state) makes no network requests and sends no telemetry.
+- Data boundaries: state is written only under `~/.codex/routing-suite/state/` (session id, first message text, mode/complexity/promotion); no keys or tokens are read or stored.
+- Least privilege: `UserPromptSubmit` only returns injected text; `PreToolUse` only returns allow/deny decisions and never executes commands for you; `model_instructions_file` points to a read-only Markdown file.
+- Auditable and reversible: behavior can be reviewed in session transcripts; `config.json` and state files are human-inspectable; `uninstall.mjs` / `uninstall.sh` / `uninstall.ps1` remove the config markers, runtime, skill, and agents.
+- Trust chain: the two hooks only run after you explicitly trust them (`codex /hooks` or the desktop prompt); all install/hook code is open source and reviewable.
+- Subagent isolation: `dev_mode_subagent` runs in a local one-shot `codex exec` subprocess with desktop thread env stripped, hooks/memories disabled, and temp persona files removed afterwards; it reuses your existing codex CLI / DeepSeek API path and adds no credential storage.
+- Model gating fallback: non-DeepSeek or unrecognized models automatically disable the workflow, reducing unintended intervention.
+
 ## DeepSeek-specific adaptations
 
 Designed for Codex + DeepSeek and tested on **DeepSeek V4 Flash**:
