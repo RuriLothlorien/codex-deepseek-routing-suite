@@ -10,7 +10,7 @@ A Codex port of **[dsh-routing-suite](https://github.com/yjh051108/dsh-routing-s
 
 If this suite helps you, please give it a ⭐.
 
-> ⚠️ **Model status**: designed specifically for **Codex + DeepSeek**; tested and tuned on **Codex (desktop/CLI) with DeepSeek V4 Flash**. **DeepSeek V4 Pro is NOT tested**; the Pro branch in `router-core.mjs` is inherited from the original project and should be treated as unverified.
+> ⚠️ **Model status**: designed specifically for **Codex + DeepSeek**; tested and tuned on **Codex (desktop/CLI) with DeepSeek V4 Flash**. **DeepSeek V4 Pro is NOT tested**; the Pro branch in `router-core.mjs` is inherited from the original project and should be treated as unverified. **Validation**: multi-scenario checks (plan mode, ambiguous tasks, multi-turn complex sessions) were performed in real Codex sessions; see [docs/validation-report.md](docs/validation-report.md).
 
 ## Acknowledgments
 

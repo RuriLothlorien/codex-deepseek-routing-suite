@@ -10,7 +10,7 @@
 
 如果这个套件对你有帮助，欢迎点个 Star ⭐。
 
-> ⚠️ **模型适配声明**：本套件专门面向 **Codex + DeepSeek** 设计，仅在 **Codex（桌面端/CLI）搭配 DeepSeek V4 Flash** 组合上实测调优；**DeepSeek V4 Pro 未测试，效果未验证**。`router-core.mjs` 中的 Pro 分支来自原项目移植，请按“未实测”对待。
+> ⚠️ **模型适配声明**：本套件专门面向 **Codex + DeepSeek** 设计，仅在 **Codex（桌面端/CLI）搭配 DeepSeek V4 Flash** 组合上实测调优；**DeepSeek V4 Pro 未测试，效果未验证**。`router-core.mjs` 中的 Pro 分支来自原项目移植，请按“未实测”对待。**有效性**：已在真实 Codex 会话中完成计划模式、模糊任务、多轮复杂会话等多场景核验，详见 [docs/validation-report.md](docs/validation-report.md)。
 
 ## 致谢
 
