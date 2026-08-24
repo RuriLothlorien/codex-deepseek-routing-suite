@@ -1,8 +1,8 @@
-# codex-deepseek-routing-suite
+# codex-dsh-routing-suite
 
-![License](https://img.shields.io/github/license/RuriLothlorien/codex-deepseek-routing-suite)
-![Release](https://img.shields.io/github/v/release/RuriLothlorien/codex-deepseek-routing-suite)
-![Stars](https://img.shields.io/github/stars/RuriLothlorien/codex-deepseek-routing-suite?style=social)
+![License](https://img.shields.io/github/license/RuriLothlorien/codex-dsh-routing-suite)
+![Release](https://img.shields.io/github/v/release/RuriLothlorien/codex-dsh-routing-suite)
+![Stars](https://img.shields.io/github/stars/RuriLothlorien/codex-dsh-routing-suite?style=social)
 
 > English | [中文](README.md)
 
@@ -46,13 +46,13 @@ This suite turns those measurements into defaults for Codex + DeepSeek: band-bas
 
 - `UserPromptSubmit` hook: records the first user message, classifies the session, and returns persona + guidance (`additionalContext`) per turn.
 - `PreToolUse` hook: only core tools pass before the first tool call, then `promoted=true` unlocks the full catalog.
-- Session state is persisted under `~/.codex/codex-deepseek-routing-suite/state/`, so resume/continuation does not lose it.
+- Session state is persisted under `~/.codex/codex-dsh-routing-suite/state/`, so resume/continuation does not lose it.
 - The MCP server reads/writes the same state: view or switch modes, run self-tests, and spawn isolated subprocesses.
 
 ### Security analysis
 
 - Fully local: hooks and the MCP server are zero-dependency local Node scripts; routing itself (classification, injection, anchoring, state) makes no network requests and sends no telemetry.
-- Data boundaries: state is written only under `~/.codex/codex-deepseek-routing-suite/state/` (session id, first message text, mode/complexity/promotion); no keys or tokens are read or stored.
+- Data boundaries: state is written only under `~/.codex/codex-dsh-routing-suite/state/` (session id, first message text, mode/complexity/promotion); no keys or tokens are read or stored.
 - Least privilege: `UserPromptSubmit` only returns injected text; `PreToolUse` only returns allow/deny decisions and never executes commands for you; `model_instructions_file` points to a read-only Markdown file.
 - Auditable and reversible: behavior can be reviewed in session transcripts; `config.json` and state files are human-inspectable; `uninstall.mjs` / `uninstall.sh` / `uninstall.ps1` remove the config markers, runtime, skill, and agents.
 - Trust chain: the two hooks only run after you explicitly trust them (`codex /hooks` or the desktop prompt); all install/hook code is open source and reviewable.
@@ -62,10 +62,10 @@ This suite turns those measurements into defaults for Codex + DeepSeek: band-bas
 ## Repository structure
 
 ```text
-codex-deepseek-routing-suite/
+codex-dsh-routing-suite/
 ├─ hooks/                  # UserPromptSubmit + PreToolUse hooks
 ├─ mcp/server.mjs          # zero-dependency MCP server (dev_router_*)
-├─ skills/codex-deepseek-routing-suite/      # skill manual and persona references
+├─ skills/codex-dsh-routing-suite/      # skill manual and persona references
 ├─ agents/                 # optional native agents (router_*)
 ├─ instructions/base.md    # base instructions for persona replacement
 ├─ test/                   # 39 tests in the repo (38 in-session self-test)

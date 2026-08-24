@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- 全局改名 `codex-dsh-routing-suite`：技能、运行时目录、config.toml 标记、MCP 服务器名与 persona 身份统一为新名；安装器自动从上一版 `codex-deepseek-routing-suite` 布局迁移（保留会话状态），并继续兼容更早的 `dsh-router` 布局清理；README/文档/发布元数据同步。
+
 ## 0.1.4 (2026-08-23)
 
 - 全套件命名对齐：技能、运行时目录、config.toml 标记、MCP 服务器名与 persona 身份统一为 `codex-deepseek-routing-suite`（旧 `dsh-router` 布局由安装器自动迁移：旧运行时目录改名保留状态、旧技能目录移除、旧标记块清理）；上游 `dsh-routing-suite` / `dsh-router-standard` 署名与 `dev_router_*` 工具名保持不变。

@@ -1,11 +1,11 @@
 ---
-name: codex-deepseek-routing-suite
+name: codex-dsh-routing-suite
 description: 思维模式路由套件（dsh-routing-suite 的 Codex 移植版）操作手册。当任务涉及 路由/思维模式/路由器/dev_router/router/首轮锚定，或需要查看或切换当前会话的 spec/react/weak 模式、用不同模式派生一次性子进程、运行路由自检时使用。
 ---
 
-# codex-deepseek-routing-suite 操作手册
+# codex-dsh-routing-suite 操作手册
 
-安装 codex-deepseek-routing-suite 后，Codex 环境具备任务感知思维模式路由（移植自 DSH 生态 dsh-routing-suite）。它按首条用户消息分类会话模式，在每轮注入对应 persona 与引导，并在首次核心工具调用前对工具面做硬锚定。
+安装 codex-dsh-routing-suite 后，Codex 环境具备任务感知思维模式路由（移植自 DSH 生态 dsh-routing-suite）。它按首条用户消息分类会话模式，在每轮注入对应 persona 与引导，并在首次核心工具调用前对工具面做硬锚定。
 
 ## 1. 模式与分类
 
@@ -32,18 +32,18 @@ description: 思维模式路由套件（dsh-routing-suite 的 Codex 移植版）
 
 1. `dev_router_status` 看当前路由；
 2. 若分类与任务不符，`dev_router_mode` 显式覆盖（下轮生效，代价是一次前缀缓存 miss）；
-3. 改 `~/.codex/codex-deepseek-routing-suite/config.json`（`routerMode` / `anchoring` / `specExtraTools` / `reactExtraTools`）即时生效（钩子每次读文件）。
+3. 改 `~/.codex/codex-dsh-routing-suite/config.json`（`routerMode` / `anchoring` / `specExtraTools` / `reactExtraTools`）即时生效（钩子每次读文件）。
 
 ## 5. 故障排查
 
 - 钩子不生效：确认已重启 Codex、并已信任两个钩子（CLI `codex /hooks` 或桌面端信任提示）。
 - 计划模式下的 persona/锚定是 DSH 原始行为（plan 段由宿主保留，路由器照常工作），不是故障；如想临时关闭锚定，设 `config.json` 的 `anchoring=false`。
 - 工具被误拒：首轮锚定中，先调 `exec_command` 或 `apply_patch`；或临时设 `anchoring=false`。
-- 注入文本没出现：确认 `~/.codex/codex-deepseek-routing-suite/config.json` 存在、hooks 配置块在 `~/.codex/config.toml` 中未被覆盖（若使用 CC Switch 管理配置，切换供应商后需按 [CCSwitch-operations](https://github.com/RuriLothlorien/CCSwitch-operations) 技能重新同步，可选）。
-- 卸载：运行仓库内 `uninstall.ps1`（会移除 config.toml 中的 codex-deepseek-routing-suite 块并保留备份）。
+- 注入文本没出现：确认 `~/.codex/codex-dsh-routing-suite/config.json` 存在、hooks 配置块在 `~/.codex/config.toml` 中未被覆盖（若使用 CC Switch 管理配置，切换供应商后需按 [CCSwitch-operations](https://github.com/RuriLothlorien/CCSwitch-operations) 技能重新同步，可选）。
+- 卸载：运行仓库内 `uninstall.ps1`（会移除 config.toml 中的 codex-dsh-routing-suite 块并保留备份）。
 
 ## 6. 参考
 
 - `references/personas.md`：persona 原文与实测依据（P23/P24/P30）。
-- [docs/architecture.md](https://github.com/RuriLothlorien/codex-deepseek-routing-suite/blob/main/docs/architecture.md)：机制映射、接口契约与模型适配说明。
+- [docs/architecture.md](https://github.com/RuriLothlorien/codex-dsh-routing-suite/blob/main/docs/architecture.md)：机制映射、接口契约与模型适配说明。
 - 原项目：https://github.com/yjh051108/dsh-routing-suite（MIT）。

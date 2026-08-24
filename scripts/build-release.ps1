@@ -1,4 +1,4 @@
-# Builds the publishable release zip for codex-deepseek-routing-suite.
+# Builds the publishable release zip for codex-dsh-routing-suite.
 # Usage: .\scripts\build-release.ps1 [-Version 0.1.0]
 param(
   [string]$Version = '0.1.4',
@@ -6,7 +6,7 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 
-$TopLevel = 'codex-deepseek-routing-suite'
+$TopLevel = 'codex-dsh-routing-suite'
 $repoRoot = [IO.Path]::GetFullPath($Repo)
 $distDir = Join-Path $repoRoot 'dist'
 $staging = Join-Path $distDir "staging-$Version"

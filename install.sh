@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# POSIX entrypoint for the codex-deepseek-routing-suite installer (macOS/Linux).
+# POSIX entrypoint for the codex-dsh-routing-suite installer (macOS/Linux).
 # Delegates to the tested cross-platform Node installer (install.mjs).
 # Usage: ./install.sh [--home <codex-home>] [--dry-run]
 set -euo pipefail

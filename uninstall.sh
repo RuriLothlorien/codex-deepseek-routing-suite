@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# POSIX entrypoint for the codex-deepseek-routing-suite uninstaller (macOS/Linux).
+# POSIX entrypoint for the codex-dsh-routing-suite uninstaller (macOS/Linux).
 # Delegates to the tested cross-platform Node uninstaller (uninstall.mjs).
 # Usage: ./uninstall.sh [--home <codex-home>] [--dry-run]
 set -euo pipefail

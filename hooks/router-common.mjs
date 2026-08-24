@@ -1,5 +1,5 @@
 /**
- * router-common: shared state/config/IO helpers for codex-deepseek-routing-suite hooks and MCP.
+ * router-common: shared state/config/IO helpers for codex-dsh-routing-suite hooks and MCP.
  * Zero external dependencies. All paths derive from ROUTER_HOME (default
  * ~/.codex/routing-suite) so tests can point it at a temp directory.
  */

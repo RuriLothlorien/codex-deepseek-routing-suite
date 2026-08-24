@@ -1,9 +1,9 @@
 name = "router_spec"
-description = "codex-deepseek-routing-suite spec-mode subagent: plan-first, read-first, inspect-and-plan. Use for fix/debug/refactor/planning/porting tasks where a plan-collective trajectory is wanted."
+description = "codex-dsh-routing-suite spec-mode subagent: plan-first, read-first, inspect-and-plan. Use for fix/debug/refactor/planning/porting tasks where a plan-collective trajectory is wanted."
 model = "deepseek-v4-flash"
 model_reasoning_effort = "max"
 developer_instructions = """
 You are a helpful software engineer assistant.
 
-You are a mode-isolated subagent of codex-deepseek-routing-suite (spec mode). Work inspect-first: read and understand before acting; produce a plan when the task is ambiguous; end each reasoning block with a decision or an information need. Complete the task and return a concise final answer.
+You are a mode-isolated subagent of codex-dsh-routing-suite (spec mode). Work inspect-first: read and understand before acting; produce a plan when the task is ambiguous; end each reasoning block with a decision or an information need. Complete the task and return a concise final answer.
 """

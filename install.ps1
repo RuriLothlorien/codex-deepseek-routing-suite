@@ -1,4 +1,4 @@
-# codex-deepseek-routing-suite install script for Codex (user-level direct install).
+# codex-dsh-routing-suite install script for Codex (user-level direct install).
 # Usage: .\install.ps1
 $ErrorActionPreference = 'Stop'
 
@@ -62,7 +62,7 @@ function Merge-ConfigToml {
   if (Test-Path -LiteralPath $ConfigPath) { $toml = Get-Content -Raw -LiteralPath $ConfigPath }
   if ($null -eq $toml) { $toml = '' }
   $fs = $RuntimeDir.Replace('\', '/')
-  $label = 'codex-deepseek-routing-suite'
+  $label = 'codex-dsh-routing-suite'
 
   $hooksBlock = @"
 # >>> ${label} hooks: begin >>>
@@ -101,8 +101,9 @@ model_instructions_file = "$fs/instructions/base.md"
 # >>> ${label} instructions: end <<<
 "@
 
-  # Remove legacy dsh-router marker blocks from older installs.
+  # Remove marker blocks from previous/legacy installs.
   foreach ($marker in @('hooks', 'mcp', 'instructions')) {
+    $toml = Remove-MarkerBlock -Text $toml -Label 'codex-deepseek-routing-suite' -Marker $marker
     $toml = Remove-MarkerBlock -Text $toml -Label 'dsh-router' -Marker $marker
   }
   $toml = Set-MarkerBlock -Text $toml -Label $label -Marker 'hooks' -Block $hooksBlock
@@ -121,8 +122,10 @@ $root = Split-Path -Parent $MyInvocation.MyCommand.Path
 $homeDir = $env:USERPROFILE
 if (-not $homeDir) { throw 'USERPROFILE is not set' }
 $codexHome = Join-Path $homeDir '.codex'
-$dst = Join-Path $codexHome 'codex-deepseek-routing-suite'
-$skillDst = Join-Path $codexHome 'skills\codex-deepseek-routing-suite'
+$dst = Join-Path $codexHome 'codex-dsh-routing-suite'
+$skillDst = Join-Path $codexHome 'skills\codex-dsh-routing-suite'
+$prevDst = Join-Path $codexHome 'codex-deepseek-routing-suite'
+$prevSkillDst = Join-Path $codexHome 'skills\codex-deepseek-routing-suite'
 $oldDst = Join-Path $codexHome 'routing-suite'
 $oldSkillDst = Join-Path $codexHome 'skills\dsh-router'
 $configPath = Join-Path $codexHome 'config.toml'
@@ -135,7 +138,14 @@ if (Test-Path -LiteralPath $configPath) {
   Write-Host "  backup: $backup"
 }
 
-Write-Host '[1.5/7] Migrating legacy layout (dsh-router -> codex-deepseek-routing-suite)'
+Write-Host '[1.5/7] Migrating previous layout -> codex-dsh-routing-suite'
+if ((Test-Path -LiteralPath $prevDst) -and -not (Test-Path -LiteralPath $dst)) {
+  Move-Item -LiteralPath $prevDst -Destination $dst
+  Write-Host "  moved $prevDst -> $dst"
+} elseif (Test-Path -LiteralPath $prevDst) {
+  Remove-Item -LiteralPath $prevDst -Recurse -Force
+  Write-Host "  removed stale $prevDst"
+}
 if ((Test-Path -LiteralPath $oldDst) -and -not (Test-Path -LiteralPath $dst)) {
   Move-Item -LiteralPath $oldDst -Destination $dst
   Write-Host "  moved $oldDst -> $dst"
@@ -146,6 +156,10 @@ if ((Test-Path -LiteralPath $oldDst) -and -not (Test-Path -LiteralPath $dst)) {
 if (Test-Path -LiteralPath $oldSkillDst) {
   Remove-Item -LiteralPath $oldSkillDst -Recurse -Force
   Write-Host "  removed stale $oldSkillDst"
+}
+if (Test-Path -LiteralPath $prevSkillDst) {
+  Remove-Item -LiteralPath $prevSkillDst -Recurse -Force
+  Write-Host "  removed stale $prevSkillDst"
 }
 
 Write-Host "[2/6] Copying runtime to $dst"
@@ -182,9 +196,9 @@ if (Test-Path -LiteralPath $skillDst) {
   }
 }
 New-Item -ItemType Directory -Force -Path $skillDst | Out-Null
-Copy-Item -LiteralPath (Join-Path $root 'skills\codex-deepseek-routing-suite\SKILL.md') -Destination (Join-Path $skillDst 'SKILL.md') -Force
+Copy-Item -LiteralPath (Join-Path $root 'skills\codex-dsh-routing-suite\SKILL.md') -Destination (Join-Path $skillDst 'SKILL.md') -Force
 New-Item -ItemType Directory -Force -Path (Join-Path $skillDst 'references') | Out-Null
-Copy-Item -Path (Join-Path $root 'skills\codex-deepseek-routing-suite\references\*') -Destination (Join-Path $skillDst 'references') -Recurse -Force
+Copy-Item -Path (Join-Path $root 'skills\codex-dsh-routing-suite\references\*') -Destination (Join-Path $skillDst 'references') -Recurse -Force
 
 Write-Host '[4/7] Installing native agents (optional backend; multi_agent stays off)'
 $agentsDst = Join-Path $codexHome 'agents'

@@ -1,4 +1,4 @@
-# codex-deepseek-routing-suite uninstall script for Codex.
+# codex-dsh-routing-suite uninstall script for Codex.
 # Removes the config.toml marker blocks and the installed runtime/skill.
 $ErrorActionPreference = 'Stop'
 
@@ -6,8 +6,10 @@ $homeDir = $env:USERPROFILE
 if (-not $homeDir) { throw 'USERPROFILE is not set' }
 $codexHome = Join-Path $homeDir '.codex'
 $configPath = Join-Path $codexHome 'config.toml'
-$dst = Join-Path $codexHome 'codex-deepseek-routing-suite'
-$skillDst = Join-Path $codexHome 'skills\codex-deepseek-routing-suite'
+$dst = Join-Path $codexHome 'codex-dsh-routing-suite'
+$skillDst = Join-Path $codexHome 'skills\codex-dsh-routing-suite'
+$prevDst = Join-Path $codexHome 'codex-deepseek-routing-suite'
+$prevSkillDst = Join-Path $codexHome 'skills\codex-deepseek-routing-suite'
 $oldDst = Join-Path $codexHome 'routing-suite'
 $oldSkillDst = Join-Path $codexHome 'skills\dsh-router'
 $stamp = Get-Date -Format 'yyyyMMdd-HHmmss'
@@ -18,7 +20,7 @@ if (Test-Path -LiteralPath $configPath) {
   Copy-Item -LiteralPath $configPath -Destination $backup -Force
   Write-Host "  backup: $backup"
   $text = Get-Content -Raw -LiteralPath $configPath
-  foreach ($label in @('codex-deepseek-routing-suite', 'dsh-router')) {
+  foreach ($label in @('codex-dsh-routing-suite', 'codex-deepseek-routing-suite', 'dsh-router')) {
     foreach ($marker in @('hooks', 'mcp', 'instructions')) {
       $begin = "# >>> ${label} ${marker}: begin >>>"
       $end = "# >>> ${label} ${marker}: end <<<"
@@ -43,7 +45,7 @@ foreach ($agent in @('router-spec.toml', 'router-react.toml', 'router-weak.toml'
 
 Write-Host '[3/4] Removing runtime and skill'
 $codexHomeFull = [IO.Path]::GetFullPath($codexHome)
-foreach ($target in @($dst, $skillDst, $oldDst, $oldSkillDst)) {
+foreach ($target in @($dst, $skillDst, $prevDst, $prevSkillDst, $oldDst, $oldSkillDst)) {
   if (Test-Path -LiteralPath $target) {
     $resolved = [IO.Path]::GetFullPath($target)
     if (-not $resolved.StartsWith($codexHomeFull, [StringComparison]::OrdinalIgnoreCase)) {

@@ -31,10 +31,13 @@ function parseArgs(argv) {
 
 const args = parseArgs(process.argv.slice(2))
 const codexHome = resolve(args.home || join(homedir(), '.codex'))
-const CODE_NAME = 'codex-deepseek-routing-suite'
+const CODE_NAME = 'codex-dsh-routing-suite'
+const PREV_CODE_NAME = 'codex-deepseek-routing-suite'
 const OLD_CODE_NAME = 'dsh-router'
 const dst = join(codexHome, CODE_NAME)
 const skillDst = join(codexHome, 'skills', CODE_NAME)
+const prevDst = join(codexHome, PREV_CODE_NAME)
+const prevSkillDst = join(codexHome, 'skills', PREV_CODE_NAME)
 const oldDst = join(codexHome, 'routing-suite')
 const oldSkillDst = join(codexHome, 'skills', OLD_CODE_NAME)
 const agentsDst = join(codexHome, 'agents')
@@ -167,8 +170,9 @@ tool_timeout_sec = 120
 model_instructions_file = "${fs}/instructions/base.md"
 # >>> ${CODE_NAME} instructions: end <<<`
 
-  // Remove legacy dsh-router marker blocks from older installs.
+  // Remove marker blocks from previous/legacy installs.
   for (const marker of ['hooks', 'mcp', 'instructions']) {
+    text = removeMarkerBlock(text, PREV_CODE_NAME, marker)
     text = removeMarkerBlock(text, OLD_CODE_NAME, marker)
   }
   text = setMarkerBlock(text, CODE_NAME, 'hooks', hooksBlock)
@@ -186,8 +190,15 @@ if (existsSync(configPath) && !args.dryRun) {
   console.log(`  backup: ${backup}`)
 }
 
-step(1.5, `Migrating legacy layout (dsh-router -> ${CODE_NAME})`)
+step(1.5, `Migrating previous layout -> ${CODE_NAME}`)
 if (!args.dryRun) {
+  if (existsSync(prevDst) && !existsSync(dst)) {
+    renameSync(prevDst, dst)
+    console.log(`  moved ${prevDst} -> ${dst}`)
+  } else if (existsSync(prevDst)) {
+    removeInside(prevDst, codexHome)
+    console.log(`  removed stale ${prevDst}`)
+  }
   if (existsSync(oldDst) && !existsSync(dst)) {
     renameSync(oldDst, dst)
     console.log(`  moved ${oldDst} -> ${dst}`)
@@ -198,6 +209,10 @@ if (!args.dryRun) {
   if (existsSync(oldSkillDst)) {
     removeInside(oldSkillDst, codexHome)
     console.log(`  removed stale ${oldSkillDst}`)
+  }
+  if (existsSync(prevSkillDst)) {
+    removeInside(prevSkillDst, codexHome)
+    console.log(`  removed stale ${prevSkillDst}`)
   }
 }
 

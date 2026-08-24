@@ -1,5 +1,5 @@
 {
-  "name": "codex-deepseek-routing-suite",
+  "name": "codex-dsh-routing-suite",
   "version": "0.1.4",
   "description": "dsh-routing-suite port for Codex: task-aware reasoning-mode router with hooks, MCP tools, optional native agents, model_instructions_file persona replacement, and no forced multi-agent config.",
   "private": false,
