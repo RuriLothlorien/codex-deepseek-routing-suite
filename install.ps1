@@ -48,14 +48,6 @@ function Set-MarkerBlock {
   return $Text
 }
 
-function Remove-MarkerBlock {
-  param([string]$Text, [string]$Label, [string]$Marker)
-  $begin = "# >>> ${Label} ${Marker}: begin >>>"
-  $end = "# >>> ${Label} ${Marker}: end <<<"
-  $pattern = [regex]::Escape($begin) + '.*?' + [regex]::Escape($end) + '\s*'
-  return [regex]::Replace($Text, $pattern, '', [Text.RegularExpressions.RegexOptions]::Singleline)
-}
-
 function Merge-ConfigToml {
   param([string]$ConfigPath, [string]$RuntimeDir)
   $toml = ''
@@ -101,11 +93,6 @@ model_instructions_file = "$fs/instructions/base.md"
 # >>> ${label} instructions: end <<<
 "@
 
-  # Remove marker blocks from previous/legacy installs.
-  foreach ($marker in @('hooks', 'mcp', 'instructions')) {
-    $toml = Remove-MarkerBlock -Text $toml -Label 'codex-deepseek-routing-suite' -Marker $marker
-    $toml = Remove-MarkerBlock -Text $toml -Label 'dsh-router' -Marker $marker
-  }
   $toml = Set-MarkerBlock -Text $toml -Label $label -Marker 'hooks' -Block $hooksBlock
   $toml = Set-MarkerBlock -Text $toml -Label $label -Marker 'mcp' -Block $mcpBlock
   # Persona replacement via model_instructions_file is the only form
@@ -124,10 +111,6 @@ if (-not $homeDir) { throw 'USERPROFILE is not set' }
 $codexHome = Join-Path $homeDir '.codex'
 $dst = Join-Path $codexHome 'codex-dsh-routing-suite'
 $skillDst = Join-Path $codexHome 'skills\codex-dsh-routing-suite'
-$prevDst = Join-Path $codexHome 'codex-deepseek-routing-suite'
-$prevSkillDst = Join-Path $codexHome 'skills\codex-deepseek-routing-suite'
-$oldDst = Join-Path $codexHome 'routing-suite'
-$oldSkillDst = Join-Path $codexHome 'skills\dsh-router'
 $configPath = Join-Path $codexHome 'config.toml'
 $stamp = Get-Date -Format 'yyyyMMdd-HHmmss'
 
@@ -136,30 +119,6 @@ if (Test-Path -LiteralPath $configPath) {
   $backup = "$configPath.bak-$stamp"
   Copy-Item -LiteralPath $configPath -Destination $backup -Force
   Write-Host "  backup: $backup"
-}
-
-Write-Host '[1.5/7] Migrating previous layout -> codex-dsh-routing-suite'
-if ((Test-Path -LiteralPath $prevDst) -and -not (Test-Path -LiteralPath $dst)) {
-  Move-Item -LiteralPath $prevDst -Destination $dst
-  Write-Host "  moved $prevDst -> $dst"
-} elseif (Test-Path -LiteralPath $prevDst) {
-  Remove-Item -LiteralPath $prevDst -Recurse -Force
-  Write-Host "  removed stale $prevDst"
-}
-if ((Test-Path -LiteralPath $oldDst) -and -not (Test-Path -LiteralPath $dst)) {
-  Move-Item -LiteralPath $oldDst -Destination $dst
-  Write-Host "  moved $oldDst -> $dst"
-} elseif (Test-Path -LiteralPath $oldDst) {
-  Remove-Item -LiteralPath $oldDst -Recurse -Force
-  Write-Host "  removed stale $oldDst"
-}
-if (Test-Path -LiteralPath $oldSkillDst) {
-  Remove-Item -LiteralPath $oldSkillDst -Recurse -Force
-  Write-Host "  removed stale $oldSkillDst"
-}
-if (Test-Path -LiteralPath $prevSkillDst) {
-  Remove-Item -LiteralPath $prevSkillDst -Recurse -Force
-  Write-Host "  removed stale $prevSkillDst"
 }
 
 Write-Host "[2/6] Copying runtime to $dst"
