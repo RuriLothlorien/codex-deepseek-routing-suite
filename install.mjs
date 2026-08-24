@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Cross-platform installer for codex-deepseek-routing-suite.
+ * Cross-platform installer for codex-dsh-routing-suite.
  *
  * Works on Windows, macOS, and Linux. Installs into ~/.codex by default;
  * pass --home <dir> to use a different codex home (also used by tests).

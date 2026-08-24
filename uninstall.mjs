@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Cross-platform uninstaller for codex-deepseek-routing-suite.
+ * Cross-platform uninstaller for codex-dsh-routing-suite.
  * Usage:
  *   node uninstall.mjs [--home <codex-home>] [--dry-run]
  */
