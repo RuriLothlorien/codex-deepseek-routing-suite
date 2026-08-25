@@ -6,7 +6,7 @@
 
 **使用方法**：
 - 持久默认：编辑 `~/.codex/codex-dsh-routing-suite/config.json`，设 `"preset": "standard" | "spec" | "react"`（默认 `standard`），新会话生效。
-- 当前会话：首条消息以 `#preset <name>` 开头（如 `#preset react 帮我开发一个网页`），仅本次会话生效。
+- 当前会话：首条消息以 `#preset <name>` 开头（如 `#preset react 帮我开发一个网页`），仅本次会话生效；首轮不加指令时直接使用 `config.json` 的 `preset`（默认 `standard`）。
 - 验证：新会话运行 `dev_router_status`，查看 `preset=...` 行。
 
 ## 0.1.4 (2026-08-23)

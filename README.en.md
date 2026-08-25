@@ -70,6 +70,7 @@ Start the first message of a new session with:
 - The directive is honored only on the **first real user message** and applies to the **current session only**.
 - `#preset=<name>` is also accepted; an unknown preset name is treated as plain text.
 - The directive text does not participate in task classification.
+- Without a `#preset` directive in the first message, the session uses the `preset` value from `config.json` (default `standard`). Precedence: **first-turn directive > config.json > built-in default `standard`**.
 
 ### 3. Behavior of the three presets
 
