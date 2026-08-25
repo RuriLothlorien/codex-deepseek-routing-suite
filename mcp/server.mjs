@@ -104,7 +104,7 @@ async function handle(msg) {
       send(msg.id, {
         protocolVersion: '2025-03-26',
         capabilities: { tools: {} },
-        serverInfo: { name: 'codex-dsh-routing-suite', version: '0.1.4' },
+        serverInfo: { name: 'codex-dsh-routing-suite', version: '1.0.0' },
       })
       break
     case 'notifications/initialized':

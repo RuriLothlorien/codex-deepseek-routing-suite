@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased
+## 1.0.0 (2026-08-26)
+
+- 大版本更新：追随上游 `yjh051108/dsh-routing-suite`（router-standard v34 / router-spec v10 / router-react v17），全套件命名统一为 `codex-dsh-routing-suite`。
 
 - 三预设切换：`config.json` 新增 `preset`（默认 `standard`）+ 首轮 `#preset <name>` 指令（仅当前会话）；`standard` 保留任务路由并加入注意力工程引导，`spec` 固定深思考，`react` 固定快循环；`dev_router_status` 输出 `preset`。
 - 交付证据门禁：新增 MCP 工具 `dev_delivery_check`（移植自上游 router-standard v1.24/v1.28 语义，纯本地校验：交付物存在/非空/UTF-8 + 8 类证据清单 + numeric 不变量 + 页面 reviewed 视觉证据）。
