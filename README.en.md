@@ -41,7 +41,7 @@ This suite turns those measurements into defaults for Codex + DeepSeek: band-bas
   - Default: one-shot `codex exec` subprocess via `dev_mode_subagent <spec|react|weak> <task> [reasoning=...]` — full `model_instructions_file` replacement, desktop thread env stripped, hooks/memories disabled, `reasoning` maps to `model_reasoning_effort`; no multi-agent config required.
   - Optional: native agents via `spawn_agent(agent_type="router_spec"|"router_react"|"router_weak", message="<task>")` when the session has `spawn_agent`; does not force `features.multi_agent`.
   - `dev_router_status` shows `nativeAgents` installation status.
-- **Four MCP tools + self-test**: `dev_router_status` / `dev_router_mode` / `dev_mode_subagent` / `dev_router_test`.
+- **Five MCP tools + self-test**: `dev_router_status` / `dev_router_mode` / `dev_mode_subagent` / `dev_router_test` / `dev_delivery_check`.
 - **Zero runtime dependencies**: zero-dependency Node hooks/MCP; idempotent install/uninstall; direct Codex install (optional CC Switch sync via [CCSwitch-operations](https://github.com/RuriLothlorien/CCSwitch-operations)).
 - Measurements cited (P11/P23/P24/P30) come from the original project's DSH environment; this port is tested on Codex + V4 Flash.
 
@@ -124,7 +124,7 @@ codex-dsh-routing-suite/
 ├─ skills/codex-dsh-routing-suite/      # skill manual and persona references
 ├─ agents/                 # optional native agents (router_*)
 ├─ instructions/base.md    # base instructions for persona replacement
-├─ test/                   # 39 tests in the repo (38 in-session self-test)
+├─ test/                   # 58 tests in the repo (installer and delivery-gate cases run in-repo only)
 ├─ docs/architecture.md    # mechanism mapping, contracts, model status
 ├─ install.mjs / uninstall.mjs  # cross-platform install/uninstall (recommended)
 ├─ install.sh / uninstall.sh    # macOS/Linux POSIX entrypoints

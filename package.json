@@ -1,7 +1,7 @@
 {
   "name": "codex-dsh-routing-suite",
   "version": "1.0.0",
-  "description": "dsh-routing-suite port for Codex: task-aware reasoning-mode router with hooks, MCP tools, optional native agents, model_instructions_file persona replacement, and no forced multi-agent config.",
+  "description": "dsh-routing-suite port for Codex: task-aware reasoning-mode router with three presets (standard/spec/react), hooks, MCP tools (incl. delivery evidence gate), optional native agents, model_instructions_file persona replacement, and no forced multi-agent config.",
   "private": false,
   "license": "MIT",
   "type": "module",

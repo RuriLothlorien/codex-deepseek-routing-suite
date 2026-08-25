@@ -47,7 +47,7 @@
   - 默认：一次性 `codex exec` 子进程——`dev_mode_subagent <spec|react|weak> <task> [reasoning=...]`，`model_instructions_file` 完整替换、剥离桌面端环境变量、禁用 hooks/memories、`reasoning` 映射 `model_reasoning_effort`，无需多智能体配置。
   - 可选：原生 agents——`spawn_agent(agent_type="router_spec"|"router_react"|"router_weak", message="<task>")`，会话具备 `spawn_agent` 时可用，不强制开启 `features.multi_agent`。
   - `dev_router_status` 的 `nativeAgents` 字段显示三个 agent 是否已安装。
-- **四个 MCP 工具 + 自检**：`dev_router_status` / `dev_router_mode` / `dev_mode_subagent` / `dev_router_test`。
+- **五个 MCP 工具 + 自检**：`dev_router_status` / `dev_router_mode` / `dev_mode_subagent` / `dev_router_test` / `dev_delivery_check`。
 - **零运行时依赖**：钩子与 MCP 服务器为零依赖 Node 脚本；安装/卸载幂等可逆、Codex 直装（若使用 CC Switch 管理配置，可另行用 [CCSwitch-operations](https://github.com/RuriLothlorien/CCSwitch-operations) 技能同步）。
 - 测量依据来自原项目（P11/P23/P24/P30，DSH 环境）；本移植在 Codex + V4 Flash 组合实测。
 
@@ -130,7 +130,7 @@ codex-dsh-routing-suite/
 ├─ skills/codex-dsh-routing-suite/      # 技能手册与 persona 参考
 ├─ agents/                 # 可选原生 agents（router_*）
 ├─ instructions/base.md    # 主会话 persona 替换基础指令
-├─ test/                   # 仓库 39 例（会话内自检 38 例）
+├─ test/                   # 仓库 58 例（安装器与交付门禁用例仅仓库运行）
 ├─ docs/architecture.md    # 机制映射、接口契约与模型适配说明
 ├─ docs/validation-report.md  # 有效性测试报告（中文）
 ├─ install.mjs / uninstall.mjs  # 跨平台安装/卸载（推荐）

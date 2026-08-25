@@ -46,7 +46,7 @@
 
 ## 5. 测试
 
-`node --test test/router.test.mjs test/router-model.test.mjs test/hook.test.mjs test/agents.test.mjs test/delivery-check.test.mjs`（仓库 57 例；会话内 `dev_router_test` 覆盖路由/钩子/agents，安装器与交付门禁用例仅仓库运行），覆盖分类、band 量化、persona、模型门控、钩子状态机、plan 模式对等行为、agents 文件校验、交付证据门禁。
+`node --test test/router.test.mjs test/router-model.test.mjs test/hook.test.mjs test/agents.test.mjs test/delivery-check.test.mjs`（仓库 58 例；会话内 `dev_router_test` 覆盖路由/钩子/agents，安装器与交付门禁用例仅仓库运行），覆盖分类、band 量化、persona、模型门控、钩子状态机、plan 模式对等行为、agents 文件校验、交付证据门禁。
 
 真实会话的有效性核验记录（计划模式、模糊任务、多轮复杂会话等）见 `docs/validation-report.md`（中文）。
 
