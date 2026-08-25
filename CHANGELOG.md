@@ -9,6 +9,12 @@
 - 当前会话：首条消息以 `#preset <name>` 开头（如 `#preset react 帮我开发一个网页`），仅本次会话生效；首轮不加指令时直接使用 `config.json` 的 `preset`（默认 `standard`）。
 - 验证：新会话运行 `dev_router_status`，查看 `preset=...` 行。
 
+**本次未对齐上游**（对照 `yjh051108/dsh-routing-suite` main，2026-08-24 单仓库扁平化版：router-standard v34 / router-spec v10 / router-react v17，注意力工程 v1.20–1.28）：
+- 未移植 DSH 平台机制：injector 运行时（junction/loader/HMR/staging/UI）、`cordis.yml` agent-plane 配置、`gitbash-executor.mjs`、`install-injector.ps1`、单仓库/子模块工程结构。
+- 未移植工具层：`engram_*` 记忆工具（13 个）、`delivery_check` 证据门禁工具、`dev_page_check`（上游 v1.23 已自删）、阶段工具窗 `windowFor` / `preUnlockedFor` / `stageSummary`。
+- 未移植机制层：stage 0-3 阶段机（`advanceStage`、`phase_begin`、single-truth stage 文本）、按阶段工具解锁（v1.20 取消预解锁）、`dsh-probe` 评测矩阵 / selftest 平台。
+- 引导层仅抽取注意力工程五支柱（v1.22/v1.24/v1.25/v1.26/v1.28）与 spec/react 引导的紧凑文本，未整段搬运上游 v1.14–v1.28 长文。
+
 ## 0.1.4 (2026-08-23)
 
 - 全局改名 `codex-dsh-routing-suite`：技能、运行时目录、config.toml 标记、MCP 服务器名与 persona 身份统一为新名；README/文档/发布元数据同步。
