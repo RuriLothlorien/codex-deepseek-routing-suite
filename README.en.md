@@ -43,6 +43,46 @@ This suite turns those measurements into defaults for Codex + DeepSeek: band-bas
 - **Zero runtime dependencies**: zero-dependency Node hooks/MCP; idempotent install/uninstall; direct Codex install (optional CC Switch sync via [CCSwitch-operations](https://github.com/RuriLothlorien/CCSwitch-operations)).
 - Measurements cited (P11/P23/P24/P30) come from the original project's DSH environment; this port is tested on Codex + V4 Flash.
 
+## Usage (preset switching)
+
+The suite ships three presets that define a session's behavior package; the default is `standard`.
+
+### 1. Persistent default: config.json
+
+Edit `~/.codex/codex-dsh-routing-suite/config.json`:
+
+```json
+{ "preset": "standard" }
+```
+
+Values: `standard` (default; task routing + attention-engineering guidance), `spec` (fixed deep-think), `react` (fixed tight-loop). Changes apply to **new sessions**.
+
+### 2. Per-session shortcut: first-turn directive
+
+Start the first message of a new session with:
+
+```text
+#preset spec fix the bug in this repo
+#preset react build a web page
+#preset standard help me review this project
+```
+
+- The directive is honored only on the **first real user message** and applies to the **current session only**.
+- `#preset=<name>` is also accepted; an unknown preset name is treated as plain text.
+- The directive text does not participate in task classification.
+
+### 3. Behavior of the three presets
+
+| preset | Behavior |
+|---|---|
+| `standard` (default) | Auto-routes tasks to spec / react / weak; persona follows the route; appends attention-engineering guidance (anti-local-optima / doubt-the-hypothesis / attention recycling / proactivity / lean meta) |
+| `spec` | Fixed deep-think: read before writing, think the first turn through (long reasoning is a feature); persona = SPEC |
+| `react` | Fixed tight loop: write → verify → fix, no ceremony; persona = REACT |
+
+### 4. Verify
+
+Run `dev_router_status` in a new session; the `preset=standard|spec|react` line shows the active preset.
+
 ## How it works
 
 - `UserPromptSubmit` hook: records the first user message, classifies the session, and returns persona + guidance (`additionalContext`) per turn.

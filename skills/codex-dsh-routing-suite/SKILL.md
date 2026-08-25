@@ -14,6 +14,7 @@ description: 思维模式路由套件（dsh-routing-suite 的 Codex 移植版）
 - 量化：`spec` [0,0.2) 稳定带；`mixed` [0.2,0.5) 过渡带（陷阱，不自动选）；`react` [0.5,1] 稳定带。
 - routerMode：`standard`（默认，persona 恒为 RL 句 `You are a helpful software engineer assistant.`）；`spec`（按分类用 `personaFor` 选 persona，当前模型走 Flash 分支）。
 - preset：`standard`（默认，任务路由 + 注意力工程引导）/ `spec`（固定深思考）/ `react`（固定快循环）；首轮 `#preset <name>` 指令仅当前会话生效，`config.json` 的 `preset` 为持久默认。
+  - 示例：新会话首条消息 `#preset react 帮我开发一个网页`；持久默认改 `config.json` 的 `preset`。
 - weak 带：按首条消息复杂度锁定 fast 或 deep 引导，会话内不变（保缓存稳定）。
 - 主会话为唯一形态：`model_instructions_file` 替换内置 identity（base.md：RL 句 + 路由规则），钩子再按轮追加 persona/引导；`dev_mode_subagent` 子进程中同样以 `model_instructions_file` 实现完整“仅 persona”替换。
 

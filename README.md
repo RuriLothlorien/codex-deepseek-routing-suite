@@ -49,6 +49,46 @@
 - **零运行时依赖**：钩子与 MCP 服务器为零依赖 Node 脚本；安装/卸载幂等可逆、Codex 直装（若使用 CC Switch 管理配置，可另行用 [CCSwitch-operations](https://github.com/RuriLothlorien/CCSwitch-operations) 技能同步）。
 - 测量依据来自原项目（P11/P23/P24/P30，DSH 环境）；本移植在 Codex + V4 Flash 组合实测。
 
+## 使用方法（预设切换）
+
+套件内置三种预设，决定会话的行为包；默认 `standard`。
+
+### 1. 持久默认：config.json
+
+编辑 `~/.codex/codex-dsh-routing-suite/config.json`：
+
+```json
+{ "preset": "standard" }
+```
+
+可选值：`standard`（默认，任务路由 + 注意力工程引导）、`spec`（固定深思考）、`react`（固定快循环）。改完**新会话**生效。
+
+### 2. 当前会话快捷切换：首轮指令
+
+在新会话的第一条消息开头输入：
+
+```text
+#preset spec 修复这个仓库的 bug
+#preset react 帮我开发一个网页
+#preset standard 帮我梳理一下项目
+```
+
+- 指令仅在**首个真实用户消息**生效，只作用于**当前会话**。
+- `#preset=<name>` 写法同样支持；非法预设名会被当作普通文本。
+- 指令文本不会参与任务分类。
+
+### 3. 三种预设的行为差异
+
+| preset | 行为 |
+|---|---|
+| `standard`（默认） | 按任务自动路由 spec / react / weak；persona 随路由选择；追加注意力工程引导（防局部最优 / 质疑假设 / 注意力回收 / proactivity / 压上下文） |
+| `spec` | 固定深思考：先读后写、首轮想透再动手（长思维链是特征），persona = SPEC |
+| `react` | 固定快循环：写 → 验证 → 修，不建仪式，persona = REACT |
+
+### 4. 验证
+
+新会话运行 `dev_router_status`，输出行 `preset=standard|spec|react` 即当前预设。
+
 ## 工作原理
 
 - `UserPromptSubmit` 钩子：记录首条用户消息并分类，按轮返回 persona + 引导（`additionalContext`）。
