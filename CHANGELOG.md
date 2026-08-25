@@ -9,6 +9,7 @@
 - 记忆策略：不新增 engram 类工具；standard 预设引导明确“用 Codex 原生记忆做上下文资产化”（注意力回收 v1.26 语义）。
 - 修复：`ROUTER_HOME` 默认路径仍指向旧 `~/.codex/routing-suite`（改名遗漏），钩子/MCP 现统一读写 `~/.codex/codex-dsh-routing-suite`；旧目录数据（state/config 等）已迁移。
 - 兼容：首轮指令支持 `\#preset <name>`（Markdown 反斜杠转义）写法。
+- 发布包不再包含 `docs/validation-report.md`（仓库内保留，README 链接指向 GitHub）。
 
 **使用方法**：
 - 持久默认：编辑 `~/.codex/codex-dsh-routing-suite/config.json`，设 `"preset": "standard" | "spec" | "react"`（默认 `standard`），新会话生效。

@@ -48,7 +48,7 @@
 
 `node --test test/router.test.mjs test/router-model.test.mjs test/hook.test.mjs test/agents.test.mjs test/delivery-check.test.mjs`（仓库 58 例；会话内 `dev_router_test` 覆盖路由/钩子/agents，安装器与交付门禁用例仅仓库运行），覆盖分类、band 量化、persona、模型门控、钩子状态机、plan 模式对等行为、agents 文件校验、交付证据门禁。
 
-真实会话的有效性核验记录（计划模式、模糊任务、多轮复杂会话等）见 `docs/validation-report.md`（中文）。
+真实会话的有效性核验记录（计划模式、模糊任务、多轮复杂会话、standard/spec 预设等）见 [docs/validation-report.md](https://github.com/RuriLothlorien/codex-dsh-routing-suite/blob/main/docs/validation-report.md)（中文）。
 
 ## 6. 模型适配状态
 
@@ -57,7 +57,7 @@
 - 具体适配：① Flash 分支 persona 为默认（weak 用 Flash 最优形态 + recall/收敛/反跑题锚，P11/P23）；② RL 接口还原（`model_instructions_file` 注入 RL 句 + 首轮 `bash`/`apply_patch` 核心面）；③ 深度自适应引导（`isComplexTask` 含中文关键词 → deep/fast guide，P30）；④ 中文分类关键词扩展（`规划|计划|方案|阅读|移植`）；⑤ `dev_mode_subagent` 的 `reasoning` 映射 `model_reasoning_effort`。
 - 模型门控（严格）：`modelClass` 先要求 DeepSeek 家族（`deepseek` 或 `ds-` 前缀），再精确返回 `flash` / `pro` / `null`——Flash 家族含 `deepseek-v4-flash`、`deepseek-v4-flash-vision-exp` 等；Pro 家族含 `pro|reasoner|r1|v4-pro`。其他厂商的 `*-flash`/`*-pro`、`deepseek-chat`、缺失均返回 `null`，套件工作流整体停用：钩子不注入、不锚定，`dev_mode_subagent` 拒绝执行。
 - 测量依据来自原项目（P11/P23/P24/P30，DSH 环境）；本移植在 Codex + V4 Flash 组合实测。
-- 有效性核验：计划模式、模糊任务、多轮复杂会话等场景已在真实 Codex 会话中验证，详见 `docs/validation-report.md`。
+- 有效性核验：计划模式、模糊任务、多轮复杂会话、standard/spec 预设等场景已在真实 Codex 会话中验证，详见 [docs/validation-report.md](https://github.com/RuriLothlorien/codex-dsh-routing-suite/blob/main/docs/validation-report.md)。
 
 ## 7. 边界与已知代价
 

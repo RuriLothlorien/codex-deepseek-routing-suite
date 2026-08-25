@@ -36,6 +36,11 @@ if (Test-Path -LiteralPath $privateDoc) {
   Remove-Item -LiteralPath $privateDoc -Force
 }
 
+$validationReport = Join-Path $pkgDir 'docs\validation-report.md'
+if (Test-Path -LiteralPath $validationReport) {
+  Remove-Item -LiteralPath $validationReport -Force
+}
+
 if (Test-Path -LiteralPath $zip) {
   Remove-Item -LiteralPath $zip -Force
 }
