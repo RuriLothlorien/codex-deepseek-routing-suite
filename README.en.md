@@ -99,11 +99,12 @@ dev_delivery_check file=<deliverable path> evidence={"items":[{"label":"...","ki
 
 ## How it works
 
-- `UserPromptSubmit` hook: records the first user message, classifies the session, and returns persona + guidance (`additionalContext`) per turn.
+- **Single main-session form**: `model_instructions_file` replaces the built-in identity (RL sentence + routing rules).
+- `UserPromptSubmit` hook: records the first real user message (parses `#preset` / `\#preset` directives and locks the preset), and returns persona + guidance (`additionalContext`) per turn; fixed presets (spec/react) skip task classification.
 - `PreToolUse` hook: only core tools pass before the first tool call, then `promoted=true` unlocks the full catalog.
 - Session state is persisted under `~/.codex/codex-dsh-routing-suite/state/`, so resume/continuation does not lose it.
-- The MCP server reads/writes the same state: view or switch modes, run self-tests, and spawn isolated subprocesses.
-- **Presets**: `standard` (default; task routing + attention-engineering guidance) / `spec` (fixed deep-think) / `react` (fixed tight-loop); the first-turn `#preset <name>` directive applies to the current session only — change the default by editing the `preset` key in `config.json`.
+- The MCP server reads/writes the same state: view/switch modes and presets, run self-tests, spawn isolated subprocesses, and run the delivery evidence gate `dev_delivery_check`.
+- **Presets**: `standard` (default; task routing + attention-engineering guidance) / `spec` (fixed deep-think) / `react` (fixed tight-loop); the first-turn `#preset <name>` directive (including the `\#preset` escape) applies to the current session only — change the default by editing the `preset` key in `config.json`.
 
 ### Security analysis
 

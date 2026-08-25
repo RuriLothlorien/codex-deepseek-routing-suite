@@ -105,11 +105,12 @@ dev_delivery_check file=<交付物路径> evidence={"items":[{"label":"...","kin
 
 ## 工作原理
 
-- `UserPromptSubmit` 钩子：记录首条用户消息并分类，按轮返回 persona + 引导（`additionalContext`）。
+- **主会话唯一形态**：`model_instructions_file` 替换内置 identity（RL 句 + 路由规则）。
+- `UserPromptSubmit` 钩子：记录首条真实用户消息（解析 `#preset` / `\#preset` 指令并锁定 preset），按轮返回 persona + 引导（`additionalContext`）；固定预设（spec/react）下不做任务分类。
 - `PreToolUse` 钩子：首轮仅放行核心工具，首个核心调用后置 `promoted=true` 并全量放开。
 - 会话状态落盘于 `~/.codex/codex-dsh-routing-suite/state/`，resume/续接不丢。
-- MCP 服务器读写同一状态，支持查看/切换模式、运行自检、派生隔离子进程。
-- **预设（preset）**：`standard`（默认，任务路由 + 注意力工程引导）/ `spec`（固定深思考）/ `react`（固定快循环）；首轮 `#preset <name>` 指令仅作用于当前会话，改默认请编辑 `config.json` 的 `preset` 字段。
+- MCP 服务器读写同一状态：查看/切换模式与预设、运行自检、派生隔离子进程、执行交付门禁 `dev_delivery_check`。
+- **预设（preset）**：`standard`（默认，任务路由 + 注意力工程引导）/ `spec`（固定深思考）/ `react`（固定快循环）；首轮 `#preset <name>`（含 `\#preset` 转义）仅作用于当前会话，改默认请编辑 `config.json` 的 `preset` 字段。
 
 ### 安全性分析
 
