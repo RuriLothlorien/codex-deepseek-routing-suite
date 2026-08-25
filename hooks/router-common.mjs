@@ -8,7 +8,7 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSy
 import { join } from 'node:path'
 import { homedir } from 'node:os'
 
-export const ROUTER_HOME = process.env.ROUTER_HOME || join(homedir(), '.codex', 'routing-suite')
+export const ROUTER_HOME = process.env.ROUTER_HOME || join(homedir(), '.codex', 'codex-dsh-routing-suite')
 export const STATE_DIR = join(ROUTER_HOME, 'state')
 export const LATEST_DIR = join(ROUTER_HOME, 'latest')
 export const PERSONA_DIR = join(ROUTER_HOME, 'personas')

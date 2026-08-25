@@ -206,6 +206,19 @@ test('user-prompt: #preset=spec directive fixes deep-think behavior', () => {
   assert.ok(ctx.includes('Deep-think first'), ctx)
 })
 
+test('user-prompt: backslash-escaped \\#preset directive is honored and stripped', () => {
+  const { output, state } = runHook('router-user-prompt.mjs', {
+    ...BASE_INPUT,
+    prompt: '\\#preset spec 修复这个仓库里的 bug',
+  })
+  const ctx = output.hookSpecificOutput?.additionalContext || ''
+  assert.equal(state.preset, 'spec')
+  assert.equal(state.mode, 0)
+  assert.equal(state.band, 'spec')
+  assert.equal(state.firstUserText, '修复这个仓库里的 bug')
+  assert.ok(ctx.includes('Deep-think first'), ctx)
+})
+
 test('user-prompt: unknown #preset name is ignored', () => {
   const { state } = runHook('router-user-prompt.mjs', {
     ...BASE_INPUT,
