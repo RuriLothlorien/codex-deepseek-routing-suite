@@ -3,6 +3,8 @@
 ## Unreleased
 
 - 三预设切换：`config.json` 新增 `preset`（默认 `standard`）+ 首轮 `#preset <name>` 指令（仅当前会话）；`standard` 保留任务路由并加入注意力工程引导，`spec` 固定深思考，`react` 固定快循环；`dev_router_status` 输出 `preset`。
+- 交付证据门禁：新增 MCP 工具 `dev_delivery_check`（移植自上游 router-standard v1.24/v1.28 语义，纯本地校验：交付物存在/非空/UTF-8 + 8 类证据清单 + numeric 不变量 + 页面 reviewed 视觉证据）。
+- 记忆策略：不新增 engram 类工具；standard 预设引导明确“用 Codex 原生记忆做上下文资产化”（注意力回收 v1.26 语义）。
 
 **使用方法**：
 - 持久默认：编辑 `~/.codex/codex-dsh-routing-suite/config.json`，设 `"preset": "standard" | "spec" | "react"`（默认 `standard`），新会话生效。

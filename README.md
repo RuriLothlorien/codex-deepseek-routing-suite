@@ -41,6 +41,8 @@
 - **深度自适应引导**：`isComplexTask`（长文本或 架构/设计/重构 等关键词，含中文）→ deep/fast guide（P30）。
 - **中文分类适配**：`SPEC_RE` 增加 `规划|计划|方案|阅读|移植`，降低中文规划/移植任务被“实现”误判为 react。
 - **三预设切换（standard/spec/react）**：`config.json` 的 `preset`（默认 `standard`）或首轮消息 `#preset <name>` 选择行为包；`standard`=任务路由 + 注意力工程引导，`spec`=固定深思考，`react`=固定快循环。
+- **交付证据门禁**：`dev_delivery_check <file> [url] [evidence]`——校验交付物（存在/非空/UTF-8）与证据清单（file/page/image/run/test/text/external/numeric，页面需 `reviewed:true` 视觉证据），PASS 才可宣告完成（移植自上游 v1.24/v1.28）。
+- **上下文资产化（引导层）**：不新增记忆工具；standard 预设引导明确“用 **Codex 原生记忆**沉淀已定探索/细节”。
 - **双后端模式隔离**：
   - 默认：一次性 `codex exec` 子进程——`dev_mode_subagent <spec|react|weak> <task> [reasoning=...]`，`model_instructions_file` 完整替换、剥离桌面端环境变量、禁用 hooks/memories、`reasoning` 映射 `model_reasoning_effort`，无需多智能体配置。
   - 可选：原生 agents——`spawn_agent(agent_type="router_spec"|"router_react"|"router_weak", message="<task>")`，会话具备 `spawn_agent` 时可用，不强制开启 `features.multi_agent`。
@@ -89,6 +91,17 @@
 ### 4. 验证
 
 新会话运行 `dev_router_status`，输出行 `preset=standard|spec|react` 即当前预设。
+
+### 5. 交付门禁（dev_delivery_check）
+
+任务收尾时运行：
+
+```text
+dev_delivery_check file=<交付物路径> evidence={"items":[{"label":"...","kind":"file|page|image|run|test|text|external|numeric","target?":"...","result?":"...","reviewed?":true}]}
+```
+
+- 页面交付物需至少一项 `reviewed:true` 的视觉证据（截图 + 人工复核）。
+- 记忆不做新工具：上下文资产化直接用 **Codex 原生记忆**（standard 预设引导已写明）。
 
 ## 工作原理
 

@@ -182,6 +182,7 @@ if (!args.dryRun) {
   copyFileSync(join(root, 'uninstall.mjs'), join(dst, 'uninstall.mjs'))
   copyTree(join(root, 'hooks'), join(dst, 'hooks'))
   copyFileSync(join(root, 'mcp', 'server.mjs'), join(dst, 'mcp', 'server.mjs'))
+  copyFileSync(join(root, 'mcp', 'delivery-check.mjs'), join(dst, 'mcp', 'delivery-check.mjs'))
   copyFileSync(join(root, 'instructions', 'base.md'), join(dst, 'instructions', 'base.md'))
   copyTree(join(root, 'test'), join(dst, 'test'))
   copyTree(join(root, 'agents'), join(dst, 'agents'))

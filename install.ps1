@@ -131,6 +131,7 @@ Copy-Item -LiteralPath (Join-Path $root 'install.mjs') -Destination $dst -Force
 Copy-Item -LiteralPath (Join-Path $root 'uninstall.mjs') -Destination $dst -Force
 Copy-Item -Path (Join-Path $root 'hooks\*.mjs') -Destination (Join-Path $dst 'hooks') -Force
 Copy-Item -LiteralPath (Join-Path $root 'mcp\server.mjs') -Destination (Join-Path $dst 'mcp') -Force
+Copy-Item -LiteralPath (Join-Path $root 'mcp\delivery-check.mjs') -Destination (Join-Path $dst 'mcp') -Force
 Copy-Item -LiteralPath (Join-Path $root 'instructions\base.md') -Destination (Join-Path $dst 'instructions') -Force
 Copy-Item -Path (Join-Path $root 'test\*.mjs') -Destination (Join-Path $dst 'test') -Force
 

@@ -8,6 +8,7 @@
  *   dev_mode_subagent(mode, task, cwd?) - run one task in an isolated persona
  *     via a one-shot `codex exec` subprocess (model_instructions_file
  *     replacement, hooks disabled). No multi-agent feature is used.
+ *   dev_delivery_check(file, url?, evidence?) - delivery evidence gate
  */
 import { spawn, spawnSync } from 'node:child_process'
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs'
@@ -20,6 +21,7 @@ import {
   LATEST_DIR, PERSONA_DIR, ROUTER_HOME, TMP_DIR, ensureDirs, modelClass, readConfig,
   readState, resolveLatestSessionId, routerModelFor, statePath, writeState,
 } from '../hooks/router-common.mjs'
+import { deliveryCheck, deliveryCheckText } from './delivery-check.mjs'
 
 const TOOLS = [
   {
@@ -61,6 +63,20 @@ const TOOLS = [
         reasoning: { type: 'string', description: 'optional model_reasoning_effort override for the subprocess (minimal/low/medium/high/xhigh/max/ultra); defaults to the inherited config' },
       },
       required: ['mode', 'task'],
+    },
+  },
+  {
+    name: 'dev_delivery_check',
+    description: 'Delivery evidence gate: validate a deliverable file (exists / nonempty / UTF-8) and an evidence manifest before declaring a task delivered. Evidence items: {label, kind ∈ file|page|image|run|test|text|external|numeric, target?, result?, reviewed?}; page/image kinds require reviewed:true; when url is set, at least one reviewed visual evidence is required. Returns PASS/FAIL checks.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        file: { type: 'string', description: 'deliverable file path (required)' },
+        url: { type: 'string', description: 'optional page URL; when set, requires reviewed visual evidence' },
+        requireSmoke: { type: 'boolean', description: 'default true; set false to skip the page-verify advisory' },
+        evidence: { type: 'object', description: 'evidence manifest: { items: [{ label, kind, target?, result?, reviewed? }] }' },
+      },
+      required: ['file'],
     },
   },
 ]
@@ -165,6 +181,9 @@ function coreList(mode, cfg) {
 
 async function callTool(name, args) {
   const cfg = readConfig()
+  if (name === 'dev_delivery_check') {
+    return textResult(deliveryCheckText(deliveryCheck(args)))
+  }
   if (name === 'dev_router_status') {
     const sessionId = resolveSession(args.session_id)
     const state = readState(sessionId)

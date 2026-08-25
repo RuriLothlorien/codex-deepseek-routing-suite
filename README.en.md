@@ -35,6 +35,8 @@ This suite turns those measurements into defaults for Codex + DeepSeek: band-bas
 - **Depth-adaptive guidance**: `isComplexTask` (long text or architecture keywords, including Chinese) selects deep/fast guides (P30).
 - **Chinese classification adaptation**: `SPEC_RE` adds 规划/计划/方案/阅读/移植 to keep Chinese planning/porting tasks from being misrouted to react.
 - **Three-preset switching (standard/spec/react)**: select the behavior package via the `preset` key in `config.json` (default `standard`) or a first-turn `#preset <name>` directive; `standard` = task routing + attention-engineering guidance, `spec` = fixed deep-think, `react` = fixed tight-loop.
+- **Delivery evidence gate**: `dev_delivery_check <file> [url] [evidence]` validates the deliverable (exists / nonempty / UTF-8) and an evidence manifest (file/page/image/run/test/text/external/numeric; pages need `reviewed:true` visual evidence) — PASS before declaring completion (ported from upstream v1.24/v1.28).
+- **Context assetization (guidance layer)**: no new memory tools; the `standard` preset guide says to use **Codex native memories** for settled exploration/details.
 - **Dual-backend mode isolation**:
   - Default: one-shot `codex exec` subprocess via `dev_mode_subagent <spec|react|weak> <task> [reasoning=...]` — full `model_instructions_file` replacement, desktop thread env stripped, hooks/memories disabled, `reasoning` maps to `model_reasoning_effort`; no multi-agent config required.
   - Optional: native agents via `spawn_agent(agent_type="router_spec"|"router_react"|"router_weak", message="<task>")` when the session has `spawn_agent`; does not force `features.multi_agent`.
@@ -83,6 +85,17 @@ Start the first message of a new session with:
 ### 4. Verify
 
 Run `dev_router_status` in a new session; the `preset=standard|spec|react` line shows the active preset.
+
+### 5. Delivery gate (dev_delivery_check)
+
+Before wrapping up a task:
+
+```text
+dev_delivery_check file=<deliverable path> evidence={"items":[{"label":"...","kind":"file|page|image|run|test|text|external|numeric","target?":"...","result?":"...","reviewed?":true}]}
+```
+
+- Page deliverables need at least one `reviewed:true` visual evidence item (screenshot + human review).
+- No new memory tools: use **Codex native memories** for context assetization (already in the standard preset guide).
 
 ## How it works
 

@@ -25,6 +25,8 @@ description: 思维模式路由套件（dsh-routing-suite 的 Codex 移植版）
 - `dev_mode_subagent <spec|react|weak> <task> [reasoning=low|medium|high|xhigh|max]`：用不同模式派生一次性 `codex exec` 子进程（全新上下文、独立 persona、hooks 与 memories 禁用、剥离桌面端线程环境变量），当前会话轨迹与锚定状态不受影响。适合“换个模式验证结论/做交叉检查”。
 - 原生多智能体后端（可选，不强制配置）：若当前会话具备 `spawn_agent` 工具（`features.multi_agent` 是否开启由你决定，本套件不修改它），可直接 `spawn_agent(agent_type = "router_spec" | "router_react" | "router_weak", message = "<task>")` 做模式隔离子代理（自定义 agents 位于 `~/.codex/agents/`，由 install 安装）；否则回退 MCP `dev_mode_subagent`（exec 后端，始终可用）。
 - `dev_router_test`：运行单元、钩子场景、agents 与模型门控测试，返回 PASS/FAIL 汇总。
+- `dev_delivery_check <file> [url] [evidence]`：交付证据门禁——校验交付物（存在/非空/UTF-8）与证据清单（file/page/image/run/test/text/external/numeric）；页面交付物需至少一项 `reviewed:true` 视觉证据；PASS 才可宣告完成（移植自上游 v1.24/v1.28）。
+- 记忆：不提供 engram 类工具；上下文资产化直接用 Codex 原生记忆（standard 预设引导已写明）。
 
 ## 3. 首轮锚定
 

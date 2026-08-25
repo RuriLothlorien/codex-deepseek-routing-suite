@@ -239,6 +239,8 @@ test('user-prompt: standard preset keeps routing and adds attention guide', () =
   assert.equal(state.mode, 1)
   assert.equal(state.band, 'react')
   assert.ok(ctx.includes('Attention engineering'), ctx)
+  assert.ok(ctx.includes('Codex native memories'), ctx)
+  assert.ok(ctx.includes('dev_delivery_check'), ctx)
 })
 
 test('user-prompt: first prompt is locked for the session', () => {

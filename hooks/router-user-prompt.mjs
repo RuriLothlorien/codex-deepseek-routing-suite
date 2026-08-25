@@ -23,7 +23,7 @@ const PRESET_RE = /^#preset[=\s]+(standard|spec|react)\b/i
 /** Per-preset guidance (portable layer from upstream router-standard/spec/react). */
 const PRESET_GUIDES = {
   standard:
-    '\nAttention engineering: keep the WHOLE deliverable working while iterating; if one detail stalls several rounds, preserve a working version, finish the rest, re-attack it fresh. On verification failure, first question your hypothesis and the new evidence, then check gates. Assetize context: keep task goal + current decision + live evidence in focus; sink settled exploration into memory; drop stale threads. Act proactively on reversible next steps and report actions with evidence. Keep meta instructions lean.',
+    '\nAttention engineering: keep the WHOLE deliverable working while iterating; if one detail stalls several rounds, preserve a working version, finish the rest, re-attack it fresh. On verification failure, first question your hypothesis and the new evidence, then check gates. Assetize context: use Codex native memories to sink settled exploration/details; keep task goal + current decision + live evidence in focus; drop stale threads. Act proactively on reversible next steps and report actions with evidence. Before declaring a task delivered, run dev_delivery_check with an evidence manifest. Keep meta instructions lean.',
   spec:
     '\nDeep-think first: the long first-turn reasoning chain is a feature, not a defect. Read and understand before acting; keep all context; produce a decision-complete plan before touching code.',
   react:

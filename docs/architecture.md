@@ -17,7 +17,7 @@
 
 - `hooks/router-user-prompt.mjs`：记录首条用户消息与复杂度；按 override 或分类得到 mode（spec/react/weak）；返回 persona + 引导（plan 模式下与 DSH 一致，照常注入）。
 - `hooks/router-pre-tool.mjs`：未 promoted 前仅放行核心工具（`bash`/`apply_patch` + 按 band 的额外 MCP 前缀），首个核心调用后置 `promoted=true`。
-- `mcp/server.mjs`：零依赖 MCP 服务器，提供 `dev_router_status` / `dev_router_mode` / `dev_router_test` / `dev_mode_subagent`。
+- `mcp/server.mjs`：零依赖 MCP 服务器，提供 `dev_router_status` / `dev_router_mode` / `dev_router_test` / `dev_mode_subagent` / `dev_delivery_check`（交付证据门禁，纯校验逻辑位于 `mcp/delivery-check.mjs`）。
 - 状态：`~/.codex/codex-dsh-routing-suite/state/<session>.json` + `latest/<cwd>.json`；配置 `~/.codex/codex-dsh-routing-suite/config.json`。
 
 ## 3. 配置契约（`~/.codex/codex-dsh-routing-suite/config.json`）
@@ -46,7 +46,7 @@
 
 ## 5. 测试
 
-`node --test test/router.test.mjs test/router-model.test.mjs test/hook.test.mjs test/agents.test.mjs`（仓库 39 例；会话内 `dev_router_test` 38 例，安装器用例仅仓库运行），覆盖分类、band 量化、persona、模型门控、钩子状态机、plan 模式对等行为、agents 文件校验。
+`node --test test/router.test.mjs test/router-model.test.mjs test/hook.test.mjs test/agents.test.mjs test/delivery-check.test.mjs`（仓库 57 例；会话内 `dev_router_test` 覆盖路由/钩子/agents，安装器与交付门禁用例仅仓库运行），覆盖分类、band 量化、persona、模型门控、钩子状态机、plan 模式对等行为、agents 文件校验、交付证据门禁。
 
 真实会话的有效性核验记录（计划模式、模糊任务、多轮复杂会话等）见 `docs/validation-report.md`（中文）。
 
