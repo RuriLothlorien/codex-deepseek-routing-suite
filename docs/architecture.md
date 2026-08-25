@@ -2,7 +2,7 @@
 
 ## 1. 背景
 
-本套件移植自 DeepSeek Harness 生态的 [dsh-routing-suite](https://github.com/yjh051108/dsh-routing-suite)（MIT，上游组件 tag v0.3.0；其中 dsh-router-standard preset 包版本 v0.2.0，`router-core.mjs` 即该预设核心）。原项目在 DSH 侧用 `system-prompt/assemble` Waterfall 实现首轮 persona 注入与工具面裁剪；本套件用 Codex 对等扩展面实现相同语义：
+本套件移植自 DeepSeek Harness 生态的 [dsh-routing-suite](https://github.com/yjh051108/dsh-routing-suite)（MIT，上游组件 tag v0.3.0；其中 dsh-router-standard preset 包版本 v0.2.0，`router-core.mjs` 即该预设核心）。v1.0.0 起引导层对齐上游 main（router-standard v34 / router-spec v10 / router-react v17，注意力工程 v1.20–1.28），平台机制仍按 Codex 对等扩展面实现。原项目在 DSH 侧用 `system-prompt/assemble` Waterfall 实现首轮 persona 注入与工具面裁剪；本套件用 Codex 对等扩展面实现相同语义：
 
 | DSH 原机制 | Codex 对等面 |
 |---|---|
@@ -12,13 +12,17 @@
 | `dev_router_status` / `dev_router_mode` | MCP stdio 工具 |
 | `dev_mode_subagent`（llm.stream 隔离） | 一次性 `codex exec` 子进程（默认）或原生 `router_*` agents（可选） |
 | `dev_self_test` | MCP `dev_router_test` + `node --test` |
+| 三种预设（router-standard / spec / react） | `config.json` 的 `preset` + 首轮 `#preset` 指令 |
+| `delivery_check`（交付门禁） | MCP `dev_delivery_check`（纯本地校验，见 `mcp/delivery-check.mjs`） |
+| `engram_*` 记忆工具 | 不移植；standard 引导改用 Codex 原生记忆做上下文资产化 |
 
 ## 2. 组件与数据流
 
-- `hooks/router-user-prompt.mjs`：记录首条用户消息与复杂度；按 override 或分类得到 mode（spec/react/weak）；返回 persona + 引导（plan 模式下与 DSH 一致，照常注入）。
+- `hooks/router-user-prompt.mjs`：解析首条真实用户消息（含 `#preset` / `\#preset` 指令）并锁定 preset；固定预设（spec/react）强制 mode/band，standard 下按 override 或分类路由（spec/react/weak）；返回 persona + 预设引导（plan 模式下与 DSH 一致，照常注入）。
 - `hooks/router-pre-tool.mjs`：未 promoted 前仅放行核心工具（`bash`/`apply_patch` + 按 band 的额外 MCP 前缀），首个核心调用后置 `promoted=true`。
 - `mcp/server.mjs`：零依赖 MCP 服务器，提供 `dev_router_status` / `dev_router_mode` / `dev_router_test` / `dev_mode_subagent` / `dev_delivery_check`（交付证据门禁，纯校验逻辑位于 `mcp/delivery-check.mjs`）。
-- 状态：`~/.codex/codex-dsh-routing-suite/state/<session>.json` + `latest/<cwd>.json`；配置 `~/.codex/codex-dsh-routing-suite/config.json`。
+- 状态：`~/.codex/codex-dsh-routing-suite/state/<session>.json`（mode/band/preset/complexity/promoted 等）+ `latest/<cwd>.json`；配置 `~/.codex/codex-dsh-routing-suite/config.json`。
+- 记忆：不提供 engram 类工具；上下文资产化以 standard 预设引导指向 **Codex 原生记忆**。
 
 ## 3. 配置契约（`~/.codex/codex-dsh-routing-suite/config.json`）
 
@@ -34,8 +38,8 @@
 ```
 
 - `anchoring`：硬锚定总开关。
-- `routerMode`：`standard`（persona 恒为 RL 句）或 `spec`（按分类用 `personaFor`）。
-- `preset`：`standard`（默认，任务路由 + 注意力工程引导）/ `spec`（固定深思考）/ `react`（固定快循环）；首轮 `#preset <name>` 指令仅当前会话生效。
+- `routerMode`：仅在 `preset=standard` 时生效——`standard`（persona 恒为 RL 句）或 `spec`（按分类用 `personaFor`）。
+- `preset`：`standard`（默认，任务路由 + 注意力工程引导）/ `spec`（固定深思考）/ `react`（固定快循环）；首轮 `#preset <name>`（含 `\#preset` 转义）指令仅当前会话生效；生效优先级：首轮指令 > `config.json` > 内置默认 `standard`，首轮后按会话锁定。
 - `specExtraTools` / `reactExtraTools`：按 band 追加允许的 MCP 工具前缀（如 `mcp__codebase_memory_mcp__.*`）。
 - `codexCli`：`dev_mode_subagent` 使用的 CLI 路径，安装时自动探测。
 
@@ -61,7 +65,7 @@
 
 ## 7. 边界与已知代价
 
-- 不移植 DSH 内部机制：运行时注入器（junction/loader/HMR/staging/UI 管理页/路由自愈）与 dsh-probe 评测矩阵。
+- 不移植 DSH 内部机制：运行时注入器（junction/loader/HMR/staging/UI 管理页/路由自愈）、dsh-probe 评测矩阵、engram 记忆工具（改用 Codex 原生记忆引导）、stage 0-3 阶段机与按阶段工具窗（`windowFor`/`preUnlockedFor`）。
 - 缓存代价：切换 mode 会使下一请求前缀缓存 miss；persona/引导按会话锁定以保缓存稳定。
 - `dev_mode_subagent` 每次调用约 8–25 秒 + 25k–31k token（含 max 推理）。
 - 安装器为 Codex 直装；如使用 CC Switch 管理配置，可另行用 [CCSwitch-operations](https://github.com/RuriLothlorien/CCSwitch-operations) 技能做可选同步。
@@ -75,6 +79,7 @@
 ## 9. 安全与隐私
 
 - 全本地运行：钩子与 MCP 服务器为本机零依赖 Node 脚本；路由（分类、注入、锚定、状态读写）不产生网络请求或遥测。
+- 交付门禁纯本地：`dev_delivery_check` 只做文件存在/编码与证据清单校验，无网络请求、不内置浏览器。
 - 数据边界：状态仅写入 `~/.codex/codex-dsh-routing-suite/state/`（会话 id、首条消息文本、模式/复杂度/提升状态）；不读取、不保存密钥或令牌。
 - 权限最小化：`UserPromptSubmit` 只返回注入文本；`PreToolUse` 只返回放行/拒绝决策；`model_instructions_file` 指向只读 Markdown。
 - 可审计、可回滚：行为可在会话记录复核；`config.json` 与状态文件可人工检查；卸载脚本完整移除配置标记、运行时、技能与 agents。

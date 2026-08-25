@@ -1,7 +1,7 @@
 /**
  * router-common: shared state/config/IO helpers for codex-dsh-routing-suite hooks and MCP.
  * Zero external dependencies. All paths derive from ROUTER_HOME (default
- * ~/.codex/routing-suite) so tests can point it at a temp directory.
+ * ~/.codex/codex-dsh-routing-suite) so tests can point it at a temp directory.
  */
 import { createHash } from 'node:crypto'
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs'
