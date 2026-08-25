@@ -175,6 +175,7 @@ if (Test-Path -LiteralPath $cfgPath) {
 }
 $cfg['anchoring'] = $true
 if (-not $cfg.ContainsKey('routerMode')) { $cfg['routerMode'] = 'standard' }
+if (-not $cfg.ContainsKey('preset')) { $cfg['preset'] = 'standard' }
 if (-not $cfg.ContainsKey('specExtraTools')) { $cfg['specExtraTools'] = @() }
 if (-not $cfg.ContainsKey('reactExtraTools')) { $cfg['reactExtraTools'] = @() }
 $cfg['codexCli'] = Get-CodexCli

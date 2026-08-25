@@ -40,6 +40,7 @@
 - **自动模型识别 + Flash 分支默认**：按 slug 精确识别 DeepSeek Flash / Pro（Flash 家族含 `deepseek-v4-flash-vision-exp` 等）；weak 用 Flash 最优 persona（neutral + classify + recall/收敛/反跑题锚，P11/P23）；非 DeepSeek 或未识别模型自动停用整套工作流；Pro 分支保留但未实测。
 - **深度自适应引导**：`isComplexTask`（长文本或 架构/设计/重构 等关键词，含中文）→ deep/fast guide（P30）。
 - **中文分类适配**：`SPEC_RE` 增加 `规划|计划|方案|阅读|移植`，降低中文规划/移植任务被“实现”误判为 react。
+- **三预设切换（standard/spec/react）**：`config.json` 的 `preset`（默认 `standard`）或首轮消息 `#preset <name>` 选择行为包；`standard`=任务路由 + 注意力工程引导，`spec`=固定深思考，`react`=固定快循环。
 - **双后端模式隔离**：
   - 默认：一次性 `codex exec` 子进程——`dev_mode_subagent <spec|react|weak> <task> [reasoning=...]`，`model_instructions_file` 完整替换、剥离桌面端环境变量、禁用 hooks/memories、`reasoning` 映射 `model_reasoning_effort`，无需多智能体配置。
   - 可选：原生 agents——`spawn_agent(agent_type="router_spec"|"router_react"|"router_weak", message="<task>")`，会话具备 `spawn_agent` 时可用，不强制开启 `features.multi_agent`。
@@ -54,6 +55,7 @@
 - `PreToolUse` 钩子：首轮仅放行核心工具，首个核心调用后置 `promoted=true` 并全量放开。
 - 会话状态落盘于 `~/.codex/codex-dsh-routing-suite/state/`，resume/续接不丢。
 - MCP 服务器读写同一状态，支持查看/切换模式、运行自检、派生隔离子进程。
+- **预设（preset）**：`standard`（默认，任务路由 + 注意力工程引导）/ `spec`（固定深思考）/ `react`（固定快循环）；首轮 `#preset <name>` 指令仅作用于当前会话，改默认请编辑 `config.json` 的 `preset` 字段。
 
 ### 安全性分析
 

@@ -26,6 +26,7 @@
 {
   "anchoring": true,
   "routerMode": "standard",
+  "preset": "standard",
   "specExtraTools": [],
   "reactExtraTools": [],
   "codexCli": null
@@ -34,6 +35,7 @@
 
 - `anchoring`：硬锚定总开关。
 - `routerMode`：`standard`（persona 恒为 RL 句）或 `spec`（按分类用 `personaFor`）。
+- `preset`：`standard`（默认，任务路由 + 注意力工程引导）/ `spec`（固定深思考）/ `react`（固定快循环）；首轮 `#preset <name>` 指令仅当前会话生效。
 - `specExtraTools` / `reactExtraTools`：按 band 追加允许的 MCP 工具前缀（如 `mcp__codebase_memory_mcp__.*`）。
 - `codexCli`：`dev_mode_subagent` 使用的 CLI 路径，安装时自动探测。
 

@@ -18,6 +18,7 @@ export const CONFIG_PATH = join(ROUTER_HOME, 'config.json')
 export const DEFAULT_CONFIG = {
   anchoring: true,
   routerMode: 'standard',
+  preset: 'standard',
   specExtraTools: [],
   reactExtraTools: [],
   codexCli: null,

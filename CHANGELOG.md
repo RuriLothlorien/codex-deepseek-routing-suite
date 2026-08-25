@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- 三预设切换：`config.json` 新增 `preset`（默认 `standard`）+ 首轮 `#preset <name>` 指令（仅当前会话）；`standard` 保留任务路由并加入注意力工程引导，`spec` 固定深思考，`react` 固定快循环；`dev_router_status` 输出 `preset`。
+
 ## 0.1.4 (2026-08-23)
 
 - 全局改名 `codex-dsh-routing-suite`：技能、运行时目录、config.toml 标记、MCP 服务器名与 persona 身份统一为新名；README/文档/发布元数据同步。

@@ -179,6 +179,68 @@ test('user-prompt: override wins over classification', () => {
   assert.equal(state.override, 1)
 })
 
+test('user-prompt: #preset react directive fixes react behavior and strips directive', () => {
+  const { output, state } = runHook('router-user-prompt.mjs', {
+    ...BASE_INPUT,
+    prompt: '#preset react 帮我开发一个网页游戏',
+  })
+  const ctx = output.hookSpecificOutput?.additionalContext || ''
+  assert.equal(state.preset, 'react')
+  assert.equal(state.mode, 1)
+  assert.equal(state.band, 'react')
+  assert.equal(state.firstUserText, '帮我开发一个网页游戏')
+  assert.ok(ctx.includes('hands-on'), ctx)
+  assert.ok(ctx.includes('Think-act loop'), ctx)
+})
+
+test('user-prompt: #preset=spec directive fixes deep-think behavior', () => {
+  const { output, state } = runHook('router-user-prompt.mjs', {
+    ...BASE_INPUT,
+    prompt: '#preset=spec 修复这个仓库里的 bug',
+  })
+  const ctx = output.hookSpecificOutput?.additionalContext || ''
+  assert.equal(state.preset, 'spec')
+  assert.equal(state.mode, 0)
+  assert.equal(state.band, 'spec')
+  assert.equal(state.firstUserText, '修复这个仓库里的 bug')
+  assert.ok(ctx.includes('Deep-think first'), ctx)
+})
+
+test('user-prompt: unknown #preset name is ignored', () => {
+  const { state } = runHook('router-user-prompt.mjs', {
+    ...BASE_INPUT,
+    prompt: '#preset turbo 帮我开发一个网页游戏',
+  })
+  assert.equal(state.preset, 'standard')
+  assert.equal(state.firstUserText, '#preset turbo 帮我开发一个网页游戏')
+  assert.equal(state.mode, 1)
+})
+
+test('user-prompt: config preset=spec locks spec without directive', () => {
+  const { output, state } = runHook(
+    'router-user-prompt.mjs',
+    { ...BASE_INPUT, prompt: '帮我开发一个网页游戏' },
+    { seedConfig: { preset: 'spec' } },
+  )
+  const ctx = output.hookSpecificOutput?.additionalContext || ''
+  assert.equal(state.preset, 'spec')
+  assert.equal(state.mode, 0)
+  assert.equal(state.band, 'spec')
+  assert.ok(ctx.includes('Deep-think first'), ctx)
+})
+
+test('user-prompt: standard preset keeps routing and adds attention guide', () => {
+  const { output, state } = runHook('router-user-prompt.mjs', {
+    ...BASE_INPUT,
+    prompt: '帮我开发一个马里奥网页小游戏',
+  })
+  const ctx = output.hookSpecificOutput?.additionalContext || ''
+  assert.equal(state.preset, 'standard')
+  assert.equal(state.mode, 1)
+  assert.equal(state.band, 'react')
+  assert.ok(ctx.includes('Attention engineering'), ctx)
+})
+
 test('user-prompt: first prompt is locked for the session', () => {
   const seeded = {
     mode: null, band: null, firstUserText: '修复这个仓库里的 bug',

@@ -212,6 +212,7 @@ if (!args.dryRun) {
   } catch { /* fresh */ }
   cfg.anchoring = true
   if (!('routerMode' in cfg)) cfg.routerMode = 'standard'
+  if (!('preset' in cfg)) cfg.preset = 'standard'
   if (!('specExtraTools' in cfg)) cfg.specExtraTools = []
   if (!('reactExtraTools' in cfg)) cfg.reactExtraTools = []
   cfg.codexCli = detectCli()

@@ -24,7 +24,7 @@ import {
 const TOOLS = [
   {
     name: 'dev_router_status',
-    description: 'Show the codex-dsh-routing-suite routing state for a session: mode, band, persona, first-turn core tools, promotion, override, anchoring and routerMode.',
+    description: 'Show the codex-dsh-routing-suite routing state for a session: mode, band, persona, preset, first-turn core tools, promotion, override, anchoring and routerMode.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -171,14 +171,20 @@ async function callTool(name, args) {
     const mode = state.override ?? state.mode
     const mc = modelClass(state.model)
     const supported = state.supported ?? (mc !== null)
+    const preset = state.preset || cfg.preset || 'standard'
     const persona = !supported
       ? '(workflow disabled: model is not DeepSeek V4 Flash/Pro)'
-      : (cfg.routerMode === 'standard'
-        ? 'You are a helpful software engineer assistant.'
-        : personaFor(mode ?? 'weak', routerModelFor(state.model)))
+      : (preset === 'spec'
+        ? personaFor(0, routerModelFor(state.model))
+        : (preset === 'react'
+          ? personaFor(1, routerModelFor(state.model))
+          : (cfg.routerMode === 'standard'
+            ? 'You are a helpful software engineer assistant.'
+            : personaFor(mode ?? 'weak', routerModelFor(state.model)))))
     return textResult([
       `session=${sessionId}`,
       `router-mode=${cfg.routerMode} (standard=RL sentence / spec=classified persona)`,
+      `preset=${preset} (standard=task-routed / spec=deep-think / react=tight-loop)`,
       `mode=${mode == null ? 'unclassified' : fmtMode(mode)} (band=${bandFor(mode ?? 'weak')})`,
       `persona=${persona.replace(/\n/g, ' / ')}`,
       `core=[${coreList(mode ?? 'weak', cfg).join(', ')}]`,

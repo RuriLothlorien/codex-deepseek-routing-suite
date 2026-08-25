@@ -34,6 +34,7 @@ test('install.mjs installs into a temp codex home; uninstall.mjs removes it', ()
   assert.ok(existsSync(join(home, 'agents', 'router-spec.toml')))
   const cfg = JSON.parse(readFileSync(join(home, 'codex-dsh-routing-suite', 'config.json'), 'utf8'))
   assert.equal(cfg.anchoring, true)
+  assert.equal(cfg.preset, 'standard')
 
   const u = run('uninstall.mjs', home)
   assert.equal(u.status, 0, u.stderr || u.stdout)

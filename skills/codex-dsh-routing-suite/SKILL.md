@@ -13,12 +13,13 @@ description: 思维模式路由套件（dsh-routing-suite 的 Codex 移植版）
 - 分类：首条真实用户消息按关键词计数分到 `spec`（修复/排查/重构/规划/移植类）或 `react`（开发/构建/生成类）；平局或未命中 → `weak`（模型内路由，自己分类再行动）。
 - 量化：`spec` [0,0.2) 稳定带；`mixed` [0.2,0.5) 过渡带（陷阱，不自动选）；`react` [0.5,1] 稳定带。
 - routerMode：`standard`（默认，persona 恒为 RL 句 `You are a helpful software engineer assistant.`）；`spec`（按分类用 `personaFor` 选 persona，当前模型走 Flash 分支）。
+- preset：`standard`（默认，任务路由 + 注意力工程引导）/ `spec`（固定深思考）/ `react`（固定快循环）；首轮 `#preset <name>` 指令仅当前会话生效，`config.json` 的 `preset` 为持久默认。
 - weak 带：按首条消息复杂度锁定 fast 或 deep 引导，会话内不变（保缓存稳定）。
 - 主会话为唯一形态：`model_instructions_file` 替换内置 identity（base.md：RL 句 + 路由规则），钩子再按轮追加 persona/引导；`dev_mode_subagent` 子进程中同样以 `model_instructions_file` 实现完整“仅 persona”替换。
 
 ## 2. 工具用法
 
-- `dev_router_status`：查看当前会话 mode/band/persona/core/promoted/override/anchoring/supported/nativeAgents/model。
+- `dev_router_status`：查看当前会话 mode/band/persona/preset/core/promoted/override/anchoring/supported/nativeAgents/model。
 - `dev_router_mode <spec|weak|mixed|react|0-100|0.0-1.0|auto>`：写 override，下一轮请求生效；`auto` 清除 override 回到任务分类。
 - `dev_mode_subagent <spec|react|weak> <task> [reasoning=low|medium|high|xhigh|max]`：用不同模式派生一次性 `codex exec` 子进程（全新上下文、独立 persona、hooks 与 memories 禁用、剥离桌面端线程环境变量），当前会话轨迹与锚定状态不受影响。适合“换个模式验证结论/做交叉检查”。
 - 原生多智能体后端（可选，不强制配置）：若当前会话具备 `spawn_agent` 工具（`features.multi_agent` 是否开启由你决定，本套件不修改它），可直接 `spawn_agent(agent_type = "router_spec" | "router_react" | "router_weak", message = "<task>")` 做模式隔离子代理（自定义 agents 位于 `~/.codex/agents/`，由 install 安装）；否则回退 MCP `dev_mode_subagent`（exec 后端，始终可用）。

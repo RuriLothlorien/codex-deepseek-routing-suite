@@ -34,6 +34,7 @@ This suite turns those measurements into defaults for Codex + DeepSeek: band-bas
 - **Automatic model detection + Flash-branch defaults**: the slug is precisely classified as DeepSeek Flash / Pro (Flash family includes `deepseek-v4-flash-vision-exp`); weak mode uses the Flash-optimal persona (neutral + classify + recall/convergence/anti-runaway anchors, P11/P23); non-DeepSeek or unrecognized models disable the workflow entirely; the Pro branch is retained but untested.
 - **Depth-adaptive guidance**: `isComplexTask` (long text or architecture keywords, including Chinese) selects deep/fast guides (P30).
 - **Chinese classification adaptation**: `SPEC_RE` adds 规划/计划/方案/阅读/移植 to keep Chinese planning/porting tasks from being misrouted to react.
+- **Three-preset switching (standard/spec/react)**: select the behavior package via the `preset` key in `config.json` (default `standard`) or a first-turn `#preset <name>` directive; `standard` = task routing + attention-engineering guidance, `spec` = fixed deep-think, `react` = fixed tight-loop.
 - **Dual-backend mode isolation**:
   - Default: one-shot `codex exec` subprocess via `dev_mode_subagent <spec|react|weak> <task> [reasoning=...]` — full `model_instructions_file` replacement, desktop thread env stripped, hooks/memories disabled, `reasoning` maps to `model_reasoning_effort`; no multi-agent config required.
   - Optional: native agents via `spawn_agent(agent_type="router_spec"|"router_react"|"router_weak", message="<task>")` when the session has `spawn_agent`; does not force `features.multi_agent`.
@@ -48,6 +49,7 @@ This suite turns those measurements into defaults for Codex + DeepSeek: band-bas
 - `PreToolUse` hook: only core tools pass before the first tool call, then `promoted=true` unlocks the full catalog.
 - Session state is persisted under `~/.codex/codex-dsh-routing-suite/state/`, so resume/continuation does not lose it.
 - The MCP server reads/writes the same state: view or switch modes, run self-tests, and spawn isolated subprocesses.
+- **Presets**: `standard` (default; task routing + attention-engineering guidance) / `spec` (fixed deep-think) / `react` (fixed tight-loop); the first-turn `#preset <name>` directive applies to the current session only — change the default by editing the `preset` key in `config.json`.
 
 ### Security analysis
 
